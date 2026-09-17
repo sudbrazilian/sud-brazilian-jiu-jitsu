@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alunos - SUD Brazilian Jiu-Jitsu</title>
+    <!-- ✅ ÍCONE NA ABA + PWA -->
+    <link rel="icon" type="image/png" href="imagens/logosud.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#D10000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SUD Jiu-Jitsu">
+    <link rel="apple-touch-icon" href="imagens/logosud.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+        :root {
+            --vermelho-principal: #D10000;
+            --vermelho-claro: #FF3B3B;
+            --verde: #00C853;
+            --amarelo: #FFC107;
+            --azul: #2563eb;
+            --cinza: #6B7280;
+        }
+        .tema-escuro {
+            --fundo-escuro: #121214;
+            --fundo-card: #1A1A1F;
+            --texto-branco: #FFFFFF;
+            --texto-cinza: #B0B0B8;
+            --borda: #29292E;
+            --fundo-input: #0C0C0E;
+        }
+        .tema-claro {
+            --fundo-escuro: #F8F9FA;
+            --fundo-card: #FFFFFF;
+            --texto-branco: #121214;
+            --texto-cinza: #6B7280;
+            --borda: #DEE2E6;
+            --fundo-input: #FFFFFF;
+        }
+        html, body { 
+            background: var(--fundo-escuro); 
+            color: var(--texto-branco); 
+            min-height: 100vh; 
+            overflow-y: auto;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        .btn-menu {
+            display: none; position: fixed; top: 15px; left: 15px; z-index: 9999;
+            background: var(--vermelho-principal); border: none; color: white;
+            width: 48px; height: 48px; border-radius: 8px; font-size: 22px; cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        .menu-lateral {
+            width: 240px; background: var(--fundo-card); border-right: 1px solid var(--borda);
+            padding: 30px 0; position: fixed; height: 100vh; top: 0; left: 0; z-index: 999;
+            transition: transform 0.3s ease; overflow-y: auto;
+        }
+        .menu-lateral.fechado { transform: translateX(-100%); }
+        .menu-lateral.aberto { transform: translateX(0); }
+        .logo { text-align: center; margin-bottom: 40px; }
+        .logo img { width: 90px; margin-bottom: 10px; }
+        .logo h1 { font-size: 14px; font-weight: 700; line-height: 1.3; color: var(--texto-branco); }
+        .menu-navegacao ul { list-style: none; padding: 0 15px; }
+        .menu-navegacao li a {
+            display: flex; align-items: center; gap: 10px; padding: 12px 15px; margin-bottom: 5px;
+            color: var(--texto-cinza); text-decoration: none; font-size: 14px; font-weight: 600; border-radius: 6px; transition: 0.2s;
+        }
+        .menu-navegacao li a.ativo, .menu-navegacao li a:hover { background: rgba(209,0,0,0.15); color: var(--vermelho-principal); }
+        .menu-navegacao li a.sair { color: #FF4D4D; margin-top: 20px; }
+        .conteudo { 
+            margin-left: 240px; 
+            padding: 25px 30px; 
+            min-height: 100vh;
+            width: calc(100% - 240px);
+        }
+        .cabecalho {
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 25px;
+        }
+        .titulo-pagina { font-size: 26px; font-weight: 800; position: relative; }
+        .titulo-pagina::after { content: ''; position: absolute; bottom: -8px; left: 0; width: 70px; height: 3px; background: var(--vermelho-principal); }
+        
+        .btn-novo { 
+            background: var(--vermelho-principal); color: white; border: none; padding: 12px 20px; 
+            border-radius: 6px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px;
+            transition: 0.2s;
+        }
+        .btn-novo:hover { background: #b00000; }
+        .card-filtro { background: var(--fundo-card); border: 1px solid var(--borda); border-radius: 10px; padding: 20px; margin-bottom: 25px; display: flex; gap: 15px; flex-wrap: wrap; }
+        .card-filtro input, .card-filtro select {
+            flex: 1; min-width: 160px; padding: 12px; background: var(--fundo-input); border: 1px solid var(--borda);
+            border-radius: 6px; color: var(--texto-branco); font-size: 14px; outline: none;
+        }
+        .card-filtro input:focus, .card-filtro select:focus { border-color: var(--vermelho-principal); box-shadow: 0 0 0 2px rgba(209,0,0,0.15); }
+        .tabela { 
+            width: 100%; 
+            border-collapse: collapse; 
+            background: var(--fundo-card); 
+            border: 1px solid var(--borda); 
+            border-radius: 10px; 
+            overflow: hidden; 
+        }
+        .tabela th { background: rgba(255,255,255,0.05); padding: 14px 12px; text-align: left; font-size: 12px; font-weight: 700; color: var(--texto-cinza); text-transform: uppercase; white-space: nowrap; }
+        .tabela td { padding: 14px 12px; border-bottom: 1px solid var(--borda); font-size: 14px; color: var(--texto-branco); }
+        .tabela tr:hover { background: rgba(255,255,255,0.03); }
+        .vazio { text-align: center; padding: 50px !important; color: var(--texto-cinza); }
+        .aviso-valores { font-size: 12px; color: var(--amarelo); margin-bottom: 15px; }
+        .acoes { position: relative; }
+        .btn-acoes {
+            background: none; border: none; color: var(--texto-cinza);
+            font-size: 20px; font-weight: bold; cursor: pointer;
+            padding: 4px 10px; border-radius: 4px;
+        }
+        .btn-acoes:hover { background: rgba(255,255,255,0.05); color: var(--texto-branco); }
+        .menu-acoes {
+            position: absolute; right: 0; top: 100%;
+            background: var(--fundo-card); border: 1px solid var(--borda);
+            border-radius: 8px; min-width: 180px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            z-index: 100; display: none;
+        }
+        .menu-acoes.aberto { display: block; }
+        .menu-acoes button {
+            width: 100%; text-align: left; border: none; background: none;
+            padding: 10px 15px; color: var(--texto-branco);
+            font-size: 14px; cursor: pointer; transition: 0.15s;
+        }
+        .menu-acoes button:hover { background: rgba(209,0,0,0.1); color: var(--vermelho-principal); }
+        .menu-acoes button.destaque { color: var(--azul); }
+        .menu-acoes button.vermelho { color: var(--vermelho-claro); }
+        .fundo-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); z-index: 2000;
+            justify-content: center; align-items: flex-start;
+            padding: 20px; overflow-y: auto;
+        }
+        .modal {
+            background: var(--fundo-card); border: 1px solid var(--borda); border-radius: 10px;
+            padding: 30px; width: 100%; max-width: 500px;
+            margin: 20px auto; position: relative;
+            box-shadow: 0 0 30px rgba(0,0,0,0.6);
+        }
+        .modal h2 { color: var(--vermelho-principal); margin-bottom: 25px; font-size: 22px; font-weight: 800; }
+        .fechar-modal {
+            position: absolute; top: 15px; right: 15px; background: none; border: none;
+            color: var(--texto-cinza); font-size: 28px; cursor: pointer; transition: 0.2s;
+        }
+        .fechar-modal:hover { color: var(--vermelho-principal); }
+        .secao { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid var(--borda); }
+        .secao h3 { font-size: 16px; font-weight: 600; color: var(--texto-cinza); margin-bottom: 15px; }
+        .info-dica { font-size: 12px; color: var(--amarelo); margin-top: 5px; }
+        .linha { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 18px; }
+        .campo { display: flex; flex-direction: column; }
+        .campo label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: var(--texto-branco); }
+        .campo input, .campo select {
+            width: 100%; padding: 12px; background: var(--fundo-input); border: 1px solid var(--borda);
+            border-radius: 6px; color: var(--texto-branco); font-size: 14px;
+        }
+        .campo input:focus, .campo select:focus {
+            outline: none; border-color: var(--vermelho-principal); box-shadow: 0 0 0 2px rgba(209,0,0,0.15);
+        }
+        .opcional { font-size: 12px; color: var(--texto-cinza); font-weight: normal; }
+        .valor-final { margin-top: 5px; font-size: 18px; font-weight: 800; color: var(--verde); }
+        .valor-gratis { color: #4CAF50; }
+        .valor-vazio { color: var(--texto-cinza); font-style: italic; }
+        .info-linha { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--borda); }
+        .info-linha:last-child { border-bottom: none; }
+        .info-label { font-weight: 600; color: var(--texto-cinza); font-size: 14px; }
+        .info-valor { font-size: 14px; color: var(--texto-branco); text-align: right; }
+        .carregando-valores { color: var(--amarelo); font-style: italic; }
+        @media (max-width: 992px) {
+            .conteudo { margin-left: 0; width: 100%; padding: 80px 15px 20px; }
+            .btn-menu { display: flex; align-items: center; justify-content: center; }
+            .menu-lateral { transform: translateX(-100%); }
+            .menu-lateral.aberto { transform: translateX(0); }
+        }
+        @media (max-width: 600px) {
+            .linha { grid-template-columns: 1fr; }
+            .modal { padding: 20px; margin: 10px auto; }
+            .tabela { display: block; overflow-x: auto; }
+        }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+</head>
+<body class="tema-escuro">
+    <button class="btn-menu" onclick="abrirFecharMenu()">
+        <i class="fas fa-bars"></i>
+    </button>
+    <aside class="menu-lateral" id="menuLateral">
+        <div class="logo">
+            <img src="imagens/logosud.png" alt="Logo SUD">
+            <h1>SUD<br>Brazilian Jiu-Jitsu</h1>
+        </div>
+        <nav class="menu-navegacao">
+            <ul>
+                <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="#" class="ativo"><i class="fas fa-users"></i> Alunos</a></li>
+                <li><a href="financeiro.html"><i class="fas fa-dollar-sign"></i> Financeiro</a></li>
+                <li><a href="relatorios.html"><i class="fas fa-chart-bar"></i> Relatórios</a></li>
+                <li><a href="configuracoes.html"><i class="fas fa-cog"></i> Configurações</a></li>
+                <li id="itemInstalarApp" style="display:none;"><a href="#" class="instalar" onclick="instalarApp()"><i class="fas fa-download"></i> Instalar App</a></li>
+                <li><a href="#" class="sair" onclick="sair()"><i class="fas fa-sign-out-alt"></i> Sair</a></li>
+            </ul>
+        </nav>
+    </aside>
+    <main class="conteudo">
+        <div class="cabecalho">
+            <h1 class="titulo-pagina">Gerenciar Alunos</h1>
+            <button class="btn-novo" onclick="abrirModalCadastro()">
+                <i class="fas fa-plus"></i> Novo Aluno
+            </button>
+        </div>
+        <div class="card-filtro">
+            <input type="text" id="buscaAluno" placeholder="🔍 Buscar por nome, CPF ou responsável...">
+            <select id="filtroTipo">
+                <option value="">Todos os Tipos</option>
+                <option value="Kids">Kids</option>
+                <option value="Baby Class">Baby Class</option>
+                <option value="Comercial">Comercial</option>
+                <option value="Competidor">Competidor</option>
+                <option value="Bolsista">Bolsista</option>
+            </select>
+            <select id="filtroPeriodo">
+                <option value="">Todos os Planos</option>
+                <option value="Mensal">Mensal</option>
+                <option value="Trimestral">Trimestral</option>
+                <option value="Semestral">Semestral</option>
+                <option value="Anual">Anual</option>
+            </select>
+        </div>
+        <table class="tabela">
+            <thead>
+                <tr>
+                    <th>Nome do Aluno</th>
+                    <th>CPF</th>
+                    <th>Tipo</th>
+                    <th>Responsável</th>
+                    <th>Plano</th>
+                    <th>Valor Final</th>
+                    <th style="width:50px;"></th>
+                </tr>
+            </thead>
+            <tbody id="listaAlunos">
+                <tr><td colspan="7" class="vazio">🔄 Carregando alunos...</td></tr>
+            </tbody>
+        </table>
+    </main>
+    <div id="modalCadastro" class="fundo-modal">
+        <div class="modal">
+            <button class="fechar-modal" onclick="fecharModalCadastro()">&times;</button>
+            <h2 id="tituloModal">Cadastrar Novo Aluno</h2>
+            <form id="formAluno">
+                <input type="hidden" id="idAluno" value="">
+                <div class="secao">
+                    <h3>Dados Pessoais</h3>
+                    <div class="linha">
+                        <div class="campo">
+                            <label>Nome Completo *</label>
+                            <input type="text" id="nomeAluno" required>
+                        </div>
+                        <div class="campo">
+                            <label>CPF *</label>
+                            <input type="text" id="cpfAluno" placeholder="000.000.000-00" maxlength="14" required>
+                        </div>
+                    </div>
+                    <div class="linha">
+                        <div class="campo">
+                            <label>Tipo de Aluno *</label>
+                            <select id="tipoAluno" onchange="atualizarValorPlano()" required>
+                                <option value="">Selecione</option>
+                                <option value="Kids">Kids</option>
+                                <option value="Baby Class">Baby Class</option>
+                                <option value="Comercial">Comercial</option>
+                                <option value="Competidor">Competidor</option>
+                                <option value="Bolsista">Bolsista (Gratuito)</option>
+                            </select>
+                        </div>
+                        <div class="campo">
+                            <label>Data de Nascimento *</label>
+                            <input type="date" id="nascimentoAluno" required>
+                        </div>
+                    </div>
+                    <div class="linha">
+                        <div class="campo">
+                            <label>Nome do Responsável <span class="opcional">(opcional)</span></label>
+                            <input type="text" id="responsavelAluno">
+                        </div>
+                        <div class="campo">
+                            <label>📅 Data de Vencimento *</label>
+                            <input type="date" id="matriculaAluno" required>
+                            <p class="info-dica">💡 O vencimento sempre será no mesmo dia do mês</p>
+                        </div>
+                    </div>
+                    <div class="linha">
+                        <div class="campo">
+                            <label>Telefone / Contato <span class="opcional">(opcional)</span></label>
+                            <input type="text" id="telefoneAluno" placeholder="(91) 99999-9999">
+                        </div>
+                        <div class="campo">
+                            <label>E-mail <span class="opcional">(opcional)</span></label>
+                            <input type="email" id="emailAluno">
+                        </div>
+                    </div>
+                </div>
+                <div class="secao">
+                    <h3>Plano e Valores</h3>
+                    <p class="aviso-valores">💡 Valores carregados das Configurações do sistema</p>
+                    <div class="linha">
+                        <div class="campo">
+                            <label>Período do Plano *</label>
+                            <select id="periodoAluno" onchange="atualizarValorPlano()" required>
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
+                        <div class="campo">
+                            <label>Valor do Desconto (R$) <span class="opcional">(opcional)</span></label>
+                            <input type="number" id="descontoAluno" min="0" step="0.01" value="0" oninput="atualizarValorPlano()">
+                        </div>
+                    </div>
+                    <div class="linha">
+                        <div class="campo">
+                            <label>Valor Final</label>
+                            <input type="text" id="valorFinalAluno" class="valor-final valor-vazio" value="Carregando valores..." readonly>
+                        </div>
+                        <div class="campo">
+                            <label>Faixa Inicial *</label>
+                            <select id="faixaAluno" required>
+                                <option value="">Selecione</option>
+                                <option value="Branca">Branca</option>
+                                <option value="Cinza">Cinza</option>
+                                <option value="Amarela">Amarela</option>
+                                <option value="Laranja">Laranja</option>
+                                <option value="Verde">Verde</option>
+                                <option value="Azul">Azul</option>
+                                <option value="Roxa">Roxa</option>
+                                <option value="Marrom">Marrom</option>
+                                <option value="Preta">Preta</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn-salvar" style="width:100%;padding:14px;background:var(--verde);color:white;border:none;border-radius:6px;font-weight:700;font-size:16px;cursor:pointer;">Salvar Aluno</button>
+            </form>
+        </div>
+    </div>
+    <div id="modalInfo" class="fundo-modal">
+        <div class="modal">
+            <button class="fechar-modal" onclick="fecharModalInfo()">&times;</button>
+            <h2 id="nomeInfo">Informações do Aluno</h2>
+            <div id="conteudoInfo"></div>
+        </div>
+    </div>
+    <script>
+        // ✅ FIREBASE DA SUD BRAZILIAN JIU-JITSU
+        const firebaseConfig = {
+          apiKey: "AIzaSyDKWso0gw6T2thoS12c1erzTzVhrnagS1s",
+          authDomain: "sud-brazilian-jiu-jitsu.firebaseapp.com",
+          projectId: "sud-brazilian-jiu-jitsu",
+          storageBucket: "sud-brazilian-jiu-jitsu.firebasestorage.app",
+          messagingSenderId: "1053972036308",
+          appId: "1:1053972036308:web:215a41d7bc91502eee1941"
+        };
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        let valoresPlanos = {
+            'Mensal': 90.00,
+            'Trimestral': 240.00,
+            'Semestral': 450.00,
+            'Anual': 820.00
+        };
+        let alunosCarregados = [];
+        async function carregarValoresConfiguracoes() {
+            try {
+                const doc = await db.collection('configuracoes').doc('geral').get();
+                if (doc.exists) {
+                    const cfg = doc.data();
+                    if (cfg.valorMensal) valoresPlanos['Mensal'] = parseFloat(cfg.valorMensal);
+                    if (cfg.valorTrimestral) valoresPlanos['Trimestral'] = parseFloat(cfg.valorTrimestral);
+                    if (cfg.valorSemestral) valoresPlanos['Semestral'] = parseFloat(cfg.valorSemestral);
+                    if (cfg.valorAnual) valoresPlanos['Anual'] = parseFloat(cfg.valorAnual);
+                }
+            } catch (erro) {
+                console.warn('Usando valores padrão:', erro);
+            }
+            preencherOpcoesPlanos();
+        }
+        function preencherOpcoesPlanos() {
+            const select = document.getElementById('periodoAluno');
+            select.innerHTML = '<option value="">Selecione</option>';
+            for (const [periodo, valor] of Object.entries(valoresPlanos)) {
+                const opt = document.createElement('option');
+                opt.value = periodo;
+                opt.textContent = `${periodo} - R$ ${valor.toFixed(2).replace('.', ',')}`;
+                select.appendChild(opt);
+            }
+        }
+        function carregarTema() {
+            const temaSalvo = localStorage.getItem('tema') || 'escuro';
+            const corpo = document.body;
+            if (temaSalvo === 'claro') {
+                corpo.classList.remove('tema-escuro');
+                corpo.classList.add('tema-claro');
+            } else {
+                corpo.classList.remove('tema-claro');
+                corpo.classList.add('tema-escuro');
+            }
+        }
+        function formatarCPF(cpf) {
+            if (!cpf) return '-';
+            const apenasNumeros = cpf.replace(/\D/g, '');
+            if (apenasNumeros.length === 11) {
+                return apenasNumeros.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+            }
+            return apenasNumeros || '-';
+        }
+        function formatarTelefone(tel) {
+            if (!tel) return '-';
+            const n = tel.replace(/\D/g, '');
+            if (n.length === 11) return `(${n.slice(0,2)}) ${n.slice(2,7)}-${n.slice(7)}`;
+            return tel;
+        }
+        function formatarData(data) {
+            if (!data) return '-';
+            if (data.toDate) return data.toDate().toLocaleDateString('pt-BR');
+            return new Date(data).toLocaleDateString('pt-BR');
+        }
+        document.getElementById('cpfAluno').addEventListener('input', function() {
+            const apenasNumeros = this.value.replace(/\D/g, '');
+            if (apenasNumeros.length <= 11) {
+                let cpfFormatado = apenasNumeros;
+                if (apenasNumeros.length >= 4) cpfFormatado = apenasNumeros.slice(0,3) + '.' + apenasNumeros.slice(3);
+                if (apenasNumeros.length >= 7) cpfFormatado = cpfFormatado.slice(0,7) + '.' + cpfFormatado.slice(7);
+                if (apenasNumeros.length >= 10) cpfFormatado = cpfFormatado.slice(0,11) + '-' + cpfFormatado.slice(11,13);
+                this.value = cpfFormatado;
+            }
+        });
+        function abrirFecharMenu() {
+            document.getElementById('menuLateral').classList.toggle('aberto');
+        }
+        function atualizarValorPlano() {
+            const tipo = document.getElementById('tipoAluno').value;
+            const periodo = document.getElementById('periodoAluno').value;
+            const desconto = parseFloat(document.getElementById('descontoAluno').value) || 0;
+            const campoValor = document.getElementById('valorFinalAluno');
+            if (!tipo || !periodo) {
+                campoValor.value = 'Selecione o tipo e o plano';
+                campoValor.className = 'valor-final valor-vazio';
+                campoValor.removeAttribute('data-valor');
+                return;
+            }
+            if (tipo === 'Bolsista') {
+                campoValor.value = 'GRÁTIS';
+                campoValor.className = 'valor-final valor-gratis';
+                campoValor.removeAttribute('data-valor');
+            } else {
+                const valorBase = valoresPlanos[periodo] || 0;
+                const valorFinal = Math.round((valorBase - desconto) * 100) / 100;
+                
+                campoValor.value = `R$ ${valorFinal.toFixed(2).replace('.', ',')}`;
+                campoValor.className = 'valor-final';
+                campoValor.dataset.valor = valorFinal;
+            }
+        }
+        let menuAberto = null;
+        document.addEventListener('click', (e) => {
+            if (menuAberto && !e.target.closest('.acoes')) {
+                menuAberto.classList.remove('aberto');
+                menuAberto = null;
+            }
+        });
+        function alternarMenu(menuEl) {
+            if (menuAberto && menuAberto !== menuEl) menuAberto.classList.remove('aberto');
+            menuEl.classList.toggle('aberto');
+            menuAberto = menuEl.classList.contains('aberto') ? menuEl : null;
+        }
+        function abrirInfoAluno(id) {
+            const aluno = alunosCarregados.find(a => a.id === id);
+            if (!aluno) return;
+            const d = aluno.dados;
+            const valorTexto = (d.valorPlano || 0) === 0 ? 'GRÁTIS' : `R$ ${(d.valorPlano||0).toFixed(2).replace('.', ',')}`;
+            const descontoTexto = (d.desconto || 0) === 0 ? 'R$ 0,00' : `R$ ${(d.desconto||0).toFixed(2).replace('.', ',')}`;
+            document.getElementById('nomeInfo').textContent = d.nome || 'Aluno';
+            document.getElementById('conteudoInfo').innerHTML = `
+                <div class="info-linha">
+                    <span class="info-label">Nome Completo</span>
+                    <span class="info-valor">${d.nome || '-'}</span>
+                </div>
+                <div class="info-linha">
+                    <span class="info-label">CPF</span>
+                    <span class="info-valor">${formatarCPF(d.cpf)}</span>
+                </div>
+                <div class="info-linha">
+                    <span class="info-label">Tipo de Aluno</span>
+                    <span class="info-valor">${d.tipo || '-'}</span>
+                </div>
+                <div class="info-linha">
+                    <span class="info-label">Data de Nascimento</span>
+                    <span class="info-valor">${formatarData(d.dataNascimento)}</span>
+                </div>
+                <div class="info-linha">
+                    <span class="info-label">Nome do Responsável</span>
+                    <span class="info-valor">${d.responsavel || '-'}</span>
+                </div>
+                <div class="info-linha">
+                    <span class="info-label">Telefone / Contato</span>
+                    <span class="info-valor">${formatarTelefone(d.telefone)}</span>
+                </div>
+                <div class="info-linha">
+                    <span class="info-label">E-mail</span>
+                    <span class="info-valor">${d.email || '-'}</span>
+                </div>
+                <div class="info-linha">
+                    <span class="info-label">Data de Vencimento</span>
+                    <span class="info-valor">${formatarData(d.dataVencimento || d.dataMatricula)}</span>
+                </div>
+                <div class="info-linha">
+                    <span class="info-label">Período do Plano</span>
+                    <span class="info-valor">${d.periodo || '-'}</span>
+                </div>
+                <div class="info-linha">
+                    <span class="info-label">Valor do Desconto Aplicado</span>
+                    <span class="info-valor">${descontoTexto}</span>
+                </div>
+                <div class="info-linha">
+                    <span class="info-label">Valor Final do Plano</span>
+                    <span class="info-valor">${valorTexto}</span>
+                </div>
+                <div class="info-linha">
+                    <span class="info-label">Faixa Inicial</span>
+                    <span class="info-valor">${d.faixa || '-'}</span>
+                </div>
+            `;
+            document.getElementById('modalInfo').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        function fecharModalInfo() {
+            document.getElementById('modalInfo').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        async function carregarAlunos() {
+            const lista = document.getElementById('listaAlunos');
+            lista.innerHTML = '<tr><td colspan="7" class="vazio">🔄 Carregando alunos...</td></tr>';
+            try {
+                const snapshot = await db.collection('alunos').get();
+                if (snapshot.empty) {
+                    lista.innerHTML = '<tr><td colspan="7" class="vazio">Nenhum aluno cadastrado ainda</td></tr>';
+                    alunosCarregados = [];
+                    return;
+                }
+                alunosCarregados = [];
+                snapshot.forEach(doc => {
+                    alunosCarregados.push({ id: doc.id, dados: doc.data() });
+                });
+                alunosCarregados.sort((a, b) => {
+                    const nomeA = String((a.dados.nome || '')).toLowerCase();
+                    const nomeB = String((b.dados.nome || '')).toLowerCase();
+                    return nomeA.localeCompare(nomeB);
+                });
+                lista.innerHTML = '';
+                alunosCarregados.forEach((aluno) => {
+                    const d = aluno.dados;
+                    const valorPlano = d.valorPlano || 0;
+                    const valorTexto = valorPlano === 0 ? 'GRÁTIS' : `R$ ${valorPlano.toFixed(2).replace('.', ',')}`;
+                    const cpf = formatarCPF(d.cpf);
+                    const responsavel = d.responsavel || '-';
+                    const menuId = `menu-${aluno.id}`;
+                    lista.innerHTML += `
+                    <tr>
+                        <td><strong>${d.nome || '-'}</strong></td>
+                        <td>${cpf}</td>
+                        <td>${d.tipo || '-'}</td>
+                        <td>${responsavel}</td>
+                        <td>${d.periodo || '-'}</td>
+                        <td>${valorTexto}</td>
+                        <td class="acoes">
+                            <button class="btn-acoes" onclick="alternarMenu(document.getElementById('${menuId}'))">⋮</button>
+                            <div class="menu-acoes" id="${menuId}">
+                                <button class="destaque" onclick="editarAluno('${aluno.id}')">✏️ Editar</button>
+                                <button onclick="abrirInfoAluno('${aluno.id}')">ℹ️ Informações do Aluno</button>
+                                <button class="vermelho" onclick="excluirAluno('${aluno.id}')">🗑️ Excluir</button>
+                            </div>
+                        </td>
+                    </tr>`;
+                });
+            } catch (erro) {
+                console.error('ERRO NO CARREGAMENTO:', erro);
+                lista.innerHTML = `<tr><td colspan="7" class="vazio">Erro: ${erro.message}</td></tr>`;
+            }
+        }
+        function abrirModalCadastro() {
+            document.getElementById('idAluno').value = '';
+            document.getElementById('tituloModal').textContent = 'Cadastrar Novo Aluno';
+            document.getElementById('formAluno').reset();
+            document.getElementById('matriculaAluno').valueAsDate = new Date();
+            document.getElementById('valorFinalAluno').value = 'Selecione o tipo e o plano';
+            document.getElementById('valorFinalAluno').className = 'valor-final valor-vazio';
+            preencherOpcoesPlanos();
+            document.getElementById('modalCadastro').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        function fecharModalCadastro() {
+            document.getElementById('modalCadastro').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        async function editarAluno(id) {
+            try {
+                const doc = await db.collection('alunos').doc(id).get();
+                if (!doc.exists) return;
+                const dados = doc.data();
+                document.getElementById('idAluno').value = id;
+                document.getElementById('tituloModal').textContent = 'Editar Aluno';
+                document.getElementById('nomeAluno').value = dados.nome || '';
+                document.getElementById('cpfAluno').value = formatarCPF(dados.cpf || '');
+                document.getElementById('tipoAluno').value = dados.tipo || '';
+                document.getElementById('nascimentoAluno').value = dados.dataNascimento ? dados.dataNascimento.toDate().toISOString().split('T')[0] : '';
+                document.getElementById('responsavelAluno').value = dados.responsavel || '';
+                document.getElementById('telefoneAluno').value = dados.telefone || '';
+                document.getElementById('emailAluno').value = dados.email || '';
+                let dataVenc = null;
+                if (dados.dataVencimento) {
+                    dataVenc = dados.dataVencimento.toDate();
+                } else if (dados.dataMatricula) {
+                    dataVenc = dados.dataMatricula.toDate();
+                } else if (dados.dataInicioAula) {
+                    dataVenc = dados.dataInicioAula.toDate();
+                }
+                document.getElementById('matriculaAluno').value = dataVenc ? dataVenc.toISOString().split('T')[0] : '';
+                preencherOpcoesPlanos();
+                document.getElementById('periodoAluno').value = dados.periodo || '';
+                document.getElementById('descontoAluno').value = dados.desconto || 0;
+                document.getElementById('faixaAluno').value = dados.faixa || '';
+                atualizarValorPlano();
+                document.getElementById('modalCadastro').style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            } catch (erro) {
+                alert('Erro ao carregar: ' + erro.message);
+            }
+        }
+        async function excluirAluno(id) {
+            if (!confirm('Tem certeza que deseja excluir? Essa ação não pode ser desfeita.')) return;
+            try {
+                await db.collection('alunos').doc(id).delete();
+                carregarAlunos();
+            } catch (erro) {
+                alert('Erro ao excluir: ' + erro.message);
+            }
+        }
+        document.getElementById('formAluno').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('idAluno').value;
+            const valorFinal = parseFloat(document.getElementById('valorFinalAluno').dataset.valor) || 0;
+            const cpfSemFormatacao = document.getElementById('cpfAluno').value.replace(/\D/g, '');
+            const dataNascimentoValor = document.getElementById('nascimentoAluno').value;
+            const dataVencimentoValor = document.getElementById('matriculaAluno').value;
+            const dados = {
+                nome: document.getElementById('nomeAluno').value.trim(),
+                cpf: cpfSemFormatacao,
+                tipo: document.getElementById('tipoAluno').value,
+                dataNascimento: firebase.firestore.Timestamp.fromDate(new Date(dataNascimentoValor + 'T00:00:00')),
+                responsavel: document.getElementById('responsavelAluno').value.trim(),
+                telefone: document.getElementById('telefoneAluno').value.trim(),
+                email: document.getElementById('emailAluno').value.trim(),
+                dataVencimento: firebase.firestore.Timestamp.fromDate(new Date(dataVencimentoValor + 'T00:00:00')),
+                periodo: document.getElementById('periodoAluno').value,
+                desconto: parseFloat(document.getElementById('descontoAluno').value) || 0,
+                valorPlano: valorFinal,
+                faixa: document.getElementById('faixaAluno').value,
+                dataCadastro: firebase.firestore.Timestamp.now()
+            };
+            try {
+                if (id) {
+                    const docAntigo = await db.collection('alunos').doc(id).get();
+                    if (docAntigo.exists) {
+                        const dadosAntigos = docAntigo.data();
+                        dados.qtdPagamentos = dadosAntigos.qtdPagamentos || 0;
+                    }
+                    await db.collection('alunos').doc(id).update(dados);
+                    alert('✅ Aluno atualizado! Valor calculado com base nas configurações.');
+                } else {
+                    dados.qtdPagamentos = 0;
+                    await db.collection('alunos').add(dados);
+                    alert('✅ Aluno cadastrado! Valor carregado das configurações.');
+                }
+                fecharModalCadastro();
+                carregarAlunos();
+            } catch (erro) {
+                alert('Erro ao salvar: ' + erro.message);
+            }
+        });
+        document.getElementById('buscaAluno').addEventListener('input', () => {
+            const termo = document.getElementById('buscaAluno').value.toLowerCase();
+            document.querySelectorAll('#listaAlunos tr').forEach(linha => {
+                if (linha.classList.contains('vazio')) return;
+                linha.style.display = linha.textContent.toLowerCase().includes(termo) ? '' : 'none';
+            });
+        });
+        document.getElementById('filtroTipo').addEventListener('change', () => {
+            const tipo = document.getElementById('filtroTipo').value.toLowerCase();
+            document.querySelectorAll('#listaAlunos tr').forEach(linha => {
+                if (linha.classList.contains('vazio')) return;
+                linha.style.display = !tipo || linha.textContent.toLowerCase().includes(tipo) ? '' : 'none';
+            });
+        });
+        document.getElementById('filtroPeriodo').addEventListener('change', () => {
+            const periodo = document.getElementById('filtroPeriodo').value.toLowerCase();
+            document.querySelectorAll('#listaAlunos tr').forEach(linha => {
+                if (linha.classList.contains('vazio')) return;
+                linha.style.display = !periodo || linha.textContent.toLowerCase().includes(periodo) ? '' : 'none';
+            });
+        });
+        function sair() {
+            if (confirm('Deseja sair do sistema?')) {
+                auth.signOut().then(() => window.location.href = 'login.html');
+            }
+        }
+        let promptInstalacao;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            promptInstalacao = e;
+            document.getElementById('itemInstalarApp').style.display = 'block';
+        });
+        async function instalarApp() {
+            if (!promptInstalacao) return alert('A opção de instalar não está disponível agora.');
+            promptInstalacao.prompt();
+            promptInstalacao = null;
+            document.getElementById('itemInstalarApp').style.display = 'none';
+        }
+        auth.onAuthStateChanged(usuario => {
+            if (!usuario) {
+                window.location.href = 'login.html';
+            } else {
+                carregarTema();
+                carregarValoresConfiguracoes();
+                carregarAlunos();
+            }
+        });
+    </script>
+</body>
+</html>
