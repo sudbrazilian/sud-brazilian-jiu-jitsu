@@ -55,7 +55,6 @@
         .logo p {
             font-size: 0.85rem;
             color: var(--cinza);
-            margin-top: 5px;
         }
         .form-group {
             margin-bottom: 20px;
@@ -129,12 +128,6 @@
         .voltar a:hover {
             color: white;
         }
-        .dica {
-            margin-top: 15px;
-            font-size: 0.75rem;
-            color: #666;
-            text-align: center;
-        }
     </style>
 </head>
 <body>
@@ -142,8 +135,8 @@
 <div class="caixa-login">
     <div class="logo">
         <img src="imagens/logosud.png" alt="SUD Brazilian Jiu-Jitsu">
-        <h1>Área Restrita</h1>
-        <p>Entre com sua conta</p>
+        <h1>Área Administrativa</h1>
+        <p>Acesso restrito ao responsável</p>
     </div>
 
     <form id="formLogin">
@@ -162,11 +155,6 @@
 
     <div class="mensagem" id="caixaMensagem"></div>
 
-    <p class="dica">
-        Aluno: acesso aos seus dados<br>
-        Administrador: controle geral
-    </p>
-
     <div class="voltar">
         <a href="index.html">← Voltar para a página inicial</a>
     </div>
@@ -176,7 +164,6 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyDKWso0gw6T2thoS12c1erzTzVhrnagS1s",
@@ -189,7 +176,6 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    const db = getFirestore(app);
 
     const formLogin = document.getElementById('formLogin');
     const btnEntrar = document.getElementById('btnEntrar');
@@ -212,30 +198,11 @@
         caixaMensagem.style.display = 'none';
 
         try {
-            const credencial = await signInWithEmailAndPassword(auth, email, senha);
-            const usuario = credencial.user;
-
-            // Verifica se é administrador
-            const adminRef = doc(db, "configuracao", "admin");
-            const adminSnap = await getDoc(adminRef);
-            
-            let emailAdmin = null;
-            if (adminSnap.exists()) {
-                emailAdmin = adminSnap.data().email;
-            }
-
+            await signInWithEmailAndPassword(auth, email, senha);
             mostrarMensagem('✅ Entrando...', 'sucesso');
-            
             setTimeout(() => {
-                if (emailAdmin && email === emailAdmin) {
-                    // É o administrador → painel completo
-                    window.location.href = 'dashboard.html';
-                } else {
-                    // É aluno → área do aluno
-                    window.location.href = 'aluno.html';
-                }
+                window.location.href = 'dashboard.html';
             }, 1000);
-
         } catch (erro) {
             btnEntrar.disabled = false;
             btnEntrar.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Entrar';
