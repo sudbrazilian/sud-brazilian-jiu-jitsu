@@ -251,13 +251,14 @@
         </div>
     </main>
     <script>
+        // ✅ FIREBASE DA SUD BRAZILIAN JIU-JITSU
         const firebaseConfig = {
-          apiKey: "AIzaSyAwbIaioYPlQsHEz2bNh5ATi3cGicu12bw",
-          authDomain: "pjj-para-jiu-jitsu.firebaseapp.com",
-          projectId: "pjj-para-jiu-jitsu",
-          storageBucket: "pjj-para-jiu-jitsu.firebasestorage.app",
-          messagingSenderId: "72563195814",
-          appId: "1:72563195814:web:5bc90e7bc0c51f415c1967"
+          apiKey: "AIzaSyDKWso0gw6T2thoS12c1erzTzVhrnagS1s",
+          authDomain: "sud-brazilian-jiu-jitsu.firebaseapp.com",
+          projectId: "sud-brazilian-jiu-jitsu",
+          storageBucket: "sud-brazilian-jiu-jitsu.firebasestorage.app",
+          messagingSenderId: "1053972036308",
+          appId: "1:1053972036308:web:215a41d7bc91502eee1941"
         };
         const app = firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
@@ -314,7 +315,6 @@
             const nasc = pegarData(dataNascimento);
             if (!nasc || isNaN(nasc.getTime())) return null;
             let idade = hoje.getFullYear() - nasc.getFullYear();
-            // ✅ CORRIGIDO: compara com datas corretas
             const m = hoje.getMonth() - nasc.getUTCMonth();
             if (m < 0 || (m === 0 && hoje.getDate() < nasc.getUTCDate())) idade--;
             return idade;
@@ -402,13 +402,12 @@
                 document.getElementById('valorRecebido').textContent = formatarValor(recebidoSemestreAtual);
                 document.getElementById('valorPendente').textContent = formatarValor(pendente);
                 document.getElementById('valorAtrasado').textContent = formatarValor(atrasado);
-                // ✅ AVISO DE ANIVERSÁRIO DO DIA — CORRIGIDO COM getUTCDate/getUTCMonth
+                // ✅ AVISO DE ANIVERSÁRIO DO DIA — CORRIGIDO
                 const avisoEl = document.getElementById('avisoAniversario');
                 avisoEl.innerHTML = '';
                 alunos.forEach(a => {
                     const nasc = pegarData(a.dados.dataNascimento);
                     if (!nasc || isNaN(nasc.getTime())) return;
-                    // ✅ COMPARAÇÃO CORRIGIDA — usa getUTCDate e getUTCMonth
                     if (nasc.getUTCDate() === hoje.getDate() && nasc.getUTCMonth() === hoje.getMonth()) {
                         const idade = calcularIdade(a.dados.dataNascimento);
                         avisoEl.innerHTML = `
