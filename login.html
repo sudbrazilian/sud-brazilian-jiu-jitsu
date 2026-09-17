@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - SUD BRAZILIAN JIU-JITSU</title>
-    <!-- ✅ ÍCONE NA ABA DO NAVEGADOR -->
     <link rel="icon" type="image/png" href="imagens/logosud.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- ✅ PWA — Instalar como Aplicativo -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#D10000">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -50,13 +48,8 @@
             border: 2px solid var(--vermelho-principal);
             box-shadow: 0 0 25px rgba(209, 0, 0, 0.25);
         }
-        .logo { 
-            text-align: center; 
-            margin-bottom: 25px; 
-        }
-        .logo img { 
-            height: 85px; 
-        }
+        .logo { text-align: center; margin-bottom: 25px; }
+        .logo img { height: 85px; }
         h2 {
             text-align: center;
             color: var(--texto-branco);
@@ -64,9 +57,7 @@
             font-size: 1.6rem;
             font-weight: 700;
         }
-        .campo { 
-            margin-bottom: 22px; 
-        }
+        .campo { margin-bottom: 22px; }
         label {
             display: block;
             color: var(--texto-cinza);
@@ -83,8 +74,8 @@
             font-size: 1rem;
             transition: border 0.2s;
         }
-        input:focus { 
-            outline: none; 
+        input:focus {
+            outline: none;
             border-color: var(--vermelho-principal);
             box-shadow: 0 0 0 2px rgba(209, 0, 0, 0.15);
         }
@@ -101,9 +92,7 @@
             transition: background 0.2s;
             margin-bottom: 15px;
         }
-        .btn-entrar:hover { 
-            background-color: var(--vermelho-claro); 
-        }
+        .btn-entrar:hover { background-color: var(--vermelho-claro); }
         .btn-voltar {
             width: 100%;
             padding: 12px;
@@ -160,12 +149,9 @@
         .erro { background-color: rgba(255, 77, 77, 0.15); color: var(--erro); border: 1px solid rgba(255, 77, 77, 0.3); }
         .info { background-color: rgba(255, 193, 7, 0.15); color: var(--info); border: 1px solid rgba(255, 193, 7, 0.3); }
         @media (max-width: 400px) {
-            .caixa-login {
-                padding: 25px 20px;
-            }
+            .caixa-login { padding: 25px 20px; }
         }
     </style>
-    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
@@ -177,7 +163,6 @@
         </div>
         <h2>Acesse sua conta</h2>
         <div id="mensagem"></div>
-        <!-- ✅ Botão Instalar App -->
         <button id="btnInstalarApp" class="btn-instalar" style="display:none;" onclick="instalarApp()">
             <i class="fas fa-download"></i> Instalar Aplicativo
         </button>
@@ -192,13 +177,11 @@
             </div>
             <button type="submit" class="btn-entrar">Entrar</button>
         </form>
-        <!-- ✅ Botão Voltar para o Início -->
         <a href="index.html" class="btn-voltar">
             <i class="fas fa-arrow-left"></i> Voltar para o Início
         </a>
     </div>
     <script>
-        // ✅ FIREBASE — SUD BRAZILIAN JIU-JITSU
         const firebaseConfig = {
           apiKey: "AIzaSyAwbIaioYPlQsHEz2bNh5ATi3cGicu12bw",
           authDomain: "pjj-para-jiu-jitsu.firebaseapp.com",
@@ -211,7 +194,6 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // ✅ PWA — Instalar Aplicativo
         let promptInstalacao;
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
@@ -221,7 +203,7 @@
 
         async function instalarApp() {
             if (!promptInstalacao) {
-                alert('Use o menu do navegador (três pontinhos) → "Instalar aplicativo"');
+                alert('Use o menu do navegador → "Instalar aplicativo"');
                 return;
             }
             promptInstalacao.prompt();
@@ -234,7 +216,6 @@
             document.getElementById('btnInstalarApp').style.display = 'none';
         });
 
-        // ✅ Exibir mensagens
         function mostrarMensagem(texto, tipo) {
             const el = document.getElementById('mensagem');
             el.textContent = texto;
@@ -242,27 +223,21 @@
             el.style.display = 'block';
         }
 
-        // ✅ Verificar se entrada é telefone
         function ehTelefone(valor) {
             const apenasNumeros = valor.replace(/\D/g, '');
             return apenasNumeros.length >= 10 && apenasNumeros.length <= 11;
         }
 
-        // ✅ Buscar e-mail pelo telefone
         async function buscarEmailPorTelefone(telefone) {
             const telSemFormatacao = telefone.replace(/\D/g, '');
             const snapshot = await db.collection('usuarios')
                 .where('telefone', '==', telSemFormatacao)
                 .limit(1)
                 .get();
-            
-            if (!snapshot.empty) {
-                return snapshot.docs[0].data().email;
-            }
+            if (!snapshot.empty) return snapshot.docs[0].data().email;
             return null;
         }
 
-        // ✅ Login — ORIGINAL, sem alterações
         document.getElementById('formLogin').addEventListener('submit', async function(e) {
             e.preventDefault();
             const entrada = document.getElementById('login').value.trim();
@@ -274,48 +249,32 @@
             try {
                 if (ehTelefone(entrada)) {
                     const emailEncontrado = await buscarEmailPorTelefone(entrada);
-                    if (!emailEncontrado) {
-                        throw new Error("Telefone não cadastrado no sistema!");
-                    }
+                    if (!emailEncontrado) throw new Error("Telefone não cadastrado!");
                     emailFinal = emailEncontrado;
                 }
 
                 const resultado = await auth.signInWithEmailAndPassword(emailFinal, senha);
                 const usuario = resultado.user;
-
                 const doc = await db.collection('usuarios').doc(usuario.uid).get();
-                if (!doc.exists) {
-                    throw new Error("Conta existe, mas sem cadastro no sistema!");
-                }
+                
+                if (!doc.exists) throw new Error("Conta sem cadastro no sistema!");
 
                 const dados = doc.data();
                 if (dados.tipo === "admin") {
-                    mostrarMensagem("✅ Acesso de Administrador! Entrando...", "sucesso");
+                    mostrarMensagem("✅ Administrador! Entrando...", "sucesso");
                     setTimeout(() => window.location.href = "dashboard.html", 1200);
                 } else if (dados.tipo === "aluno") {
-                    mostrarMensagem("✅ Acesso de Aluno! Entrando...", "sucesso");
+                    mostrarMensagem("✅ Aluno! Entrando...", "sucesso");
                     setTimeout(() => window.location.href = "aluno.html", 1200);
-                } else {
-                    throw new Error("Tipo de usuário não definido: " + dados.tipo);
                 }
             } catch (erro) {
-                console.error("Erro:", erro);
                 let msg;
                 switch(erro.code) {
-                    case "auth/user-not-found":
-                        msg = "❌ E-mail ou telefone não cadastrado";
-                        break;
-                    case "auth/wrong-password":
-                        msg = "❌ Senha incorreta";
-                        break;
-                    case "auth/invalid-email":
-                        msg = "❌ Formato inválido. Use e-mail ou telefone correto";
-                        break;
-                    case "auth/network-request-failed":
-                        msg = "❌ Sem conexão com a internet";
-                        break;
-                    default:
-                        msg = "❌ " + erro.message;
+                    case "auth/user-not-found": msg = "❌ E-mail não cadastrado"; break;
+                    case "auth/wrong-password": msg = "❌ Senha incorreta"; break;
+                    case "auth/invalid-email": msg = "❌ E-mail inválido"; break;
+                    case "auth/network-request-failed": msg = "❌ Sem internet"; break;
+                    default: msg = "❌ " + erro.message;
                 }
                 mostrarMensagem(msg, "erro");
             }
