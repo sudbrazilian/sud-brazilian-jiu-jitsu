@@ -262,7 +262,7 @@
             return null;
         }
 
-        // ✅ Login — CAMINHOS CORRIGIDOS
+        // ✅ Login — ORIGINAL, sem alterações
         document.getElementById('formLogin').addEventListener('submit', async function(e) {
             e.preventDefault();
             const entrada = document.getElementById('login').value.trim();
@@ -272,7 +272,6 @@
             mostrarMensagem("🔄 Verificando dados...", "info");
             
             try {
-                // Se for telefone, busca o e-mail correspondente
                 if (ehTelefone(entrada)) {
                     const emailEncontrado = await buscarEmailPorTelefone(entrada);
                     if (!emailEncontrado) {
@@ -281,11 +280,9 @@
                     emailFinal = emailEncontrado;
                 }
 
-                // Realiza login
                 const resultado = await auth.signInWithEmailAndPassword(emailFinal, senha);
                 const usuario = resultado.user;
 
-                // Busca dados do usuário
                 const doc = await db.collection('usuarios').doc(usuario.uid).get();
                 if (!doc.exists) {
                     throw new Error("Conta existe, mas sem cadastro no sistema!");
