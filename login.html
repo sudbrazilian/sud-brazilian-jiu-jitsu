@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Login</title>
+    <link rel="stylesheet" href="estilo.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+        
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)), url('capasud.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            margin: 0;
+        }
+        .voltar-inicio {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #ffffff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+            transition: color 0.3s;
+            z-index: 10;
+        }
+        .voltar-inicio:hover {
+            color: #D10000;
+        }
+        .formulario-login {
+            background-color: #121214;
+            padding: 40px 35px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 420px;
+            border: 1px solid rgba(209, 0, 0, 0.3);
+            box-shadow: 0 0 30px rgba(209, 0, 0, 0.15);
+        }
+        .logo-login {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo-login img {
+            height: 110px;
+            width: auto;
+            object-fit: contain;
+        }
+        .titulo-bemvindo {
+            text-align: center;
+            margin-bottom: 8px;
+            font-size: 1.7rem;
+            font-weight: 800;
+            color: #ffffff;
+        }
+        .titulo-bemvindo span {
+            color: #D10000;
+        }
+        .subtitulo-login {
+            text-align: center;
+            color: #9A9AA2;
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+        }
+        .grupo-campo {
+            margin-bottom: 18px;
+        }
+        .grupo-campo label {
+            display: block;
+            margin-bottom: 8px;
+            color: #E0E0E0;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .input-container {
+            position: relative;
+        }
+        .input-container i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6B7280;
+            font-size: 1rem;
+        }
+        .grupo-campo input {
+            background-color: #1A1A1F;
+            border: 1px solid #29292E;
+            color: #ffffff;
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            transition: border 0.3s ease, box-shadow 0.3s ease;
+            margin: 0;
+            outline: none;
+        }
+        .grupo-campo input::placeholder {
+            color: #6B7280;
+        }
+        .grupo-campo input:focus {
+            border-color: #D10000;
+            box-shadow: 0 0 0 2px rgba(209, 0, 0, 0.15);
+        }
+        .linha-lembrar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        .lembrar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #B0B0B0;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        .lembrar input {
+            accent-color: #D10000;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+        .esqueci-senha {
+            color: #D10000;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .esqueci-senha:hover {
+            text-decoration: underline;
+        }
+        .btn-login {
+            width: 100%;
+            padding: 15px;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #D10000, #FF1A1A);
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+            letter-spacing: 0.5px;
+        }
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(209, 0, 0, 0.35);
+        }
+        #erroLogin {
+            display: none;
+            background-color: rgba(231, 76, 60, 0.15);
+            border: 1px solid rgba(231, 76, 60, 0.3);
+            color: #FF6B6B;
+            padding: 12px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        @media (max-width: 480px) {
+            .formulario-login {
+                padding: 30px 20px;
+            }
+            .titulo-bemvindo {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="voltar-inicio">
+        <i class="fa-solid fa-arrow-left"></i> Voltar ao site
+    </a>
+    <div class="formulario-login">
+        <div class="logo-login">
+            <img src="logosud.png" alt="Login">
+        </div>
+        
+        <h1 class="titulo-bemvindo">Bem-vindo <span>de volta!</span></h1>
+        <p class="subtitulo-login">Acesse sua conta SUD</p>
+        
+        <div id="erroLogin">❌ E-mail ou senha incorretos!</div>
+        
+        <form id="formLogin">
+            <div class="grupo-campo">
+                <label for="emailLogin">E-mail</label>
+                <div class="input-container">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" id="emailLogin" name="emailLogin" placeholder="seu@email.com" required>
+                </div>
+            </div>
+            
+            <div class="grupo-campo">
+                <label for="senhaLogin">Senha</label>
+                <div class="input-container">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="senhaLogin" name="senhaLogin" placeholder="Digite sua senha" required>
+                </div>
+            </div>
+            
+            <div class="linha-lembrar">
+                <label class="lembrar">
+                    <input type="checkbox"> Lembrar de mim
+                </label>
+                <a href="#" class="esqueci-senha">Esqueci minha senha</a>
+            </div>
+            
+            <button type="submit" class="btn-login">Entrar →</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('formLogin').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('emailLogin').value.trim();
+            const senha = document.getElementById('senhaLogin').value.trim();
+            
+            if (email === "admin@pjj.com.br" && senha === "123456") {
+                alert("🔐 Acesso Permitido! Entrando no PAINEL ADMINISTRATIVO...");
+                window.location.href = "admin.html";
+            }
+            else if (email === "aluno@pjj.com.br" && senha === "123456") {
+                alert("✅ Bem-vindo! Entrando na Área do Aluno...");
+                window.location.href = "aluno.html";
+            }
+            else {
+                document.getElementById('erroLogin').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('erroLogin').style.display = 'none';
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>
