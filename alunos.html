@@ -97,35 +97,43 @@
         .card-filtro input:focus, .card-filtro select:focus { border-color: var(--vermelho-principal); box-shadow: 0 0 0 2px rgba(209,0,0,0.15); }
         .tabela { 
             width: 100%; 
-            border-collapse: collapse; 
+            border-collapse: separate; 
+            border-spacing: 0;
             background: var(--fundo-card); 
             border: 1px solid var(--borda); 
             border-radius: 10px; 
-            overflow: hidden; 
+            overflow: visible; /* ✅ Permite que o menu apareça fora sem cortar */
         }
         .tabela th { background: rgba(255,255,255,0.05); padding: 14px 12px; text-align: left; font-size: 12px; font-weight: 700; color: var(--texto-cinza); text-transform: uppercase; white-space: nowrap; }
-        .tabela td { padding: 14px 12px; border-bottom: 1px solid var(--borda); font-size: 14px; color: var(--texto-branco); }
+        .tabela td { padding: 14px 12px; border-bottom: 1px solid var(--borda); font-size: 14px; color: var(--texto-branco); position: relative; }
         .tabela tr:hover { background: rgba(255,255,255,0.03); }
         .vazio { text-align: center; padding: 50px !important; color: var(--texto-cinza); }
         .aviso-valores { font-size: 12px; color: var(--amarelo); margin-bottom: 15px; }
-        .acoes { position: relative; }
+        .acoes { position: relative; z-index: 10; }
         .btn-acoes {
             background: none; border: none; color: var(--texto-cinza);
             font-size: 20px; font-weight: bold; cursor: pointer;
             padding: 4px 10px; border-radius: 4px;
         }
         .btn-acoes:hover { background: rgba(255,255,255,0.05); color: var(--texto-branco); }
+        /* ✅ MENU CORRIGIDO — Não corta mais! */
         .menu-acoes {
-            position: absolute; right: 0; top: 100%;
-            background: var(--fundo-card); border: 1px solid var(--borda);
-            border-radius: 8px; min-width: 180px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-            z-index: 100; display: none;
+            position: absolute; 
+            right: 0; 
+            top: 100%;
+            margin-top: 4px;
+            background: var(--fundo-card); 
+            border: 1px solid var(--borda);
+            border-radius: 8px; 
+            min-width: 200px; /* Mais largo */
+            box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+            z-index: 9999; /* Fica por cima de tudo */
+            display: none;
         }
         .menu-acoes.aberto { display: block; }
         .menu-acoes button {
             width: 100%; text-align: left; border: none; background: none;
-            padding: 10px 15px; color: var(--texto-branco);
+            padding: 12px 15px; color: var(--texto-branco);
             font-size: 14px; cursor: pointer; transition: 0.15s;
         }
         .menu-acoes button:hover { background: rgba(209,0,0,0.1); color: var(--vermelho-principal); }
@@ -170,7 +178,7 @@
         .info-linha:last-child { border-bottom: none; }
         .info-label { font-weight: 600; color: var(--texto-cinza); font-size: 14px; }
         .info-valor { font-size: 14px; color: var(--texto-branco); text-align: right; }
-        .carregando-valores { color: var(--amarelo); font-style: italic; }
+        .btn-salvar:hover { filter: brightness(1.1); }
         @media (max-width: 992px) {
             .conteudo { margin-left: 0; width: 100%; padding: 80px 15px 20px; }
             .btn-menu { display: flex; align-items: center; justify-content: center; }
@@ -242,7 +250,7 @@
                     <th>Responsável</th>
                     <th>Plano</th>
                     <th>Valor Final</th>
-                    <th style="width:50px;"></th>
+                    <th style="width:60px;"></th>
                 </tr>
             </thead>
             <tbody id="listaAlunos">
@@ -325,7 +333,7 @@
                     <div class="linha">
                         <div class="campo">
                             <label>Valor Final</label>
-                            <input type="text" id="valorFinalAluno" class="valor-final valor-vazio" value="Carregando valores..." readonly>
+                            <input type="text" id="valorFinalAluno" class="valor-final valor-vazio" value="Selecione o tipo e o plano" readonly>
                         </div>
                         <div class="campo">
                             <label>Faixa Inicial *</label>
@@ -368,13 +376,17 @@
         const app = firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
+        
+        // ✅ VALORES PADRÃO GARANTIDOS
         let valoresPlanos = {
             'Mensal': 90.00,
             'Trimestral': 240.00,
             'Semestral': 450.00,
             'Anual': 820.00
         };
+        
         let alunosCarregados = [];
+        let valoresCarregados = false;
         async function carregarValoresConfiguracoes() {
             try {
                 const doc = await db.collection('configuracoes').doc('geral').get();
@@ -388,6 +400,7 @@
             } catch (erro) {
                 console.warn('Usando valores padrão:', erro);
             }
+            valoresCarregados = true;
             preencherOpcoesPlanos();
         }
         function preencherOpcoesPlanos() {
@@ -448,16 +461,18 @@
             const periodo = document.getElementById('periodoAluno').value;
             const desconto = parseFloat(document.getElementById('descontoAluno').value) || 0;
             const campoValor = document.getElementById('valorFinalAluno');
+            
             if (!tipo || !periodo) {
                 campoValor.value = 'Selecione o tipo e o plano';
                 campoValor.className = 'valor-final valor-vazio';
                 campoValor.removeAttribute('data-valor');
                 return;
             }
+            
             if (tipo === 'Bolsista') {
                 campoValor.value = 'GRÁTIS';
                 campoValor.className = 'valor-final valor-gratis';
-                campoValor.removeAttribute('data-valor');
+                campoValor.dataset.valor = '0';
             } else {
                 const valorBase = valoresPlanos[periodo] || 0;
                 const valorFinal = Math.round((valorBase - desconto) * 100) / 100;
@@ -622,6 +637,7 @@
                 document.getElementById('responsavelAluno').value = dados.responsavel || '';
                 document.getElementById('telefoneAluno').value = dados.telefone || '';
                 document.getElementById('emailAluno').value = dados.email || '';
+                
                 let dataVenc = null;
                 if (dados.dataVencimento) {
                     dataVenc = dados.dataVencimento.toDate();
@@ -631,11 +647,13 @@
                     dataVenc = dados.dataInicioAula.toDate();
                 }
                 document.getElementById('matriculaAluno').value = dataVenc ? dataVenc.toISOString().split('T')[0] : '';
+                
                 preencherOpcoesPlanos();
                 document.getElementById('periodoAluno').value = dados.periodo || '';
                 document.getElementById('descontoAluno').value = dados.desconto || 0;
                 document.getElementById('faixaAluno').value = dados.faixa || '';
                 atualizarValorPlano();
+                
                 document.getElementById('modalCadastro').style.display = 'flex';
                 document.body.style.overflow = 'hidden';
             } catch (erro) {
@@ -653,27 +671,49 @@
         }
         document.getElementById('formAluno').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const id = document.getElementById('idAluno').value;
-            const valorFinal = parseFloat(document.getElementById('valorFinalAluno').dataset.valor) || 0;
+            
+            // ✅ Validação extra
+            const tipo = document.getElementById('tipoAluno').value;
+            const periodo = document.getElementById('periodoAluno').value;
+            if (!tipo || !periodo) {
+                alert('⚠️ Selecione o Tipo e o Período do Plano!');
+                return;
+            }
+            
+            const valorFinalTexto = document.getElementById('valorFinalAluno').dataset.valor;
+            if (valorFinalTexto === undefined) {
+                alert('⚠️ Aguarde o cálculo do valor final!');
+                return;
+            }
+            const valorFinal = parseFloat(valorFinalTexto) || 0;
+            
             const cpfSemFormatacao = document.getElementById('cpfAluno').value.replace(/\D/g, '');
             const dataNascimentoValor = document.getElementById('nascimentoAluno').value;
             const dataVencimentoValor = document.getElementById('matriculaAluno').value;
+            
+            if (!dataNascimentoValor || !dataVencimentoValor) {
+                alert('⚠️ Preencha as datas corretamente!');
+                return;
+            }
+            
             const dados = {
                 nome: document.getElementById('nomeAluno').value.trim(),
                 cpf: cpfSemFormatacao,
-                tipo: document.getElementById('tipoAluno').value,
+                tipo: tipo,
                 dataNascimento: firebase.firestore.Timestamp.fromDate(new Date(dataNascimentoValor + 'T00:00:00')),
                 responsavel: document.getElementById('responsavelAluno').value.trim(),
                 telefone: document.getElementById('telefoneAluno').value.trim(),
                 email: document.getElementById('emailAluno').value.trim(),
                 dataVencimento: firebase.firestore.Timestamp.fromDate(new Date(dataVencimentoValor + 'T00:00:00')),
-                periodo: document.getElementById('periodoAluno').value,
+                periodo: periodo,
                 desconto: parseFloat(document.getElementById('descontoAluno').value) || 0,
                 valorPlano: valorFinal,
                 faixa: document.getElementById('faixaAluno').value,
                 dataCadastro: firebase.firestore.Timestamp.now()
             };
+            
             try {
+                const id = document.getElementById('idAluno').value;
                 if (id) {
                     const docAntigo = await db.collection('alunos').doc(id).get();
                     if (docAntigo.exists) {
@@ -681,16 +721,17 @@
                         dados.qtdPagamentos = dadosAntigos.qtdPagamentos || 0;
                     }
                     await db.collection('alunos').doc(id).update(dados);
-                    alert('✅ Aluno atualizado! Valor calculado com base nas configurações.');
+                    alert('✅ Aluno atualizado!');
                 } else {
                     dados.qtdPagamentos = 0;
                     await db.collection('alunos').add(dados);
-                    alert('✅ Aluno cadastrado! Valor carregado das configurações.');
+                    alert('✅ Aluno cadastrado com sucesso!');
                 }
                 fecharModalCadastro();
                 carregarAlunos();
             } catch (erro) {
-                alert('Erro ao salvar: ' + erro.message);
+                alert('❌ Erro ao salvar: ' + erro.message);
+                console.error(erro);
             }
         });
         document.getElementById('buscaAluno').addEventListener('input', () => {
