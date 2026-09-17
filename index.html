@@ -4,15 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SUD Brazilian Jiu-Jitsu</title>
-    <link rel="stylesheet" href="estilo.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- ✅ PWA -->
+
+    <!-- ✅ Favicon / Logo na aba do navegador -->
+    <link rel="icon" href="imagens/logosud.png" type="image/png">
+    <link rel="shortcut icon" href="imagens/logosud.png" type="image/png">
+
+    <!-- ✅ PWA / Ícone para celular -->
+    <link rel="apple-touch-icon" href="imagens/logosud.png">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#D10000">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="SUD Jiu-Jitsu">
-    <link rel="apple-touch-icon" href="imagens/logosud.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
         * {
             margin: 0;
@@ -38,6 +44,7 @@
             max-width: 1280px;
             margin: 0 auto;
         }
+
         /* ========== CABEÇALHO ========== */
         header {
             display: flex;
@@ -70,10 +77,12 @@
             letter-spacing: 2px;
             text-transform: uppercase;
         }
-        nav {
+        .nav-desktop {
             display: flex;
-            gap: 32px;
             align-items: center;
+        }
+        nav {
+            gap: 32px;
         }
         nav a {
             color: var(--texto);
@@ -82,6 +91,7 @@
             font-weight: 500;
             position: relative;
             padding: 6px 0;
+            margin: 0 12px;
         }
         nav a.ativo {
             color: var(--vermelho-claro);
@@ -113,6 +123,64 @@
         .btn-entrar:hover {
             background: var(--vermelho-claro);
         }
+
+        /* ========== MENU HAMBÚRGUER / MOBILE ========== */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--texto);
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+        .menu-mobile {
+            display: flex;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 75%;
+            max-width: 300px;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.98);
+            flex-direction: column;
+            padding: 80px 30px;
+            gap: 20px;
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        .menu-mobile.open {
+            transform: translateX(0);
+        }
+        .menu-mobile a {
+            color: var(--texto);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+        .menu-mobile a.ativo {
+            color: var(--vermelho-claro);
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 999;
+        }
+        .overlay.active {
+            display: block;
+        }
+
         /* ========== BANNER PRINCIPAL ========== */
         .banner {
             background: linear-gradient(90deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.75) 45%, rgba(0,0,0,0.35) 70%),
@@ -169,6 +237,7 @@
             background: var(--vermelho-claro);
             transform: translateY(-2px);
         }
+
         /* ========== DESTAQUES LADO DIREITO ========== */
         .destaques {
             display: flex;
@@ -200,27 +269,7 @@
             font-size: 0.75rem;
             color: #888;
         }
-        /* ========== SEÇÕES ABAIXO ========== */
-        .secao {
-            padding: 80px 0;
-        }
-        .secao-escura {
-            background: var(--meio-escuro);
-        }
-        .secao-cabecalho {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-        .secao-cabecalho h3 {
-            font-size: 0.9rem;
-            color: var(--vermelho-claro);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-        }
-        .secao-cabecalho h2 {
-            font-size: 2.2rem;
-        }
+
         /* ========== RODAPÉ ========== */
         footer {
             background: #000;
@@ -234,7 +283,8 @@
             color: #555;
             font-size: 0.8rem;
         }
-        /* ========== RESPONSIVIDADE ========== */
+
+        /* ========== RESPONSIVIDADE / CELULAR ========== */
         @media (max-width: 900px) {
             .banner-conteudo {
                 grid-template-columns: 1fr;
@@ -244,8 +294,11 @@
                 flex-wrap: wrap;
                 justify-content: flex-start;
             }
-            nav {
+            .nav-desktop {
                 display: none;
+            }
+            .hamburger {
+                display: flex;
             }
             .banner-esquerda h2 {
                 font-size: 1.8rem;
@@ -264,7 +317,8 @@
             <p>BRAZILIAN JIU-JITSU</p>
         </div>
     </div>
-    <nav>
+
+    <nav class="nav-desktop">
         <a href="#inicio" class="ativo">Início</a>
         <a href="#sobre">Sobre</a>
         <a href="#aulas">Aulas</a>
@@ -273,10 +327,35 @@
         <a href="#noticias">Notícias</a>
         <a href="#contato">Contato</a>
     </nav>
+
+    <a href="login.html" class="btn-entrar nav-desktop">
+        <i class="fa-solid fa-user"></i> Entrar
+    </a>
+
+    <!-- Botão de menu no celular -->
+    <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</header>
+
+<!-- Fundo escuro quando abre o menu -->
+<div class="overlay" id="overlay"></div>
+
+<!-- Menu que abre no celular -->
+<nav class="menu-mobile" id="menuMobile">
+    <a href="#inicio" class="ativo">Início</a>
+    <a href="#sobre">Sobre</a>
+    <a href="#aulas">Aulas</a>
+    <a href="#horarios">Horários</a>
+    <a href="#galeria">Galeria</a>
+    <a href="#noticias">Notícias</a>
+    <a href="#contato">Contato</a>
     <a href="login.html" class="btn-entrar">
         <i class="fa-solid fa-user"></i> Entrar
     </a>
-</header>
+</nav>
 
 <!-- BANNER PRINCIPAL -->
 <section class="banner" id="inicio">
@@ -286,7 +365,7 @@
                 <img src="imagens/logosud.png" alt="SUD" class="logo-banner">
                 <h2>MAIS QUE UM ESPORTE,<br>É UM <span>ESTILO DE VIDA</span>.</h2>
                 <p>Na SUD, o Jiu-Jitsu transforma vidas. Aqui você encontra respeito, disciplina, superação e uma família que te apoia em cada passo da jornada.</p>
-                <a href="cadastro.html" class="btn-vermelho">
+                <a href="https://wa.me/5591998178337" target="_blank" class="btn-vermelho">
                     VENHA TREINAR <i class="fa-solid fa-arrow-right"></i>
                 </a>
             </div>
@@ -317,8 +396,6 @@
     </div>
 </section>
 
-<!-- AQUI VOCÊ PODE ADICIONAR AS OUTRAS SEÇÕES DEPOIS -->
-
 <!-- RODAPÉ -->
 <footer>
     <div class="container">
@@ -327,6 +404,31 @@
         </div>
     </div>
 </footer>
+
+<!-- ✅ Código do menu funcionar no celular -->
+<script>
+    const hamburger = document.getElementById('hamburger');
+    const menuMobile = document.getElementById('menuMobile');
+    const overlay = document.getElementById('overlay');
+
+    hamburger.addEventListener('click', () => {
+        menuMobile.classList.toggle('open');
+        overlay.classList.toggle('active');
+    });
+
+    overlay.addEventListener('click', () => {
+        menuMobile.classList.remove('open');
+        overlay.classList.remove('active');
+    });
+
+    // Fecha o menu ao clicar em qualquer link
+    document.querySelectorAll('.menu-mobile a').forEach(link => {
+        link.addEventListener('click', () => {
+            menuMobile.classList.remove('open');
+            overlay.classList.remove('active');
+        });
+    });
+</script>
 
 </body>
 </html>
