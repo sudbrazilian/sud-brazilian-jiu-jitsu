@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - SUD Brazilian Jiu-Jitsu</title>
     <link rel="icon" href="imagens/logosud.png" type="image/png">
+    <!-- ✅ PWA — Instalar como Aplicativo -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#D10000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SUD Jiu-Jitsu">
+    <link rel="apple-touch-icon" href="imagens/logosud.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -131,14 +140,12 @@
     </style>
 </head>
 <body>
-
 <div class="caixa-login">
     <div class="logo">
         <img src="imagens/logosud.png" alt="SUD Brazilian Jiu-Jitsu">
         <h1>Área Administrativa</h1>
         <p>Acesso restrito ao responsável</p>
     </div>
-
     <form id="formLogin">
         <div class="form-group">
             <label for="email">E-mail</label>
@@ -152,19 +159,17 @@
             <i class="fa-solid fa-right-to-bracket"></i> Entrar
         </button>
     </form>
-
     <div class="mensagem" id="caixaMensagem"></div>
-
     <div class="voltar">
         <a href="index.html">← Voltar para a página inicial</a>
     </div>
 </div>
 
-<!-- ✅ Firebase -->
+<!-- ✅ Firebase Modular — VERSÃO QUE FUNCIONA! -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js";
-
+    
     const firebaseConfig = {
         apiKey: "AIzaSyDKWso0gw6T2thoS12c1erzTzVhrnagS1s",
         authDomain: "sud-brazilian-jiu-jitsu.firebaseapp.com",
@@ -173,30 +178,30 @@
         messagingSenderId: "1053972036308",
         appId: "1:1053972036308:web:215a41d7bc91502eee1941"
     };
-
+    
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-
+    
     const formLogin = document.getElementById('formLogin');
     const btnEntrar = document.getElementById('btnEntrar');
     const caixaMensagem = document.getElementById('caixaMensagem');
-
+    
     function mostrarMensagem(texto, tipo) {
         caixaMensagem.style.display = 'block';
         caixaMensagem.className = 'mensagem ' + tipo;
         caixaMensagem.textContent = texto;
     }
-
+    
     formLogin.addEventListener('submit', async (e) => {
         e.preventDefault();
         
         const email = document.getElementById('email').value;
         const senha = document.getElementById('senha').value;
-
+        
         btnEntrar.disabled = true;
         btnEntrar.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Entrando...';
         caixaMensagem.style.display = 'none';
-
+        
         try {
             await signInWithEmailAndPassword(auth, email, senha);
             mostrarMensagem('✅ Entrando...', 'sucesso');
@@ -216,12 +221,13 @@
                 mensagemErro = 'E-mail inválido.';
             } else if (erro.code === 'auth/too-many-requests') {
                 mensagemErro = 'Muitas tentativas. Tente mais tarde.';
+            } else if (erro.code === 'auth/network-request-failed') {
+                mensagemErro = 'Sem conexão. Verifique sua internet.';
             }
             
             mostrarMensagem('❌ ' + mensagemErro, 'erro');
         }
     });
 </script>
-
 </body>
 </html>
