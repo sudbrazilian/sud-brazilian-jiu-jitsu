@@ -18,16 +18,15 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
         }
         :root {
             --vermelho: #D10000;
             --vermelho-claro: #FF3B3B;
-            --escuro: #0A0A0A;
-            --meio-escuro: #1A1A1A;
+            --escuro: #050505;
+            --meio-escuro: #121212;
             --texto: #FFFFFF;
-            --texto-claro: #CCCCCC;
-            --dourado: #D4AF37;
+            --texto-claro: #E0E0E0;
         }
         body {
             background-color: var(--escuro);
@@ -35,35 +34,66 @@
             line-height: 1.6;
         }
         .container {
-            width: 90%;
-            max-width: 1200px;
+            width: 92%;
+            max-width: 1280px;
             margin: 0 auto;
         }
-        /* Cabeçalho */
+        /* ========== CABEÇALHO ========== */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 5%;
+            padding: 12px 5%;
             position: absolute;
             width: 100%;
             top: 0;
-            z-index: 100;
+            left: 0;
+            z-index: 1000;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+        }
+        .logo-cabecalho {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
         .logo-cabecalho img {
-            height: 55px;
+            height: 48px;
+        }
+        .logo-texto h1 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .logo-texto p {
+            font-size: 0.65rem;
+            color: #999;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        nav {
+            display: flex;
+            gap: 32px;
+            align-items: center;
         }
         nav a {
             color: var(--texto);
             text-decoration: none;
-            margin: 0 12px;
-            font-size: 0.95rem;
-            transition: color 0.3s;
+            font-size: 0.9rem;
+            font-weight: 500;
+            position: relative;
+            padding: 6px 0;
         }
-        nav a:hover, nav a.ativo {
+        nav a.ativo {
             color: var(--vermelho-claro);
-            border-bottom: 2px solid var(--vermelho-claro);
-            padding-bottom: 4px;
+        }
+        nav a.ativo::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--vermelho);
         }
         .btn-entrar {
             background: var(--vermelho);
@@ -72,296 +102,167 @@
             padding: 10px 24px;
             border-radius: 6px;
             font-weight: 600;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: background 0.3s;
             text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         .btn-entrar:hover {
             background: var(--vermelho-claro);
         }
-        /* Banner Principal */
+        /* ========== BANNER PRINCIPAL ========== */
         .banner {
-            background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.85)), url('imagens/capasud.jpg') center/cover no-repeat;
+            background: linear-gradient(90deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.75) 45%, rgba(0,0,0,0.35) 70%),
+                        url('imagens/capa-sud.jpg') center/cover no-repeat;
             min-height: 100vh;
             display: flex;
             align-items: center;
-            padding-top: 80px;
+            padding-top: 70px;
         }
         .banner-conteudo {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 50px;
+            grid-template-columns: 1fr auto;
+            gap: 60px;
             align-items: center;
+            width: 100%;
         }
-        .banner-texto .logo-grande {
+        .banner-esquerda {
+            max-width: 520px;
+        }
+        .logo-banner {
             height: 140px;
             margin-bottom: 25px;
         }
-        .banner-texto h1 {
-            font-size: 1.2rem;
-            color: var(--dourado);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 10px;
-        }
-        .banner-texto h2 {
-            font-size: 3rem;
-            line-height: 1.1;
-            margin-bottom: 20px;
-        }
-        .lema {
-            font-size: 1.3rem;
-            color: var(--vermelho-claro);
-            font-weight: 700;
+        .banner-esquerda h2 {
+            font-size: 2.4rem;
+            line-height: 1.2;
             margin-bottom: 15px;
-            letter-spacing: 2px;
         }
-        .banner-texto p {
+        .banner-esquerda h2 span {
+            color: var(--vermelho);
+        }
+        .banner-esquerda p {
             color: var(--texto-claro);
-            margin-bottom: 12px;
             font-size: 1rem;
-        }
-        .banner-texto .destaque-frase {
-            color: var(--dourado);
-            font-weight: 600;
-            margin-bottom: 25px;
+            margin-bottom: 35px;
+            line-height: 1.7;
         }
         .btn-vermelho {
             background: var(--vermelho);
             color: white;
             border: none;
-            padding: 15px 35px;
+            padding: 14px 32px;
             border-radius: 6px;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
             text-decoration: none;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
         .btn-vermelho:hover {
             background: var(--vermelho-claro);
             transform: translateY(-2px);
         }
-        .btn-whatsapp {
-            background: #25D366;
-            margin-left: 15px;
-        }
-        .btn-whatsapp:hover {
-            background: #1FBF59;
-        }
-        /* Seção Sobre */
-        .sobre {
-            padding: 80px 0;
-            background: var(--meio-escuro);
-        }
-        .sobre-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 50px;
-            align-items: center;
-        }
-        .sobre-texto h3 {
-            font-size: 1rem;
-            color: var(--dourado);
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-        .sobre-texto h2 {
-            font-size: 2.2rem;
-            margin-bottom: 25px;
-        }
-        .sobre-texto p {
-            color: var(--texto-claro);
-            margin-bottom: 15px;
-            font-size: 1.05rem;
-        }
-        .valores {
+        /* ========== DESTAQUES LADO DIREITO ========== */
+        .destaques {
             display: flex;
-            gap: 25px;
-            margin: 25px 0;
-        }
-        .valor-item {
-            text-align: center;
-        }
-        .valor-item span {
-            display: block;
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--vermelho-claro);
-        }
-        /* Seção Aulas */
-        .aulas {
-            padding: 80px 0;
-        }
-        .aulas-cabecalho {
-            margin-bottom: 40px;
-            text-align: center;
-        }
-        .aulas-cabecalho h3 {
-            font-size: 1rem;
-            color: var(--dourado);
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-        .aulas-cabecalho h2 {
-            font-size: 2.2rem;
-            margin-bottom: 15px;
-        }
-        .aulas-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            flex-direction: column;
             gap: 25px;
         }
-        .aula-card {
-            background: var(--meio-escuro);
-            padding: 35px 25px;
-            border-radius: 12px;
-            border-left: 4px solid var(--vermelho);
-            transition: transform 0.3s;
-        }
-        .aula-card:hover {
-            transform: translateY(-5px);
-        }
-        .aula-card i {
-            font-size: 2rem;
-            color: var(--vermelho-claro);
-            margin-bottom: 20px;
-        }
-        .aula-card h4 {
-            margin-bottom: 12px;
-            font-size: 1.1rem;
-        }
-        .aula-card p {
-            color: var(--texto-claro);
-            font-size: 0.95rem;
-        }
-        /* Horários */
-        .horarios {
-            padding: 80px 0;
-            background: var(--meio-escuro);
-        }
-        .horarios-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 50px;
-        }
-        .bloco h3 {
-            font-size: 1.2rem;
-            color: var(--dourado);
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
-        .horario-item {
-            padding: 12px 0;
-            border-bottom: 1px solid #333;
-        }
-        .horario-item strong {
-            color: var(--vermelho-claro);
-        }
-        /* Galeria */
-        .galeria {
-            padding: 80px 0;
-        }
-        .galeria-cabecalho {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .galeria-cabecalho h3 {
-            font-size: 1rem;
-            color: var(--dourado);
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-        .galeria-cabecalho h2 {
-            font-size: 2.2rem;
-        }
-        .galeria-fotos {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        .destaque-item {
+            display: flex;
+            align-items: center;
             gap: 15px;
         }
-        .galeria-fotos img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            border-radius: 10px;
-            transition: transform 0.3s;
+        .destaque-icone {
+            width: 44px;
+            height: 44px;
+            background: rgba(209, 0, 0, 0.15);
+            border: 1px solid rgba(209, 0, 0, 0.3);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--vermelho-claro);
+            font-size: 1.1rem;
         }
-        .galeria-fotos img:hover {
-            transform: scale(1.05);
-        }
-        /* Rodapé */
-        footer {
-            background: #000;
-            padding: 60px 0 25px;
-            border-top: 1px solid #222;
-        }
-        .rodape-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 40px;
-            margin-bottom: 30px;
-        }
-        .rodape-logo img {
-            height: 60px;
-            margin-bottom: 15px;
-        }
-        .rodape-logo p {
-            color: var(--texto-claro);
+        .destaque-texto p {
             font-size: 0.9rem;
+            font-weight: 600;
         }
-        .rodape-coluna h4 {
-            margin-bottom: 18px;
-            font-size: 1rem;
-            color: var(--dourado);
+        .destaque-texto span {
+            font-size: 0.75rem;
+            color: #888;
         }
-        .rodape-coluna p, .rodape-coluna a {
-            color: var(--texto-claro);
-            text-decoration: none;
-            font-size: 0.95rem;
-            display: block;
+        /* ========== SEÇÕES ABAIXO ========== */
+        .secao {
+            padding: 80px 0;
+        }
+        .secao-escura {
+            background: var(--meio-escuro);
+        }
+        .secao-cabecalho {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .secao-cabecalho h3 {
+            font-size: 0.9rem;
+            color: var(--vermelho-claro);
+            text-transform: uppercase;
+            letter-spacing: 2px;
             margin-bottom: 10px;
         }
-        .rodape-coluna a:hover {
-            color: var(--vermelho-claro);
+        .secao-cabecalho h2 {
+            font-size: 2.2rem;
         }
-        .rodape-redes a {
-            display: inline-block;
-            margin-right: 15px;
-            font-size: 1.4rem;
+        /* ========== RODAPÉ ========== */
+        footer {
+            background: #000;
+            padding: 50px 0 20px;
+            border-top: 1px solid #1a1a1a;
         }
         .copyright {
             text-align: center;
-            padding-top: 25px;
-            border-top: 1px solid #222;
-            color: #666;
-            font-size: 0.85rem;
+            padding-top: 20px;
+            border-top: 1px solid #1a1a1a;
+            color: #555;
+            font-size: 0.8rem;
         }
-        /* Responsividade */
-        @media (max-width: 768px) {
-            .banner-conteudo, .sobre-grid, .horarios-grid {
+        /* ========== RESPONSIVIDADE ========== */
+        @media (max-width: 900px) {
+            .banner-conteudo {
                 grid-template-columns: 1fr;
+            }
+            .destaques {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: flex-start;
             }
             nav {
                 display: none;
             }
-            .banner-texto h2 {
-                font-size: 2rem;
-            }
-            .btn-whatsapp {
-                margin-left: 0;
-                margin-top: 15px;
+            .banner-esquerda h2 {
+                font-size: 1.8rem;
             }
         }
     </style>
 </head>
 <body>
 
-<!-- Cabeçalho -->
+<!-- CABEÇALHO -->
 <header>
     <div class="logo-cabecalho">
         <img src="imagens/logosud.png" alt="SUD Brazilian Jiu-Jitsu">
+        <div class="logo-texto">
+            <h1>SUD</h1>
+            <p>BRAZILIAN JIU-JITSU</p>
+        </div>
     </div>
     <nav>
         <a href="#inicio" class="ativo">Início</a>
@@ -369,194 +270,60 @@
         <a href="#aulas">Aulas</a>
         <a href="#horarios">Horários</a>
         <a href="#galeria">Galeria</a>
+        <a href="#noticias">Notícias</a>
         <a href="#contato">Contato</a>
     </nav>
-    <a href="login.html" class="btn-entrar">Entrar</a>
+    <a href="login.html" class="btn-entrar">
+        <i class="fa-solid fa-user"></i> Entrar
+    </a>
 </header>
 
-<!-- Banner Principal -->
+<!-- BANNER PRINCIPAL -->
 <section class="banner" id="inicio">
     <div class="container">
         <div class="banner-conteudo">
-            <div class="banner-texto">
-                <img src="imagens/logosud.png" alt="SUD" class="logo-grande">
-                <h1>SUD BRAZILIAN JIU-JITSU</h1>
-                <p class="lema">SAÚDE • UNIÃO • DISCIPLINA</p>
-                <p class="destaque-frase">Mais que uma equipe, uma família 👊</p>
-                <p>🏋️ Treinos de Segunda a Sexta — Noite</p>
-                <p>🥋 Venha fazer uma aula experimental!</p>
-                <p style="color: var(--dourado); font-weight: 600;">👉 Mais informações pelo WhatsApp</p>
-                <div style="margin-top: 30px;">
-                    <a href="cadastro.html" class="btn-vermelho">AGENDE SUA AULA</a>
-                    <a href="https://wa.me/5591999999999" target="_blank" class="btn-vermelho btn-whatsapp">
-                        <i class="fa-brands fa-whatsapp"></i> WhatsApp
-                    </a>
-                </div>
-            </div>
-            <div>
-                <!-- Espaço para foto principal -->
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Sobre -->
-<section class="sobre" id="sobre">
-    <div class="container">
-        <div class="sobre-grid">
-            <div>
-                <img src="imagens/sobre-sud.jpg" alt="SUD Brazilian Jiu-Jitsu" style="width:100%; border-radius:12px;">
-            </div>
-            <div class="sobre-texto">
-                <h3>Sobre a SUD</h3>
-                <h2>SAÚDE, UNIÃO E DISCIPLINA</h2>
-                <p>A SUD Brazilian Jiu-Jitsu é uma escola de artes marciais que forma não apenas lutadores, mas cidadãos melhores.</p>
-                <p>📌 Mais que uma equipe, uma verdadeira família.</p>
-                <p>💪 Aqui você encontra saúde física, fortalece laços com a comunidade e desenvolve disciplina para a vida toda.</p>
-                <div class="valores">
-                    <div class="valor-item">
-                        <span>S</span>
-                        <small>Saúde</small>
-                    </div>
-                    <div class="valor-item">
-                        <span>U</span>
-                        <small>União</small>
-                    </div>
-                    <div class="valor-item">
-                        <span>D</span>
-                        <small>Disciplina</small>
-                    </div>
-                </div>
-                <a href="cadastro.html" class="btn-vermelho">FAÇA PARTE →</a>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Aulas -->
-<section class="aulas" id="aulas">
-    <div class="container">
-        <div class="aulas-cabecalho">
-            <h3>Nossas modalidades</h3>
-            <h2>PARA TODAS AS IDADES</h2>
-        </div>
-        <div class="aulas-grid">
-            <div class="aula-card">
-                <i class="fa-solid fa-child"></i>
-                <h4>Jiu-Jitsu Infantil</h4>
-                <p>Disciplina, respeito e confiança desde cedo.</p>
-            </div>
-            <div class="aula-card">
-                <i class="fa-solid fa-person"></i>
-                <h4>Jiu-Jitsu Adulto</h4>
-                <p>Técnica, defesa pessoal e condicionamento físico.</p>
-            </div>
-            <div class="aula-card">
-                <i class="fa-solid fa-venus"></i>
-                <h4>Jiu-Jitsu Feminino</h4>
-                <p>Força, autonomia e ambiente acolhedor.</p>
-            </div>
-            <div class="aula-card">
-                <i class="fa-solid fa-medal"></i>
-                <h4>Equipe Competição</h4>
-                <p>Preparação intensa para quem quer competir.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Horários -->
-<section class="horarios" id="horarios">
-    <div class="container">
-        <div class="horarios-grid">
-            <div class="bloco">
-                <h3><i class="fa-solid fa-clock"></i> Horários de Treino</h3>
-                <p style="color: var(--dourado); margin-bottom: 15px;">Segunda a Sexta — Período da Noite</p>
-                <div class="horario-item">
-                    <strong>18:00</strong> — Infantil
-                </div>
-                <div class="horario-item">
-                    <strong>19:00</strong> — Iniciante
-                </div>
-                <div class="horario-item">
-                    <strong>20:00</strong> — Intermediário
-                </div>
-                <div class="horario-item">
-                    <strong>21:00</strong> — Avançado / Competição
-                </div>
-                <div class="horario-item">
-                    <strong>Sábado</strong> — Treinamento Geral
-                </div>
-            </div>
-            <div class="bloco">
-                <h3><i class="fa-solid fa-location-dot"></i> Localização</h3>
-                <p>📍 Belém — Pará</p>
-                <p style="margin: 15px 0;">📞 Entre em contato pelo WhatsApp para saber o endereço completo e agendar sua aula experimental!</p>
-                <a href="https://wa.me/5591999999999" target="_blank" class="btn-vermelho btn-whatsapp" style="margin-left: 0;">
-                    <i class="fa-brands fa-whatsapp"></i> Falar no WhatsApp
+            <div class="banner-esquerda">
+                <img src="imagens/logosud.png" alt="SUD" class="logo-banner">
+                <h2>MAIS QUE UM ESPORTE,<br>É UM <span>ESTILO DE VIDA</span>.</h2>
+                <p>Na SUD, o Jiu-Jitsu transforma vidas. Aqui você encontra respeito, disciplina, superação e uma família que te apoia em cada passo da jornada.</p>
+                <a href="cadastro.html" class="btn-vermelho">
+                    VENHA TREINAR <i class="fa-solid fa-arrow-right"></i>
                 </a>
             </div>
-        </div>
-    </div>
-</section>
-
-<!-- Galeria -->
-<section class="galeria" id="galeria">
-    <div class="container">
-        <div class="galeria-cabecalho">
-            <h3>Galeria</h3>
-            <h2>MOMENTOS DA NOSSA FAMÍLIA</h2>
-        </div>
-        <div class="galeria-fotos">
-            <img src="imagens/galeria1.jpg" alt="Treinamento SUD">
-            <img src="imagens/galeria2.jpg" alt="Graduação">
-            <img src="imagens/galeria3.jpg" alt="Competição">
-            <img src="imagens/galeria4.jpg" alt="Equipe SUD">
-        </div>
-    </div>
-</section>
-
-<!-- Rodapé -->
-<footer id="contato">
-    <div class="container">
-        <div class="rodape-grid">
-            <div class="rodape-logo">
-                <img src="imagens/logosud.png" alt="SUD">
-                <p><strong>SAÚDE • UNIÃO • DISCIPLINA</strong></p>
-                <p style="margin-top: 10px;">Mais que uma equipe, uma família.</p>
-            </div>
-            <div class="rodape-coluna">
-                <h4>CONTATO</h4>
-                <p><i class="fa-brands fa-whatsapp"></i> (91) 99999-9999</p>
-                <p><i class="fa-solid fa-location-dot"></i> Belém — PA</p>
-                <p><i class="fa-solid fa-envelope"></i> contato@sudbrazilian.com.br</p>
-            </div>
-            <div class="rodape-coluna">
-                <h4>LINKS RÁPIDOS</h4>
-                <a href="#inicio">Início</a>
-                <a href="#sobre">Sobre</a>
-                <a href="#aulas">Modalidades</a>
-                <a href="#horarios">Horários</a>
-                <a href="cadastro.html">Agende sua aula</a>
-            </div>
-            <div class="rodape-coluna">
-                <h4>SIGA-NOS</h4>
-                <div class="rodape-redes">
-                    <a href="https://instagram.com/sudbrazilianjiujitsu" target="_blank" title="Instagram">
-                        <i class="fa-brands fa-instagram"></i>
-                    </a>
-                    <a href="#" title="Facebook">
-                        <i class="fa-brands fa-facebook-f"></i>
-                    </a>
-                    <a href="#" title="YouTube">
-                        <i class="fa-brands fa-youtube"></i>
-                    </a>
+            <div class="destaques">
+                <div class="destaque-item">
+                    <div class="destaque-icone"><i class="fa-solid fa-child-reaching"></i></div>
+                    <div class="destaque-texto">
+                        <p>JIU-JITSU</p>
+                        <span>PARA TODOS</span>
+                    </div>
                 </div>
-                <p style="margin-top: 15px; font-size: 0.85rem;">@sudbrazilianjiujitsu</p>
+                <div class="destaque-item">
+                    <div class="destaque-icone"><i class="fa-solid fa-handshake"></i></div>
+                    <div class="destaque-texto">
+                        <p>RESPEITO</p>
+                        <span>E UNIÃO</span>
+                    </div>
+                </div>
+                <div class="destaque-item">
+                    <div class="destaque-icone"><i class="fa-solid fa-chart-line"></i></div>
+                    <div class="destaque-texto">
+                        <p>DISCIPLINA</p>
+                        <span>E EVOLUÇÃO</span>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
+</section>
+
+<!-- AQUI VOCÊ PODE ADICIONAR AS OUTRAS SEÇÕES DEPOIS -->
+
+<!-- RODAPÉ -->
+<footer>
+    <div class="container">
         <div class="copyright">
-            <p>© 2026 SUD Brazilian Jiu-Jitsu — Saúde, União e Disciplina. Todos os direitos reservados.</p>
+            <p>© 2026 SUD Brazilian Jiu-Jitsu. Todos os direitos reservados.</p>
         </div>
     </div>
 </footer>
