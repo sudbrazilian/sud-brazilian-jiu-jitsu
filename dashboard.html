@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SUD Brazilian Jiu-Jitsu</title>
+    <!-- ✅ ÍCONE NA ABA + PWA -->
+    <link rel="icon" type="image/png" href="imagens/logosud.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#D10000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SUD Jiu-Jitsu">
+    <link rel="apple-touch-icon" href="imagens/logosud.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+        :root {
+            --vermelho-principal: #D10000;
+            --vermelho-claro: #FF3B3B;
+            --verde: #00C853;
+            --amarelo: #FFC107;
+            --laranja: #FF9800;
+            --azul: #2563eb;
+            --cinza: #6B7280;
+        }
+        .tema-escuro {
+            --fundo-escuro: #121214;
+            --fundo-card: #1A1A1F;
+            --texto-branco: #FFFFFF;
+            --texto-cinza: #B0B0B8;
+            --borda: #29292E;
+            --fundo-input: #0C0C0E;
+        }
+        .tema-claro {
+            --fundo-escuro: #F8F9FA;
+            --fundo-card: #FFFFFF;
+            --texto-branco: #121214;
+            --texto-cinza: #6B7280;
+            --borda: #DEE2E6;
+            --fundo-input: #FFFFFF;
+        }
+        html, body { 
+            background: var(--fundo-escuro); 
+            color: var(--texto-branco); 
+            min-height: 100vh; 
+            overflow-y: auto;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        /* ✅ AVISO DE ANIVERSÁRIO */
+        .aviso-aniversario {
+            background: linear-gradient(135deg, #FFC107, #FF9800);
+            color: #000;
+            padding: 16px 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            font-weight: 700;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 12px rgba(255,193,7,0.25);
+            animation: balanco 0.6s ease-in-out;
+        }
+        .aviso-aniversario i { font-size: 26px; }
+        @keyframes balanco {
+            0%,100% { transform: rotate(0deg); }
+            20% { transform: rotate(-5deg); }
+            40% { transform: rotate(5deg); }
+            60% { transform: rotate(-3deg); }
+            80% { transform: rotate(3deg); }
+        }
+        .btn-menu {
+            display: none; position: fixed; top: 15px; left: 15px; z-index: 9999;
+            background: var(--vermelho-principal); border: none; color: white;
+            width: 48px; height: 48px; border-radius: 8px; font-size: 22px; cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        .menu-lateral {
+            width: 240px; background: var(--fundo-card); border-right: 1px solid var(--borda);
+            padding: 30px 0; position: fixed; height: 100vh; top: 0; left: 0; z-index: 999;
+            transition: transform 0.3s ease; overflow-y: auto;
+        }
+        .menu-lateral.fechado { transform: translateX(-100%); }
+        .menu-lateral.aberto { transform: translateX(0); }
+        .logo { text-align: center; margin-bottom: 40px; }
+        .logo img { width: 90px; margin-bottom: 10px; }
+        .logo h1 { font-size: 14px; font-weight: 700; line-height: 1.3; color: var(--texto-branco); }
+        .menu-navegacao ul { list-style: none; padding: 0 15px; }
+        .menu-navegacao li a {
+            display: flex; align-items: center; gap: 10px; padding: 12px 15px; margin-bottom: 5px;
+            color: var(--texto-cinza); text-decoration: none; font-size: 14px; font-weight: 600; border-radius: 6px; transition: 0.2s;
+        }
+        .menu-navegacao li a.ativo, .menu-navegacao li a:hover { background: rgba(209,0,0,0.15); color: var(--vermelho-principal); }
+        .menu-navegacao li a.instalar { color: var(--azul); }
+        .menu-navegacao li a.sair { color: #FF4D4D; margin-top: 20px; }
+        .conteudo { 
+            margin-left: 240px; 
+            padding: 25px 30px; 
+            min-height: 100vh;
+            width: calc(100% - 240px);
+        }
+        .cabecalho {
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 25px;
+        }
+        .titulo-pagina { font-size: 26px; font-weight: 800; position: relative; }
+        .titulo-pagina::after { content: ''; position: absolute; bottom: -8px; left: 0; width: 70px; height: 3px; background: var(--vermelho-principal); }
+        .btn-atualizar {
+            background: var(--vermelho-principal); color: white; border: none; padding: 10px 18px;
+            border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.2s;
+        }
+        .btn-atualizar:hover { background: #b00000; }
+        .acesso-rapido { margin-bottom: 30px; }
+        .acesso-rapido h2 { font-size: 16px; font-weight: 700; margin-bottom: 15px; color: var(--texto-cinza); }
+        .grade-botoes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+        @media (max-width: 1000px) { .grade-botoes { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { .grade-botoes { grid-template-columns: 1fr; } }
+        .btn-acesso {
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+            background: var(--fundo-card); border: 1px solid var(--borda); border-radius: 10px;
+            padding: 18px 12px; color: var(--texto-branco); text-decoration: none;
+            font-size: 14px; font-weight: 600; transition: 0.2s; cursor: pointer;
+        }
+        .btn-acesso:hover { border-color: var(--vermelho-principal); transform: translateY(-3px); }
+        .btn-acesso i { font-size: 22px; color: var(--vermelho-principal); }
+        .grade-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
+        @media (max-width: 1000px) { .grade-cards { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { .grade-cards { grid-template-columns: 1fr; } }
+        .card { background: var(--fundo-card); border: 1px solid var(--borda); border-radius: 10px; padding: 25px; transition: 0.2s; }
+        .card:hover { border-color: var(--vermelho-principal); transform: translateY(-3px); }
+        .card h3 { font-size: 16px; font-weight: 700; margin-bottom: 10px; color: var(--texto-cinza); }
+        .card .valor { font-size: 32px; font-weight: 800; }
+        .card.azul .valor { color: var(--azul); }
+        .card.verde .valor { color: var(--verde); }
+        .card.amarelo .valor { color: var(--amarelo); }
+        .card.vermelho .valor { color: var(--vermelho-principal); }
+        .grade-inferior { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        @media (max-width: 1000px) { .grade-inferior { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { .grade-inferior { grid-template-columns: 1fr; } }
+        .card-lista { background: var(--fundo-card); border: 1px solid var(--borda); border-radius: 10px; padding: 25px; }
+        .card-lista h2 { font-size: 18px; font-weight: 700; margin-bottom: 20px; color: var(--texto-branco); }
+        .item-linha { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--borda); gap: 10px; flex-wrap: wrap; }
+        .item-linha:last-child { border-bottom: none; }
+        .item-nome { font-weight: 600; font-size: 14px; }
+        .item-valor { font-weight: 700; font-size: 14px; }
+        .vazio { text-align: center; padding: 30px; color: var(--texto-cinza); font-size: 14px; }
+        @media (max-width: 992px) {
+            .conteudo { margin-left: 0; width: 100%; padding: 80px 15px 20px; }
+            .btn-menu { display: flex; align-items: center; justify-content: center; }
+            .menu-lateral { transform: translateX(-100%); }
+            .menu-lateral.aberto { transform: translateX(0); }
+        }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+</head>
+<body class="tema-escuro">
+    <button class="btn-menu" onclick="abrirFecharMenu()">
+        <i class="fas fa-bars"></i>
+    </button>
+    <aside class="menu-lateral" id="menuLateral">
+        <div class="logo">
+            <img src="imagens/logosud.png" alt="Logo SUD">
+            <h1>SUD<br>Brazilian Jiu-Jitsu</h1>
+        </div>
+        <nav class="menu-navegacao">
+            <ul>
+                <li><a href="#" class="ativo"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="alunos.html"><i class="fas fa-users"></i> Alunos</a></li>
+                <li><a href="financeiro.html"><i class="fas fa-dollar-sign"></i> Financeiro</a></li>
+                <li><a href="declaracao.html"><i class="fas fa-file-alt"></i> Declaração</a></li>
+                <li><a href="relatorios.html"><i class="fas fa-chart-bar"></i> Relatórios</a></li>
+                <li><a href="configuracoes.html"><i class="fas fa-cog"></i> Configurações</a></li>
+                <li id="itemInstalarApp" style="display:none;"><a href="#" class="instalar" onclick="instalarApp()"><i class="fas fa-download"></i> Instalar App</a></li>
+                <li><a href="#" class="sair" onclick="sair()"><i class="fas fa-sign-out-alt"></i> Sair</a></li>
+            </ul>
+        </nav>
+    </aside>
+    <main class="conteudo">
+        <div class="cabecalho">
+            <h1 class="titulo-pagina">Painel de Controle</h1>
+            <button class="btn-atualizar" onclick="carregarDashboard()">🔄 Atualizar</button>
+        </div>
+        <!-- ✅ AVISO DE ANIVERSÁRIO DO DIA (aparece SOMENTE se houver) -->
+        <div id="avisoAniversario"></div>
+        <section class="acesso-rapido">
+            <h2>Acesso Rápido</h2>
+            <div class="grade-botoes">
+                <a href="alunos.html" class="btn-acesso">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Cadastrar Aluno</span>
+                </a>
+                <a href="financeiro.html" class="btn-acesso">
+                    <i class="fas fa-hand-holding-usd"></i>
+                    <span>Registrar Pagamento</span>
+                </a>
+                <a href="declaracao.html" class="btn-acesso">
+                    <i class="fas fa-file-signature"></i>
+                    <span>Emitir Declaração</span>
+                </a>
+                <a href="relatorios.html" class="btn-acesso">
+                    <i class="fas fa-file-pdf"></i>
+                    <span>Gerar Relatório</span>
+                </a>
+            </div>
+        </section>
+        <div class="grade-cards">
+            <div class="card azul">
+                <h3>Total de Alunos</h3>
+                <div class="valor" id="totalAlunos">—</div>
+                <p class="descricao">Alunos cadastrados</p>
+            </div>
+            <div class="card verde">
+                <h3 id="tituloRecebido">Total Recebido</h3>
+                <div class="valor" id="valorRecebido">—</div>
+                <p class="descricao" id="descRecebido">Período atual</p>
+            </div>
+            <div class="card amarelo">
+                <h3>Total Pendente</h3>
+                <div class="valor" id="valorPendente">—</div>
+                <p class="descricao">Aguardando vencimento</p>
+            </div>
+            <div class="card vermelho">
+                <h3>Total Atrasado</h3>
+                <div class="valor" id="valorAtrasado">—</div>
+                <p class="descricao">Pagamentos em atraso</p>
+            </div>
+        </div>
+        <div class="grade-inferior">
+            <div class="card-lista">
+                <h2>🎂 Próximos Aniversariantes</h2>
+                <div id="aniversariantes">
+                    <p class="vazio">Carregando...</p>
+                </div>
+            </div>
+            <div class="card-lista">
+                <h2>🆕 Últimos Cadastros</h2>
+                <div id="ultimosCadastros">
+                    <p class="vazio">Carregando...</p>
+                </div>
+            </div>
+            <div class="card-lista">
+                <h2>🥋 Alunos por Faixa</h2>
+                <div id="alunosPorFaixa">
+                    <p class="vazio">Carregando...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        const firebaseConfig = {
+          apiKey: "AIzaSyAwbIaioYPlQsHEz2bNh5ATi3cGicu12bw",
+          authDomain: "pjj-para-jiu-jitsu.firebaseapp.com",
+          projectId: "pjj-para-jiu-jitsu",
+          storageBucket: "pjj-para-jiu-jitsu.firebasestorage.app",
+          messagingSenderId: "72563195814",
+          appId: "1:72563195814:web:5bc90e7bc0c51f415c1967"
+        };
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        let promptInstalacao;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            promptInstalacao = e;
+            document.getElementById('itemInstalarApp').style.display = 'block';
+        });
+        async function instalarApp() {
+            if (!promptInstalacao) return alert('A opção de instalar não está disponível agora.');
+            promptInstalacao.prompt();
+            promptInstalacao = null;
+            document.getElementById('itemInstalarApp').style.display = 'none';
+        }
+        function carregarTema() {
+            const temaSalvo = localStorage.getItem('tema') || 'escuro';
+            if (temaSalvo === 'claro') {
+                document.body.classList.remove('tema-escuro');
+                document.body.classList.add('tema-claro');
+            } else {
+                document.body.classList.remove('tema-claro');
+                document.body.classList.add('tema-escuro');
+            }
+        }
+        function abrirFecharMenu() {
+            document.getElementById('menuLateral').classList.toggle('aberto');
+        }
+        // ✅ FORMATAR VALOR COM PONTO DE MILHAR: 10.000,00
+        function formatarValor(valor) {
+            const numero = Number(valor || 0);
+            return `R$ ${numero.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
+        function pegarData(dataCampo) {
+            if (!dataCampo) return null;
+            if (typeof dataCampo.toDate === 'function') return dataCampo.toDate();
+            return new Date(dataCampo);
+        }
+        function formatarData(dataCampo) {
+            const d = pegarData(dataCampo);
+            if (!d || isNaN(d.getTime())) return '-';
+            return d.toLocaleDateString('pt-BR');
+        }
+        // ✅ CORRIGIDO: getUTCDate / getUTCMonth — sem erro de fuso horário!
+        function formatarDataAniversario(dataCampo) {
+            const d = pegarData(dataCampo);
+            if (!d || isNaN(d.getTime())) return null;
+            const meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+            return `${d.getUTCDate()} de ${meses[d.getUTCMonth()]}`;
+        }
+        function calcularIdade(dataNascimento) {
+            const hoje = new Date();
+            const nasc = pegarData(dataNascimento);
+            if (!nasc || isNaN(nasc.getTime())) return null;
+            let idade = hoje.getFullYear() - nasc.getFullYear();
+            // ✅ CORRIGIDO: compara com datas corretas
+            const m = hoje.getMonth() - nasc.getUTCMonth();
+            if (m < 0 || (m === 0 && hoje.getDate() < nasc.getUTCDate())) idade--;
+            return idade;
+        }
+        function calcularDataVencimento(diaFixo, dataMatricula, indicePagamento) {
+            const dataMat = new Date(dataMatricula);
+            let mes = dataMat.getMonth() + indicePagamento;
+            let ano = dataMat.getFullYear();
+            while (mes > 11) { mes -= 12; ano++; }
+            return new Date(ano, mes, diaFixo);
+        }
+        function calcularStatusAluno(diaFixo, dataMatricula, qtdPagamentos) {
+            const hoje = new Date(); hoje.setHours(0,0,0,0);
+            const dataMat = new Date(dataMatricula);
+            const mesInicio = dataMat.getMonth();
+            const anoInicio = dataMat.getFullYear();
+            let mesPendente = mesInicio + qtdPagamentos;
+            let anoPendente = anoInicio;
+            while (mesPendente > 11) { mesPendente -= 12; anoPendente++; }
+            const dataVencimentoAtual = new Date(anoPendente, mesPendente, diaFixo);
+            return { vencimento: dataVencimentoAtual, emDia: dataVencimentoAtual >= hoje };
+        }
+        async function carregarDashboard() {
+            try {
+                const usuario = auth.currentUser;
+                if (!usuario) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+                const snapshot = await db.collection('alunos').get();
+                if (snapshot.empty) {
+                    document.getElementById('totalAlunos').textContent = '0';
+                    document.getElementById('valorRecebido').textContent = 'R$ 0,00';
+                    document.getElementById('valorPendente').textContent = 'R$ 0,00';
+                    document.getElementById('valorAtrasado').textContent = 'R$ 0,00';
+                    document.getElementById('aniversariantes').innerHTML = '<p class="vazio">Nenhum aluno cadastrado</p>';
+                    document.getElementById('ultimosCadastros').innerHTML = '<p class="vazio">Nenhum aluno cadastrado</p>';
+                    document.getElementById('alunosPorFaixa').innerHTML = '<p class="vazio">Nenhum aluno cadastrado</p>';
+                    document.getElementById('avisoAniversario').innerHTML = '';
+                    return;
+                }
+                const alunos = [];
+                snapshot.forEach(doc => alunos.push({ id: doc.id, dados: doc.data() }));
+                document.getElementById('totalAlunos').textContent = alunos.length;
+                // ✅ DETECTA SEMESTRE ATUAL
+                const hoje = new Date();
+                const semestreAtual = (hoje.getMonth() <= 5) ? 1 : 2;
+                const anoAtual = hoje.getFullYear();
+                // ✅ ATUALIZA TÍTULO E DESCRIÇÃO DO CARD
+                document.getElementById('tituloRecebido').textContent = `Total Recebido — ${semestreAtual}º Semestre`;
+                document.getElementById('descRecebido').textContent = semestreAtual === 1 
+                    ? `${anoAtual} · Janeiro a Junho` 
+                    : `${anoAtual} · Julho a Dezembro`;
+                let recebidoSemestreAtual = 0;
+                let pendente = 0, atrasado = 0;
+                alunos.forEach(a => {
+                    const d = a.dados;
+                    if (d.tipo === 'Bolsista') return;
+                    let diaFixo = null, dataBase = null;
+                    if (d.dataMatricula) { diaFixo = d.dataMatricula.toDate().getDate(); dataBase = d.dataMatricula.toDate(); }
+                    else if (d.dataVencimento) { diaFixo = d.dataVencimento.toDate().getDate(); dataBase = d.dataVencimento.toDate(); }
+                    else if (d.dataInicioAula) { diaFixo = d.dataInicioAula.toDate().getDate(); dataBase = d.dataInicioAula.toDate(); }
+                    if (!diaFixo || !dataBase) return;
+                    const qtdPag = Number(d.qtdPagamentos || 0);
+                    const valorPlano = Number(d.valorFinal || d.valorPlano || 0);
+                    // ✅ SOMA SOMENTE O SEMESTRE ATUAL
+                    for (let i = 0; i < qtdPag; i++) {
+                        const dataPagamento = calcularDataVencimento(diaFixo, dataBase, i);
+                        const anoPag = dataPagamento.getFullYear();
+                        const mesPag = dataPagamento.getMonth();
+                        const semestrePag = (mesPag <= 5) ? 1 : 2;
+                        if (anoPag === anoAtual && semestrePag === semestreAtual) {
+                            const desconto = (d.descontos && d.descontos[i]) ? Number(d.descontos[i]) : 0;
+                            recebidoSemestreAtual += (valorPlano - desconto);
+                        }
+                    }
+                    const status = calcularStatusAluno(diaFixo, dataBase, qtdPagamentos);
+                    if (status.emDia) {
+                        pendente += valorPlano;
+                    } else {
+                        atrasado += valorPlano;
+                    }
+                });
+                // ✅ VALORES FORMATADOS COM PONTO DE MILHAR
+                document.getElementById('valorRecebido').textContent = formatarValor(recebidoSemestreAtual);
+                document.getElementById('valorPendente').textContent = formatarValor(pendente);
+                document.getElementById('valorAtrasado').textContent = formatarValor(atrasado);
+                // ✅ AVISO DE ANIVERSÁRIO DO DIA — CORRIGIDO COM getUTCDate/getUTCMonth
+                const avisoEl = document.getElementById('avisoAniversario');
+                avisoEl.innerHTML = '';
+                alunos.forEach(a => {
+                    const nasc = pegarData(a.dados.dataNascimento);
+                    if (!nasc || isNaN(nasc.getTime())) return;
+                    // ✅ COMPARAÇÃO CORRIGIDA — usa getUTCDate e getUTCMonth
+                    if (nasc.getUTCDate() === hoje.getDate() && nasc.getUTCMonth() === hoje.getMonth()) {
+                        const idade = calcularIdade(a.dados.dataNascimento);
+                        avisoEl.innerHTML = `
+                            <div class="aviso-aniversario">
+                                <i class="fas fa-birthday-cake"></i>
+                                <div>
+                                    <strong>🎉 Hoje é aniversário do aluno(a) ${a.dados.nome || a.dados.nomeCompleto}!</strong><br>
+                                    Ele(a) está fazendo ${idade} anos. Deseje os parabéns a ele(a)!
+                                </div>
+                            </div>`;
+                    }
+                });
+                // === ANIVERSARIANTES ===
+                const aniversarios = alunos.map(a => {
+                    const d = a.dados;
+                    const nasc = pegarData(d.dataNascimento);
+                    if (!nasc || isNaN(nasc.getTime())) return null;
+                    const proximo = new Date(hoje.getFullYear(), nasc.getUTCMonth(), nasc.getUTCDate());
+                    if (proximo < hoje) proximo.setFullYear(hoje.getFullYear() + 1);
+                    return {
+                        nome: d.nome || d.nomeCompleto || 'Sem nome',
+                        data: proximo,
+                        nascimento: nasc
+                    };
+                }).filter(Boolean);
+                aniversarios.sort((x, y) => x.data - y.data);
+                const proximos5 = aniversarios.slice(0, 5);
+                let htmlAniver = '';
+                proximos5.forEach(a => {
+                    htmlAniver += `
+                    <div class="item-linha">
+                        <span class="item-nome">${a.nome}</span>
+                        <span class="item-valor">${formatarDataAniversario(a.nascimento)}</span>
+                    </div>`;
+                });
+                document.getElementById('aniversariantes').innerHTML = htmlAniver || '<p class="vazio">Sem dados de nascimento</p>';
+                // === ÚLTIMOS CADASTROS ===
+                alunos.sort((a, b) => {
+                    const dataA = pegarData(a.dados.dataCadastro || a.dados.dataMatricula);
+                    const dataB = pegarData(b.dados.dataCadastro || b.dados.dataMatricula);
+                    if (!dataA) return 1;
+                    if (!dataB) return -1;
+                    return dataB - dataA;
+                });
+                const ultimos5 = alunos.slice(0, 5);
+                let htmlUltimos = '';
+                ultimos5.forEach(a => {
+                    const d = a.dados;
+                    htmlUltimos += `
+                    <div class="item-linha">
+                        <span class="item-nome">${d.nome || d.nomeCompleto || 'Sem nome'}</span>
+                        <span class="item-valor">${formatarData(d.dataCadastro || d.dataMatricula)}</span>
+                    </div>`;
+                });
+                document.getElementById('ultimosCadastros').innerHTML = htmlUltimos || '<p class="vazio">Sem cadastros</p>';
+                // === ALUNOS POR FAIXA ===
+                const faixas = { Branca: 0, Cinza: 0, Amarela: 0, Laranja: 0, Verde: 0, Azul: 0, Roxa: 0, Marrom: 0, Preta: 0 };
+                alunos.forEach(a => {
+                    const faixa = a.dados.faixa;
+                    if (faixas.hasOwnProperty(faixa)) faixas[faixa]++;
+                });
+                let htmlFaixas = '';
+                Object.entries(faixas).forEach(([nome, qtd]) => {
+                    if (qtd > 0) {
+                        htmlFaixas += `
+                        <div class="item-linha">
+                            <span class="item-nome">Faixa ${nome}</span>
+                            <span class="item-valor">${qtd} aluno${qtd !== 1 ? 's' : ''}</span>
+                        </div>`;
+                    }
+                });
+                document.getElementById('alunosPorFaixa').innerHTML = htmlFaixas || '<p class="vazio">Sem dados de faixa</p>';
+            } catch (erro) {
+                console.error('ERRO:', erro);
+                alert('Erro ao carregar dados: ' + erro.message);
+            }
+        }
+        function sair() {
+            if (confirm('Deseja sair do sistema?')) {
+                auth.signOut().then(() => window.location.href = 'login.html');
+            }
+        }
+        auth.onAuthStateChanged(usuario => {
+            if (!usuario) {
+                window.location.href = 'login.html';
+            } else {
+                carregarTema();
+                setTimeout(() => {
+                    carregarDashboard();
+                }, 600);
+            }
+        });
+    </script>
+</body>
+</html>
