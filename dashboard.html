@@ -114,7 +114,7 @@
         .btn-atualizar:hover { background: #b00000; }
         .acesso-rapido { margin-bottom: 30px; }
         .acesso-rapido h2 { font-size: 16px; font-weight: 700; margin-bottom: 15px; color: var(--texto-cinza); }
-        .grade-botoes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+        .grade-botoes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
         @media (max-width: 1000px) { .grade-botoes { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 600px) { .grade-botoes { grid-template-columns: 1fr; } }
         .btn-acesso {
@@ -171,7 +171,6 @@
                 <li><a href="#" class="ativo"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                 <li><a href="alunos.html"><i class="fas fa-users"></i> Alunos</a></li>
                 <li><a href="financeiro.html"><i class="fas fa-dollar-sign"></i> Financeiro</a></li>
-                <li><a href="declaracao.html"><i class="fas fa-file-alt"></i> Declaração</a></li>
                 <li><a href="relatorios.html"><i class="fas fa-chart-bar"></i> Relatórios</a></li>
                 <li><a href="configuracoes.html"><i class="fas fa-cog"></i> Configurações</a></li>
                 <li id="itemInstalarApp" style="display:none;"><a href="#" class="instalar" onclick="instalarApp()"><i class="fas fa-download"></i> Instalar App</a></li>
@@ -184,7 +183,7 @@
             <h1 class="titulo-pagina">Painel de Controle</h1>
             <button class="btn-atualizar" onclick="carregarDashboard()">🔄 Atualizar</button>
         </div>
-        <!-- ✅ AVISO DE ANIVERSÁRIO DO DIA (aparece SOMENTE se houver) -->
+        <!-- ✅ AVISO DE ANIVERSÁRIO DO DIA -->
         <div id="avisoAniversario"></div>
         <section class="acesso-rapido">
             <h2>Acesso Rápido</h2>
@@ -196,10 +195,6 @@
                 <a href="financeiro.html" class="btn-acesso">
                     <i class="fas fa-hand-holding-usd"></i>
                     <span>Registrar Pagamento</span>
-                </a>
-                <a href="declaracao.html" class="btn-acesso">
-                    <i class="fas fa-file-signature"></i>
-                    <span>Emitir Declaração</span>
                 </a>
                 <a href="relatorios.html" class="btn-acesso">
                     <i class="fas fa-file-pdf"></i>
@@ -303,7 +298,6 @@
             if (!d || isNaN(d.getTime())) return '-';
             return d.toLocaleDateString('pt-BR');
         }
-        // ✅ CORRIGIDO: getUTCDate / getUTCMonth — sem erro de fuso horário!
         function formatarDataAniversario(dataCampo) {
             const d = pegarData(dataCampo);
             if (!d || isNaN(d.getTime())) return null;
@@ -359,11 +353,9 @@
                 const alunos = [];
                 snapshot.forEach(doc => alunos.push({ id: doc.id, dados: doc.data() }));
                 document.getElementById('totalAlunos').textContent = alunos.length;
-                // ✅ DETECTA SEMESTRE ATUAL
                 const hoje = new Date();
                 const semestreAtual = (hoje.getMonth() <= 5) ? 1 : 2;
                 const anoAtual = hoje.getFullYear();
-                // ✅ ATUALIZA TÍTULO E DESCRIÇÃO DO CARD
                 document.getElementById('tituloRecebido').textContent = `Total Recebido — ${semestreAtual}º Semestre`;
                 document.getElementById('descRecebido').textContent = semestreAtual === 1 
                     ? `${anoAtual} · Janeiro a Junho` 
@@ -380,7 +372,6 @@
                     if (!diaFixo || !dataBase) return;
                     const qtdPag = Number(d.qtdPagamentos || 0);
                     const valorPlano = Number(d.valorFinal || d.valorPlano || 0);
-                    // ✅ SOMA SOMENTE O SEMESTRE ATUAL
                     for (let i = 0; i < qtdPag; i++) {
                         const dataPagamento = calcularDataVencimento(diaFixo, dataBase, i);
                         const anoPag = dataPagamento.getFullYear();
@@ -398,11 +389,9 @@
                         atrasado += valorPlano;
                     }
                 });
-                // ✅ VALORES FORMATADOS COM PONTO DE MILHAR
                 document.getElementById('valorRecebido').textContent = formatarValor(recebidoSemestreAtual);
                 document.getElementById('valorPendente').textContent = formatarValor(pendente);
                 document.getElementById('valorAtrasado').textContent = formatarValor(atrasado);
-                // ✅ AVISO DE ANIVERSÁRIO DO DIA — CORRIGIDO
                 const avisoEl = document.getElementById('avisoAniversario');
                 avisoEl.innerHTML = '';
                 alunos.forEach(a => {
@@ -420,31 +409,21 @@
                             </div>`;
                     }
                 });
-                // === ANIVERSARIANTES ===
                 const aniversarios = alunos.map(a => {
                     const d = a.dados;
                     const nasc = pegarData(d.dataNascimento);
                     if (!nasc || isNaN(nasc.getTime())) return null;
                     const proximo = new Date(hoje.getFullYear(), nasc.getUTCMonth(), nasc.getUTCDate());
                     if (proximo < hoje) proximo.setFullYear(hoje.getFullYear() + 1);
-                    return {
-                        nome: d.nome || d.nomeCompleto || 'Sem nome',
-                        data: proximo,
-                        nascimento: nasc
-                    };
+                    return { nome: d.nome || d.nomeCompleto || 'Sem nome', data: proximo, nascimento: nasc };
                 }).filter(Boolean);
                 aniversarios.sort((x, y) => x.data - y.data);
                 const proximos5 = aniversarios.slice(0, 5);
                 let htmlAniver = '';
                 proximos5.forEach(a => {
-                    htmlAniver += `
-                    <div class="item-linha">
-                        <span class="item-nome">${a.nome}</span>
-                        <span class="item-valor">${formatarDataAniversario(a.nascimento)}</span>
-                    </div>`;
+                    htmlAniver += `<div class="item-linha"><span class="item-nome">${a.nome}</span><span class="item-valor">${formatarDataAniversario(a.nascimento)}</span></div>`;
                 });
                 document.getElementById('aniversariantes').innerHTML = htmlAniver || '<p class="vazio">Sem dados de nascimento</p>';
-                // === ÚLTIMOS CADASTROS ===
                 alunos.sort((a, b) => {
                     const dataA = pegarData(a.dados.dataCadastro || a.dados.dataMatricula);
                     const dataB = pegarData(b.dados.dataCadastro || b.dados.dataMatricula);
@@ -456,14 +435,9 @@
                 let htmlUltimos = '';
                 ultimos5.forEach(a => {
                     const d = a.dados;
-                    htmlUltimos += `
-                    <div class="item-linha">
-                        <span class="item-nome">${d.nome || d.nomeCompleto || 'Sem nome'}</span>
-                        <span class="item-valor">${formatarData(d.dataCadastro || d.dataMatricula)}</span>
-                    </div>`;
+                    htmlUltimos += `<div class="item-linha"><span class="item-nome">${d.nome || d.nomeCompleto || 'Sem nome'}</span><span class="item-valor">${formatarData(d.dataCadastro || d.dataMatricula)}</span></div>`;
                 });
                 document.getElementById('ultimosCadastros').innerHTML = htmlUltimos || '<p class="vazio">Sem cadastros</p>';
-                // === ALUNOS POR FAIXA ===
                 const faixas = { Branca: 0, Cinza: 0, Amarela: 0, Laranja: 0, Verde: 0, Azul: 0, Roxa: 0, Marrom: 0, Preta: 0 };
                 alunos.forEach(a => {
                     const faixa = a.dados.faixa;
@@ -472,11 +446,7 @@
                 let htmlFaixas = '';
                 Object.entries(faixas).forEach(([nome, qtd]) => {
                     if (qtd > 0) {
-                        htmlFaixas += `
-                        <div class="item-linha">
-                            <span class="item-nome">Faixa ${nome}</span>
-                            <span class="item-valor">${qtd} aluno${qtd !== 1 ? 's' : ''}</span>
-                        </div>`;
+                        htmlFaixas += `<div class="item-linha"><span class="item-nome">Faixa ${nome}</span><span class="item-valor">${qtd} aluno${qtd !== 1 ? 's' : ''}</span></div>`;
                     }
                 });
                 document.getElementById('alunosPorFaixa').innerHTML = htmlFaixas || '<p class="vazio">Sem dados de faixa</p>';
@@ -495,9 +465,7 @@
                 window.location.href = 'login.html';
             } else {
                 carregarTema();
-                setTimeout(() => {
-                    carregarDashboard();
-                }, 600);
+                setTimeout(() => { carregarDashboard(); }, 600);
             }
         });
     </script>
