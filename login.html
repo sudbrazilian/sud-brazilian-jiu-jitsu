@@ -116,26 +116,12 @@
             color: #00e660;
             border: 1px solid rgba(0, 200, 81, 0.3);
         }
-        .links {
-            margin-top: 25px;
-            text-align: center;
-        }
-        .links a {
-            color: var(--cinza);
-            text-decoration: none;
-            font-size: 0.85rem;
-            display: block;
-            margin: 8px 0;
-        }
-        .links a:hover {
-            color: var(--vermelho-claro);
-        }
         .voltar {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 25px;
         }
         .voltar a {
-            color: #666;
+            color: var(--cinza);
             text-decoration: none;
             font-size: 0.85rem;
         }
@@ -149,8 +135,8 @@
 <div class="caixa-login">
     <div class="logo">
         <img src="imagens/logosud.png" alt="SUD Brazilian Jiu-Jitsu">
-        <h1>Área Restrita</h1>
-        <p>Entre com sua conta</p>
+        <h1>Área Administrativa</h1>
+        <p>Acesso restrito ao responsável</p>
     </div>
 
     <form id="formLogin">
@@ -169,11 +155,6 @@
 
     <div class="mensagem" id="caixaMensagem"></div>
 
-    <div class="links">
-        <a href="cadastro.html">Não tem conta? Criar cadastro</a>
-        <a href="#">Esqueci minha senha</a>
-    </div>
-
     <div class="voltar">
         <a href="index.html">← Voltar para a página inicial</a>
     </div>
@@ -181,11 +162,9 @@
 
 <!-- ✅ Firebase -->
 <script type="module">
-    // Importa o Firebase
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js";
 
-    // Configuração — já preenchida!
     const firebaseConfig = {
         apiKey: "AIzaSyDKWso0gw6T2thoS12c1erzTzVhrnagS1s",
         authDomain: "sud-brazilian-jiu-jitsu.firebaseapp.com",
@@ -195,23 +174,19 @@
         appId: "1:1053972036308:web:215a41d7bc91502eee1941"
     };
 
-    // Inicializa
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Elementos
     const formLogin = document.getElementById('formLogin');
     const btnEntrar = document.getElementById('btnEntrar');
     const caixaMensagem = document.getElementById('caixaMensagem');
 
-    // Mostrar mensagem
     function mostrarMensagem(texto, tipo) {
         caixaMensagem.style.display = 'block';
         caixaMensagem.className = 'mensagem ' + tipo;
         caixaMensagem.textContent = texto;
     }
 
-    // Login
     formLogin.addEventListener('submit', async (e) => {
         e.preventDefault();
         
@@ -234,7 +209,7 @@
             
             let mensagemErro = 'Erro ao entrar. Tente novamente.';
             if (erro.code === 'auth/user-not-found') {
-                mensagemErro = 'E-mail não cadastrado.';
+                mensagemErro = 'Usuário não encontrado.';
             } else if (erro.code === 'auth/wrong-password') {
                 mensagemErro = 'Senha incorreta.';
             } else if (erro.code === 'auth/invalid-email') {
