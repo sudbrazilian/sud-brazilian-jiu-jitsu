@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - SUD Brazilian Jiu-Jitsu</title>
+    <title>Cadastro - SUD Brazilian Jiu-Jitsu</title>
     <link rel="icon" href="imagens/logosud.png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -31,25 +31,25 @@
             justify-content: center;
             padding: 20px;
         }
-        .caixa-login {
+        .caixa-cadastro {
             background: var(--meio-escuro);
-            padding: 40px 30px;
+            padding: 35px 30px;
             border-radius: 12px;
             width: 100%;
-            max-width: 420px;
+            max-width: 450px;
             box-shadow: 0 0 30px rgba(209, 0, 0, 0.15);
             border: 1px solid #222;
         }
         .logo {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
         .logo img {
-            height: 80px;
+            height: 70px;
             margin-bottom: 10px;
         }
         .logo h1 {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             color: var(--texto);
         }
         .logo p {
@@ -57,31 +57,31 @@
             color: var(--cinza);
         }
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
         label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-size: 0.9rem;
             color: #ddd;
         }
         input {
             width: 100%;
-            padding: 14px 16px;
+            padding: 12px 15px;
             background: #1f1f1f;
             border: 1px solid #333;
             border-radius: 8px;
             color: white;
-            font-size: 1rem;
+            font-size: 0.95rem;
             outline: none;
             transition: border 0.3s;
         }
         input:focus {
             border-color: var(--vermelho);
         }
-        .btn-entrar {
+        .btn-cadastrar {
             width: 100%;
-            padding: 14px;
+            padding: 13px;
             background: var(--vermelho);
             color: white;
             border: none;
@@ -90,17 +90,17 @@
             font-weight: 600;
             cursor: pointer;
             transition: background 0.3s;
-            margin-top: 10px;
+            margin-top: 8px;
         }
-        .btn-entrar:hover {
+        .btn-cadastrar:hover {
             background: var(--vermelho-claro);
         }
-        .btn-entrar:disabled {
+        .btn-cadastrar:disabled {
             opacity: 0.6;
             cursor: not-allowed;
         }
         .mensagem {
-            margin-top: 20px;
+            margin-top: 18px;
             padding: 12px;
             border-radius: 6px;
             font-size: 0.9rem;
@@ -117,75 +117,63 @@
             border: 1px solid rgba(0, 200, 81, 0.3);
         }
         .links {
-            margin-top: 25px;
+            margin-top: 20px;
             text-align: center;
         }
         .links a {
             color: var(--cinza);
             text-decoration: none;
             font-size: 0.85rem;
-            display: block;
-            margin: 8px 0;
         }
         .links a:hover {
             color: var(--vermelho-claro);
-        }
-        .voltar {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .voltar a {
-            color: #666;
-            text-decoration: none;
-            font-size: 0.85rem;
-        }
-        .voltar a:hover {
-            color: white;
         }
     </style>
 </head>
 <body>
 
-<div class="caixa-login">
+<div class="caixa-cadastro">
     <div class="logo">
         <img src="imagens/logosud.png" alt="SUD Brazilian Jiu-Jitsu">
-        <h1>Área Restrita</h1>
-        <p>Entre com sua conta</p>
+        <h1>Criar Conta</h1>
+        <p>Faça parte da família SUD</p>
     </div>
 
-    <form id="formLogin">
+    <form id="formCadastro">
+        <div class="form-group">
+            <label for="nome">Nome Completo</label>
+            <input type="text" id="nome" required placeholder="Seu nome completo">
+        </div>
         <div class="form-group">
             <label for="email">E-mail</label>
             <input type="email" id="email" required placeholder="seu@email.com">
         </div>
         <div class="form-group">
-            <label for="senha">Senha</label>
-            <input type="password" id="senha" required placeholder="Sua senha">
+            <label for="senha">Senha (mínimo 6 caracteres)</label>
+            <input type="password" id="senha" required placeholder="Crie uma senha">
         </div>
-        <button type="submit" class="btn-entrar" id="btnEntrar">
-            <i class="fa-solid fa-right-to-bracket"></i> Entrar
+        <div class="form-group">
+            <label for="confirmarSenha">Confirmar Senha</label>
+            <input type="password" id="confirmarSenha" required placeholder="Digite novamente">
+        </div>
+        <button type="submit" class="btn-cadastrar" id="btnCadastrar">
+            <i class="fa-solid fa-user-plus"></i> Criar Conta
         </button>
     </form>
 
     <div class="mensagem" id="caixaMensagem"></div>
 
     <div class="links">
-        <a href="cadastro.html">Não tem conta? Criar cadastro</a>
-        <a href="#">Esqueci minha senha</a>
-    </div>
-
-    <div class="voltar">
-        <a href="index.html">← Voltar para a página inicial</a>
+        <a href="login.html">Já tem conta? Fazer login →</a>
+        <a href="index.html" style="display:block; margin-top:10px;">← Voltar para a página inicial</a>
     </div>
 </div>
 
 <!-- ✅ Firebase -->
 <script type="module">
-    // Importa o Firebase
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js";
 
-    // Configuração — já preenchida!
     const firebaseConfig = {
         apiKey: "AIzaSyDKWso0gw6T2thoS12c1erzTzVhrnagS1s",
         authDomain: "sud-brazilian-jiu-jitsu.firebaseapp.com",
@@ -195,52 +183,60 @@
         appId: "1:1053972036308:web:215a41d7bc91502eee1941"
     };
 
-    // Inicializa
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Elementos
-    const formLogin = document.getElementById('formLogin');
-    const btnEntrar = document.getElementById('btnEntrar');
+    const formCadastro = document.getElementById('formCadastro');
+    const btnCadastrar = document.getElementById('btnCadastrar');
     const caixaMensagem = document.getElementById('caixaMensagem');
 
-    // Mostrar mensagem
     function mostrarMensagem(texto, tipo) {
         caixaMensagem.style.display = 'block';
         caixaMensagem.className = 'mensagem ' + tipo;
         caixaMensagem.textContent = texto;
     }
 
-    // Login
-    formLogin.addEventListener('submit', async (e) => {
+    formCadastro.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
+
+        const nome = document.getElementById('nome').value;
         const email = document.getElementById('email').value;
         const senha = document.getElementById('senha').value;
+        const confirmarSenha = document.getElementById('confirmarSenha').value;
 
-        btnEntrar.disabled = true;
-        btnEntrar.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Entrando...';
+        if (senha !== confirmarSenha) {
+            mostrarMensagem('❌ As senhas não coincidem.', 'erro');
+            return;
+        }
+
+        if (senha.length < 6) {
+            mostrarMensagem('❌ A senha deve ter pelo menos 6 caracteres.', 'erro');
+            return;
+        }
+
+        btnCadastrar.disabled = true;
+        btnCadastrar.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Criando...';
         caixaMensagem.style.display = 'none';
 
         try {
-            await signInWithEmailAndPassword(auth, email, senha);
-            mostrarMensagem('✅ Entrando...', 'sucesso');
+            await createUserWithEmailAndPassword(auth, email, senha);
+            mostrarMensagem('✅ Conta criada! Redirecionando...', 'sucesso');
             setTimeout(() => {
                 window.location.href = 'dashboard.html';
-            }, 1000);
+            }, 1500);
         } catch (erro) {
-            btnEntrar.disabled = false;
-            btnEntrar.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Entrar';
+            btnCadastrar.disabled = false;
+            btnCadastrar.innerHTML = '<i class="fa-solid fa-user-plus"></i> Criar Conta';
             
-            let mensagemErro = 'Erro ao entrar. Tente novamente.';
-            if (erro.code === 'auth/user-not-found') {
-                mensagemErro = 'E-mail não cadastrado.';
-            } else if (erro.code === 'auth/wrong-password') {
-                mensagemErro = 'Senha incorreta.';
+            let mensagemErro = 'Erro ao criar conta. Tente novamente.';
+            if (erro.code === 'auth/email-already-in-use') {
+                mensagemErro = 'Este e-mail já está cadastrado.';
             } else if (erro.code === 'auth/invalid-email') {
                 mensagemErro = 'E-mail inválido.';
-            } else if (erro.code === 'auth/too-many-requests') {
-                mensagemErro = 'Muitas tentativas. Tente mais tarde.';
+            } else if (erro.code === 'auth/operation-not-allowed') {
+                mensagemErro = 'Cadastro não ativado. Ative no Firebase → Autenticação.';
+            } else if (erro.code === 'auth/weak-password') {
+                mensagemErro = 'Senha muito fraca. Use pelo menos 6 caracteres.';
             }
             
             mostrarMensagem('❌ ' + mensagemErro, 'erro');
