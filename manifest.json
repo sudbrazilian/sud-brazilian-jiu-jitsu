@@ -1,0 +1,22 @@
+{
+  "name": "SUD Brazilian Jiu-Jitsu",
+  "short_name": "SUD Jiu-Jitsu",
+  "description": "Saúde, União e Disciplina. Mais que uma equipe, uma família.",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#D10000",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "imagens/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "imagens/logosud.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
