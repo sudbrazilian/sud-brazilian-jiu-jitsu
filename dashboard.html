@@ -370,9 +370,10 @@
                     else if (d.dataVencimento) { diaFixo = d.dataVencimento.toDate().getDate(); dataBase = d.dataVencimento.toDate(); }
                     else if (d.dataInicioAula) { diaFixo = d.dataInicioAula.toDate().getDate(); dataBase = d.dataInicioAula.toDate(); }
                     if (!diaFixo || !dataBase) return;
-                    const qtdPag = Number(d.qtdPagamentos || 0);
+                    // ✅ CORRIGIDO: usa a mesma variável nos dois lugares
+                    const qtdPagamentos = Number(d.qtdPagamentos || 0);
                     const valorPlano = Number(d.valorFinal || d.valorPlano || 0);
-                    for (let i = 0; i < qtdPag; i++) {
+                    for (let i = 0; i < qtdPagamentos; i++) {
                         const dataPagamento = calcularDataVencimento(diaFixo, dataBase, i);
                         const anoPag = dataPagamento.getFullYear();
                         const mesPag = dataPagamento.getMonth();
