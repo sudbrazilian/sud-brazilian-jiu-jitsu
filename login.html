@@ -3,225 +3,326 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - SUD Brazilian Jiu-Jitsu</title>
-    <link rel="icon" href="imagens/logosud.png" type="image/png">
+    <title>Login - PJJ Pará Jiu-Jitsu</title>
+    <!-- ✅ ÍCONE NA ABA DO NAVEGADOR -->
+    <link rel="icon" type="image/png" href="imagens/logopjj.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- ✅ PWA — Instalar como Aplicativo -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#D10000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="PJJ Pará">
+    <link rel="apple-touch-icon" href="imagens/logopjj.png">
+    <meta name="mobile-web-app-capable" content="yes">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, sans-serif;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
         :root {
-            --vermelho: #D10000;
+            --vermelho-principal: #D10000;
             --vermelho-claro: #FF3B3B;
-            --escuro: #050505;
-            --meio-escuro: #121212;
-            --texto: #FFFFFF;
-            --cinza: #888;
-            --erro: #ff4444;
-            --sucesso: #00C851;
+            --fundo-escuro: #121214;
+            --fundo-card: #1A1A1F;
+            --texto-branco: #FFFFFF;
+            --texto-cinza: #B0B0B8;
+            --borda: #29292E;
+            --sucesso: #00C853;
+            --erro: #FF4D4D;
+            --info: #FFC107;
         }
         body {
-            background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
-            min-height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('imagens/capactpjj.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             display: flex;
             align-items: center;
             justify-content: center;
+            min-height: 100vh;
             padding: 20px;
         }
         .caixa-login {
-            background: var(--meio-escuro);
-            padding: 40px 30px;
-            border-radius: 12px;
+            background-color: var(--fundo-card);
+            padding: 35px 30px;
+            border-radius: 10px;
             width: 100%;
-            max-width: 420px;
-            box-shadow: 0 0 30px rgba(209, 0, 0, 0.15);
-            border: 1px solid #222;
+            max-width: 400px;
+            border: 2px solid var(--vermelho-principal);
+            box-shadow: 0 0 25px rgba(209, 0, 0, 0.25);
         }
-        .logo {
+        .logo { 
+            text-align: center; 
+            margin-bottom: 25px; 
+        }
+        .logo img { 
+            height: 85px; 
+        }
+        h2 {
             text-align: center;
+            color: var(--texto-branco);
             margin-bottom: 30px;
+            font-size: 1.6rem;
+            font-weight: 700;
         }
-        .logo img {
-            height: 80px;
-            margin-bottom: 10px;
-        }
-        .logo h1 {
-            font-size: 1.3rem;
-            color: var(--texto);
-        }
-        .logo p {
-            font-size: 0.85rem;
-            color: var(--cinza);
-        }
-        .form-group {
-            margin-bottom: 20px;
+        .campo { 
+            margin-bottom: 22px; 
         }
         label {
             display: block;
+            color: var(--texto-cinza);
             margin-bottom: 8px;
-            font-size: 0.9rem;
-            color: #ddd;
+            font-weight: 500;
         }
         input {
             width: 100%;
-            padding: 14px 16px;
-            background: #1f1f1f;
-            border: 1px solid #333;
-            border-radius: 8px;
-            color: white;
+            padding: 13px;
+            background-color: var(--fundo-escuro);
+            border: 1px solid var(--borda);
+            color: var(--texto-branco);
+            border-radius: 6px;
             font-size: 1rem;
-            outline: none;
-            transition: border 0.3s;
+            transition: border 0.2s;
         }
-        input:focus {
-            border-color: var(--vermelho);
+        input:focus { 
+            outline: none; 
+            border-color: var(--vermelho-principal);
+            box-shadow: 0 0 0 2px rgba(209, 0, 0, 0.15);
         }
         .btn-entrar {
             width: 100%;
             padding: 14px;
-            background: var(--vermelho);
-            color: white;
+            background-color: var(--vermelho-principal);
+            color: var(--texto-branco);
             border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
-            margin-top: 10px;
-        }
-        .btn-entrar:hover {
-            background: var(--vermelho-claro);
-        }
-        .btn-entrar:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-        .mensagem {
-            margin-top: 20px;
-            padding: 12px;
             border-radius: 6px;
-            font-size: 0.9rem;
-            display: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-bottom: 15px;
         }
-        .erro {
-            background: rgba(255, 68, 68, 0.1);
-            color: #ff6666;
-            border: 1px solid rgba(255, 68, 68, 0.3);
+        .btn-entrar:hover { 
+            background-color: var(--vermelho-claro); 
         }
-        .sucesso {
-            background: rgba(0, 200, 81, 0.1);
-            color: #00e660;
-            border: 1px solid rgba(0, 200, 81, 0.3);
-        }
-        .voltar {
-            text-align: center;
-            margin-top: 25px;
-        }
-        .voltar a {
-            color: var(--cinza);
+        .btn-voltar {
+            width: 100%;
+            padding: 12px;
+            background-color: transparent;
+            color: var(--texto-cinza);
+            border: 1px solid var(--borda);
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
             text-decoration: none;
-            font-size: 0.85rem;
         }
-        .voltar a:hover {
-            color: white;
+        .btn-voltar:hover {
+            color: var(--vermelho-principal);
+            border-color: var(--vermelho-principal);
+            background-color: rgba(209, 0, 0, 0.08);
+        }
+        .btn-instalar {
+            width: 100%;
+            padding: 12px;
+            background-color: rgba(37, 99, 235, 0.15);
+            color: #60a5fa;
+            border: 1px solid rgba(37, 99, 235, 0.3);
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        .btn-instalar:hover {
+            background-color: rgba(37, 99, 235, 0.25);
+            color: #93c5fd;
+        }
+        #mensagem {
+            margin-top: 18px;
+            padding: 13px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+            font-size: 0.95rem;
+        }
+        .sucesso { background-color: rgba(0, 200, 83, 0.15); color: var(--sucesso); border: 1px solid rgba(0, 200, 83, 0.3); }
+        .erro { background-color: rgba(255, 77, 77, 0.15); color: var(--erro); border: 1px solid rgba(255, 77, 77, 0.3); }
+        .info { background-color: rgba(255, 193, 7, 0.15); color: var(--info); border: 1px solid rgba(255, 193, 7, 0.3); }
+        @media (max-width: 400px) {
+            .caixa-login {
+                padding: 25px 20px;
+            }
         }
     </style>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
-
-<div class="caixa-login">
-    <div class="logo">
-        <img src="imagens/logosud.png" alt="SUD Brazilian Jiu-Jitsu">
-        <h1>Área Administrativa</h1>
-        <p>Acesso restrito ao responsável</p>
-    </div>
-
-    <form id="formLogin">
-        <div class="form-group">
-            <label for="email">E-mail</label>
-            <input type="email" id="email" required placeholder="seu@email.com">
+    <div class="caixa-login">
+        <div class="logo">
+            <img src="imagens/logopjj.png" alt="Logo PJJ Pará Jiu-Jitsu">
         </div>
-        <div class="form-group">
-            <label for="senha">Senha</label>
-            <input type="password" id="senha" required placeholder="Sua senha">
-        </div>
-        <button type="submit" class="btn-entrar" id="btnEntrar">
-            <i class="fa-solid fa-right-to-bracket"></i> Entrar
+        <h2>Acesse sua conta</h2>
+        <div id="mensagem"></div>
+        <!-- ✅ Botão Instalar App -->
+        <button id="btnInstalarApp" class="btn-instalar" style="display:none;" onclick="instalarApp()">
+            <i class="fas fa-download"></i> Instalar Aplicativo
         </button>
-    </form>
-
-    <div class="mensagem" id="caixaMensagem"></div>
-
-    <div class="voltar">
-        <a href="index.html">← Voltar para a página inicial</a>
+        <form id="formLogin">
+            <div class="campo">
+                <label>E-mail ou Telefone</label>
+                <input type="text" id="login" placeholder="seu@email.com ou (91) 99999-9999" required>
+            </div>
+            <div class="campo">
+                <label>Senha</label>
+                <input type="password" id="senha" required>
+            </div>
+            <button type="submit" class="btn-entrar">Entrar</button>
+        </form>
+        <!-- ✅ Botão Voltar para o Início -->
+        <a href="index.html" class="btn-voltar">
+            <i class="fas fa-arrow-left"></i> Voltar para o Início
+        </a>
     </div>
-</div>
+    <script>
+        // ✅ FIREBASE — PJJ Pará Jiu-Jitsu
+        const firebaseConfig = {
+          apiKey: "AIzaSyAwbIaioYPlQsHEz2bNh5ATi3cGicu12bw",
+          authDomain: "pjj-para-jiu-jitsu.firebaseapp.com",
+          projectId: "pjj-para-jiu-jitsu",
+          storageBucket: "pjj-para-jiu-jitsu.firebasestorage.app",
+          messagingSenderId: "72563195814",
+          appId: "1:72563195814:web:5bc90e7bc0c51f415c1967"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
 
-<!-- ✅ Firebase -->
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js";
+        // ✅ PWA — Instalar Aplicativo
+        let promptInstalacao;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            promptInstalacao = e;
+            document.getElementById('btnInstalarApp').style.display = 'flex';
+        });
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyDKWso0gw6T2thoS12c1erzTzVhrnagS1s",
-        authDomain: "sud-brazilian-jiu-jitsu.firebaseapp.com",
-        projectId: "sud-brazilian-jiu-jitsu",
-        storageBucket: "sud-brazilian-jiu-jitsu.firebasestorage.app",
-        messagingSenderId: "1053972036308",
-        appId: "1:1053972036308:web:215a41d7bc91502eee1941"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    const formLogin = document.getElementById('formLogin');
-    const btnEntrar = document.getElementById('btnEntrar');
-    const caixaMensagem = document.getElementById('caixaMensagem');
-
-    function mostrarMensagem(texto, tipo) {
-        caixaMensagem.style.display = 'block';
-        caixaMensagem.className = 'mensagem ' + tipo;
-        caixaMensagem.textContent = texto;
-    }
-
-    formLogin.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const email = document.getElementById('email').value;
-        const senha = document.getElementById('senha').value;
-
-        btnEntrar.disabled = true;
-        btnEntrar.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Entrando...';
-        caixaMensagem.style.display = 'none';
-
-        try {
-            await signInWithEmailAndPassword(auth, email, senha);
-            mostrarMensagem('✅ Entrando...', 'sucesso');
-            setTimeout(() => {
-                window.location.href = 'dashboard.html';
-            }, 1000);
-        } catch (erro) {
-            btnEntrar.disabled = false;
-            btnEntrar.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Entrar';
-            
-            let mensagemErro = 'Erro ao entrar. Tente novamente.';
-            if (erro.code === 'auth/user-not-found') {
-                mensagemErro = 'Usuário não encontrado.';
-            } else if (erro.code === 'auth/wrong-password') {
-                mensagemErro = 'Senha incorreta.';
-            } else if (erro.code === 'auth/invalid-email') {
-                mensagemErro = 'E-mail inválido.';
-            } else if (erro.code === 'auth/too-many-requests') {
-                mensagemErro = 'Muitas tentativas. Tente mais tarde.';
+        async function instalarApp() {
+            if (!promptInstalacao) {
+                alert('Use o menu do navegador (três pontinhos) → "Instalar aplicativo"');
+                return;
             }
-            
-            mostrarMensagem('❌ ' + mensagemErro, 'erro');
+            promptInstalacao.prompt();
+            promptInstalacao = null;
+            document.getElementById('btnInstalarApp').style.display = 'none';
         }
-    });
-</script>
 
+        window.addEventListener('appinstalled', () => {
+            alert('✅ PJJ Pará instalado com sucesso!');
+            document.getElementById('btnInstalarApp').style.display = 'none';
+        });
+
+        // ✅ Exibir mensagens
+        function mostrarMensagem(texto, tipo) {
+            const el = document.getElementById('mensagem');
+            el.textContent = texto;
+            el.className = tipo;
+            el.style.display = 'block';
+        }
+
+        // ✅ Verificar se entrada é telefone
+        function ehTelefone(valor) {
+            const apenasNumeros = valor.replace(/\D/g, '');
+            return apenasNumeros.length >= 10 && apenasNumeros.length <= 11;
+        }
+
+        // ✅ Buscar e-mail pelo telefone
+        async function buscarEmailPorTelefone(telefone) {
+            const telSemFormatacao = telefone.replace(/\D/g, '');
+            const snapshot = await db.collection('usuarios')
+                .where('telefone', '==', telSemFormatacao)
+                .limit(1)
+                .get();
+            
+            if (!snapshot.empty) {
+                return snapshot.docs[0].data().email;
+            }
+            return null;
+        }
+
+        // ✅ Login
+        document.getElementById('formLogin').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const entrada = document.getElementById('login').value.trim();
+            const senha = document.getElementById('senha').value.trim();
+            let emailFinal = entrada;
+            
+            mostrarMensagem("🔄 Verificando dados...", "info");
+            
+            try {
+                // Se for telefone, busca o e-mail correspondente
+                if (ehTelefone(entrada)) {
+                    const emailEncontrado = await buscarEmailPorTelefone(entrada);
+                    if (!emailEncontrado) {
+                        throw new Error("Telefone não cadastrado no sistema!");
+                    }
+                    emailFinal = emailEncontrado;
+                }
+
+                // Realiza login
+                const resultado = await auth.signInWithEmailAndPassword(emailFinal, senha);
+                const usuario = resultado.user;
+
+                // Busca dados do usuário
+                const doc = await db.collection('usuarios').doc(usuario.uid).get();
+                if (!doc.exists) {
+                    throw new Error("Conta existe, mas sem cadastro no sistema!");
+                }
+
+                const dados = doc.data();
+                if (dados.tipo === "admin") {
+                    mostrarMensagem("✅ Acesso de Administrador! Entrando...", "sucesso");
+                    setTimeout(() => window.location.href = "dashboard.html", 1200);
+                } else if (dados.tipo === "aluno") {
+                    mostrarMensagem("✅ Acesso de Aluno! Entrando...", "sucesso");
+                    setTimeout(() => window.location.href = "aluno.html", 1200);
+                } else {
+                    throw new Error("Tipo de usuário não definido: " + dados.tipo);
+                }
+            } catch (erro) {
+                console.error("Erro:", erro);
+                let msg;
+                switch(erro.code) {
+                    case "auth/user-not-found":
+                        msg = "❌ E-mail ou telefone não cadastrado";
+                        break;
+                    case "auth/wrong-password":
+                        msg = "❌ Senha incorreta";
+                        break;
+                    case "auth/invalid-email":
+                        msg = "❌ Formato inválido. Use e-mail ou telefone correto";
+                        break;
+                    case "auth/network-request-failed":
+                        msg = "❌ Sem conexão com a internet";
+                        break;
+                    default:
+                        msg = "❌ " + erro.message;
+                }
+                mostrarMensagem(msg, "erro");
+            }
+        });
+    </script>
 </body>
 </html>
