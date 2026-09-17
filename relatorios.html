@@ -262,7 +262,11 @@
           messagingSenderId: "72563195814",
           appId: "1:72563195814:web:5bc90e7bc0c51f415c1967"
         };
-        const app = firebase.initializeApp(firebaseConfig);
+        
+        // Evita inicializar o Firebase mais de uma vez
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
         const auth = firebase.auth();
         const db = firebase.firestore();
 
@@ -436,7 +440,7 @@
                 });
                 document.getElementById('listaFaixas').innerHTML = htmlFaixas || '<p class="vazio">Sem dados de faixa</p>';
             } catch (erro) {
-                alert('Erro ao carregar: ' + erro.message);
+                console.error('Erro ao carregar:', erro);
             }
         }
 
@@ -449,7 +453,10 @@
         });
 
         async function instalarApp() {
-            if (!promptInstalacao) return alert('A opção de instalar não está disponível agora.');
+            if (!promptInstalacao) {
+                alert('Use o menu do navegador (três pontinhos) → "Instalar aplicativo"');
+                return;
+            }
             promptInstalacao.prompt();
             promptInstalacao = null;
             document.getElementById('itemInstalarApp').style.display = 'none';
@@ -461,9 +468,19 @@
             }
         }
 
+        // ✅ CORREÇÃO: Verificação de sessão otimizada
+        let verificacaoFeita = false;
         auth.onAuthStateChanged(usuario => {
+            if (verificacaoFeita) return;
+            verificacaoFeita = true;
+            
             if (!usuario) {
-                window.location.href = 'login.html';
+                // Só redireciona depois de confirmar que não há sessão
+                setTimeout(() => {
+                    if (!auth.currentUser) {
+                        window.location.href = 'login.html';
+                    }
+                }, 500);
             } else {
                 carregarTema();
                 carregarRelatorios();
