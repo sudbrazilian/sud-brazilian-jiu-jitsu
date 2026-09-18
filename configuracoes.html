@@ -52,7 +52,8 @@
         .subtitulo { color: var(--texto-cinza); font-size: 14px; margin-bottom: 20px; }
         .card-config { background: var(--fundo-card); border: 1px solid var(--borda); border-radius: 10px;
             padding: 25px; margin-bottom: 25px; }
-        .card-config h2 { font-size: 18px; font-weight: 700; margin-bottom: 20px; color: var(--vermelho-claro); }
+        .card-cabecalho { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .card-config h2 { font-size: 18px; font-weight: 700; color: var(--vermelho-claro); }
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
         .form-grupo { display: flex; flex-direction: column; gap: 6px; }
         .form-grupo label { font-size: 14px; font-weight: 600; color: var(--texto-cinza); }
@@ -66,27 +67,18 @@
             cursor: pointer; font-size: 18px; padding: 5px; }
         .btn-adicionar { background: rgba(0,200,83,0.1); border: 1px solid var(--verde); color: var(--verde);
             padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: 600; margin-bottom: 15px; }
-        .botoes { margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap; }
-        .btn { padding: 12px 24px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 14px; }
+        .btn { padding: 10px 18px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 14px; }
         .btn:disabled { opacity: 0.6; cursor: not-allowed; }
         .btn-verde { background: var(--verde); color: white; }
+        .btn-verde-pequeno { padding: 8px 14px; font-size: 13px; }
         .btn-vermelho { background: var(--vermelho-principal); color: white; }
-        .btn-cinza { background: #333; color: white; }
         .alerta-sucesso { background: rgba(0,200,83,0.1); border: 1px solid var(--verde); color: var(--verde);
-            padding: 15px; border-radius: 6px; margin-bottom: 20px; display: none; }
+            padding: 12px; border-radius: 6px; margin: 12px 0; display: none; font-size: 14px; }
         .alerta-erro { background: rgba(255,59,59,0.1); border: 1px solid var(--vermelho-claro); color: var(--vermelho-claro);
-            padding: 15px; border-radius: 6px; margin-bottom: 20px; display: none; }
+            padding: 12px; border-radius: 6px; margin: 12px 0; display: none; font-size: 14px; }
         .alerta-aviso { background: rgba(255,193,7,0.1); border: 1px solid var(--amarelo); color: var(--amarelo);
             padding: 12px; border-radius: 6px; margin-bottom: 15px; font-size: 13px; }
-        .alerta-info { background: rgba(59,130,246,0.1); border: 1px solid #3B82F6; color: #93C5FD;
-            padding: 15px; border-radius: 6px; margin-bottom: 20px; display: none; }
-        .modal-senha { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none;
-            align-items: center; justify-content: center; z-index: 99999; padding: 20px; }
-        .modal-conteudo { background: var(--fundo-card); padding: 25px; border-radius: 10px;
-            border: 1px solid var(--borda); max-width: 420px; width: 100%; }
-        .modal-conteudo h3 { margin-bottom: 10px; color: var(--amarelo); font-size: 18px; }
-        .modal-conteudo p { margin-bottom: 15px; font-size: 14px; color: #aaa; }
-        .modal-botoes { margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end; }
+        .mensagem-salvo { color: var(--verde); font-size: 13px; display: none; align-items: center; gap: 6px; }
         @media (max-width: 992px) {
             .conteudo { margin-left: 0; width: 100%; padding: 80px 15px 15px; }
             .btn-menu { display: flex; align-items: center; justify-content: center; }
@@ -116,36 +108,23 @@
         </nav>
     </aside>
 
-    <!-- Modal: Pedir senha atual -->
-    <div class="modal-senha" id="modalSenha">
-        <div class="modal-conteudo">
-            <h3>🔐 Confirme sua senha atual</h3>
-            <p>Por segurança, digite sua senha atual para alterar dados de acesso</p>
-            <div class="form-grupo">
-                <label>Senha Atual</label>
-                <input type="password" id="senhaAtual" placeholder="Digite sua senha atual...">
-            </div>
-            <div class="modal-botoes">
-                <button class="btn btn-cinza" onclick="fecharModal()">Cancelar</button>
-                <button class="btn btn-verde" id="btnConfirmar" onclick="confirmarSenhaEProsseguir()">
-                    <span id="textoBtnConfirmar">Confirmar</span>
-                </button>
-            </div>
-        </div>
-    </div>
-
     <main class="conteudo">
         <div class="cabecalho">
             <h1 class="titulo-pagina">Configurações do Sistema</h1>
-            <p class="subtitulo">Dados da academia, textos da página inicial, planos e redes sociais</p>
+            <p class="subtitulo">Salve cada seção separadamente</p>
         </div>
-        <div class="alerta-sucesso" id="alertaSucesso">✅ Configurações salvas com sucesso!</div>
-        <div class="alerta-erro" id="alertaErro"><span id="textoErro">Erro!</span></div>
-        <div class="alerta-info" id="alertaInfo">📩 Link de confirmação enviado! Verifique o e-mail e clique para confirmar.</div>
-        
-        <!-- ===== TEXTOS DA PÁGINA INICIAL ===== -->
+
+        <!-- ===== 1. TEXTOS DA PÁGINA INICIAL ===== -->
         <div class="card-config">
-            <h2>📝 Textos da Página Inicial</h2>
+            <div class="card-cabecalho">
+                <h2>📝 Textos da Página Inicial</h2>
+                <button class="btn btn-verde btn-verde-pequeno" id="btnSalvarTextos" onclick="salvarTextos()">
+                    <i class="fas fa-save"></i> Salvar
+                </button>
+            </div>
+            <div id="msgSucessoTextos" class="mensagem-salvo">
+                <i class="fas fa-check-circle"></i> Salvo com sucesso!
+            </div>
             <div class="form-grid">
                 <div class="form-grupo" style="grid-column: 1 / -1;">
                     <label>Texto do Banner Principal</label>
@@ -161,10 +140,18 @@
                 </div>
             </div>
         </div>
-        
-        <!-- ===== DADOS DA ACADEMIA ===== -->
+
+        <!-- ===== 2. DADOS DA ACADEMIA ===== -->
         <div class="card-config">
-            <h2>🏫 Dados da Academia</h2>
+            <div class="card-cabecalho">
+                <h2>🏫 Dados da Academia</h2>
+                <button class="btn btn-verde btn-verde-pequeno" id="btnSalvarAcademia" onclick="salvarAcademia()">
+                    <i class="fas fa-save"></i> Salvar
+                </button>
+            </div>
+            <div id="msgSucessoAcademia" class="mensagem-salvo">
+                <i class="fas fa-check-circle"></i> Salvo com sucesso!
+            </div>
             <div class="form-grid">
                 <div class="form-grupo">
                     <label>Nome da Academia</label>
@@ -192,10 +179,18 @@
                 </div>
             </div>
         </div>
-        
-        <!-- ===== REDES SOCIAIS ===== -->
+
+        <!-- ===== 3. REDES SOCIAIS ===== -->
         <div class="card-config">
-            <h2>📱 Redes Sociais</h2>
+            <div class="card-cabecalho">
+                <h2>📱 Redes Sociais</h2>
+                <button class="btn btn-verde btn-verde-pequeno" id="btnSalvarRedes" onclick="salvarRedes()">
+                    <i class="fas fa-save"></i> Salvar
+                </button>
+            </div>
+            <div id="msgSucessoRedes" class="mensagem-salvo">
+                <i class="fas fa-check-circle"></i> Salvo com sucesso!
+            </div>
             <div class="alerta-aviso">
                 <i class="fas fa-info-circle"></i> Preencha com o nome de usuário (@sudbjj) ou link completo. Aparece no rodapé da página inicial.
             </div>
@@ -210,47 +205,42 @@
                 </div>
             </div>
         </div>
-        
-        <!-- ===== PLANOS ===== -->
+
+        <!-- ===== 4. PLANOS ===== -->
         <div class="card-config">
-            <h2>📋 Planos (Aparecem na página inicial)</h2>
+            <div class="card-cabecalho">
+                <h2>📋 Planos</h2>
+                <button class="btn btn-verde btn-verde-pequeno" id="btnSalvarPlanos" onclick="salvarPlanos()">
+                    <i class="fas fa-save"></i> Salvar
+                </button>
+            </div>
+            <div id="msgSucessoPlanos" class="mensagem-salvo">
+                <i class="fas fa-check-circle"></i> Salvo com sucesso!
+            </div>
             <button class="btn-adicionar" onclick="adicionarPlano()">
                 <i class="fas fa-plus"></i> Adicionar Novo Plano
             </button>
             <div id="listaPlanos"></div>
         </div>
-        
-        <!-- ===== ACESSO ===== -->
+
+        <!-- ===== 5. ACESSO ===== -->
         <div class="card-config">
-            <h2>🔒 Dados de Acesso</h2>
+            <div class="card-cabecalho">
+                <h2>🔒 Dados de Acesso</h2>
+                <span style="font-size:13px; color:var(--texto-cinza);">Altere direto no Firebase → Autenticação → Usuários</span>
+            </div>
             <div class="alerta-aviso">
-                <i class="fas fa-exclamation-triangle"></i> 
-                Trocar o e-mail → você receberá um link de confirmação no NOVO e-mail. Clique nele para concluir.
+                <i class="fas fa-lightbulb"></i> Para alterar e-mail ou senha: acesse o <strong>Firebase Console → Autenticação → Usuários</strong> → edite seu usuário. Mais simples e sem erros!
             </div>
             <div class="form-grid">
                 <div class="form-grupo">
-                    <label>E-mail de Login Atual</label>
-                    <input type="email" id="emailAtual" readonly style="opacity:0.7; background:#1a1a1a;">
-                </div>
-                <div class="form-grupo">
-                    <label>Novo E-mail de Login</label>
-                    <input type="email" id="novoEmail" placeholder="novo@email.com">
-                </div>
-                <div class="form-grupo">
-                    <label>Nova Senha</label>
-                    <input type="password" id="novaSenha" placeholder="Deixe vazio = não altera">
-                </div>
-                <div class="form-grupo">
-                    <label>Confirmar Nova Senha</label>
-                    <input type="password" id="confirmaSenha">
+                    <label>E-mail de Login</label>
+                    <input type="email" id="emailAdmin" readonly style="opacity:0.7; background:#1a1a1a;">
                 </div>
             </div>
         </div>
-        
-        <div class="botoes">
-            <button class="btn btn-verde" id="btnSalvar" onclick="salvarTudo()">
-                <i class="fas fa-save"></i> Salvar Alterações
-            </button>
+
+        <div style="margin-top:10px;">
             <button class="btn btn-vermelho" onclick="history.back()">
                 <i class="fas fa-arrow-left"></i> Voltar
             </button>
@@ -273,45 +263,16 @@
         
         let planos = [];
         let usuarioAtual = null;
-        let dadosPendentes = null;
         
         function abrirFecharMenu() {
             document.getElementById('menuLateral').classList.toggle('aberto');
             document.getElementById('menuLateral').classList.toggle('fechado');
         }
         
-        function mostrarErro(msg) {
-            console.error('ERRO:', msg);
-            document.getElementById('textoErro').textContent = msg;
-            document.getElementById('alertaErro').style.display = 'block';
-            document.getElementById('alertaSucesso').style.display = 'none';
-            document.getElementById('alertaInfo').style.display = 'none';
-            setTimeout(() => document.getElementById('alertaErro').style.display = 'none', 6000);
-        }
-        
-        function mostrarSucesso() {
-            document.getElementById('alertaSucesso').style.display = 'block';
-            document.getElementById('alertaErro').style.display = 'none';
-            document.getElementById('alertaInfo').style.display = 'none';
-            setTimeout(() => document.getElementById('alertaSucesso').style.display = 'none', 4000);
-        }
-        
-        function mostrarInfo(msg) {
-            document.getElementById('alertaInfo').textContent = msg;
-            document.getElementById('alertaInfo').style.display = 'block';
-            document.getElementById('alertaSucesso').style.display = 'none';
-            document.getElementById('alertaErro').style.display = 'none';
-        }
-        
-        function abrirModal() {
-            document.getElementById('modalSenha').style.display = 'flex';
-            document.getElementById('senhaAtual').value = '';
-            document.getElementById('senhaAtual').focus();
-        }
-        
-        function fecharModal() {
-            document.getElementById('modalSenha').style.display = 'none';
-            dadosPendentes = null;
+        function mostrarMensagem(elemId) {
+            const el = document.getElementById(elemId);
+            el.style.display = 'flex';
+            setTimeout(() => el.style.display = 'none', 3000);
         }
         
         function renderizarPlanos() {
@@ -342,7 +303,7 @@
         
         async function carregarDados(u) {
             usuarioAtual = u;
-            document.getElementById('emailAtual').value = u.email || '';
+            document.getElementById('emailAdmin').value = u.email || '';
             
             try {
                 const doc = await db.collection('configuracoes').doc('geral').get();
@@ -372,114 +333,44 @@
             renderizarPlanos();
         }
         
-        async function salvarDadosGerais() {
-            const dados = {
+        async function salvarTextos() {
+            await db.collection('configuracoes').doc('geral').set({
                 textoBanner: document.getElementById('textoBanner').value.trim(),
                 tituloSobre: document.getElementById('tituloSobre').value.trim(),
                 textoSobre: document.getElementById('textoSobre').value.trim(),
+                atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true });
+            mostrarMensagem('msgSucessoTextos');
+        }
+        
+        async function salvarAcademia() {
+            await db.collection('configuracoes').doc('geral').set({
                 nomeAcademia: document.getElementById('nomeAcademia').value.trim(),
                 cnpjAcademia: document.getElementById('cnpjAcademia').value.trim(),
                 enderecoAcademia: document.getElementById('enderecoAcademia').value.trim(),
                 telefoneAcademia: document.getElementById('telefoneAcademia').value.trim(),
                 emailContato: document.getElementById('emailContato').value.trim(),
                 horarioFuncionamento: document.getElementById('horarioFuncionamento').value.trim(),
+                atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true });
+            mostrarMensagem('msgSucessoAcademia');
+        }
+        
+        async function salvarRedes() {
+            await db.collection('configuracoes').doc('geral').set({
                 instagram: document.getElementById('instagram').value.trim(),
                 facebook: document.getElementById('facebook').value.trim(),
+                atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true });
+            mostrarMensagem('msgSucessoRedes');
+        }
+        
+        async function salvarPlanos() {
+            await db.collection('configuracoes').doc('geral').set({
                 planos: planos.filter(p => p.nome?.trim()),
                 atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
-            };
-            
-            await db.collection('configuracoes').doc('geral').set(dados, { merge: true });
-            mostrarSucesso();
-            document.getElementById('novaSenha').value = '';
-            document.getElementById('confirmaSenha').value = '';
-        }
-        
-        async function salvarTudo() {
-            if(!usuarioAtual) return mostrarErro('Faça login primeiro!');
-            
-            const novoEmail = document.getElementById('novoEmail').value.trim();
-            const senhaNova = document.getElementById('novaSenha').value.trim();
-            const confirma = document.getElementById('confirmaSenha').value.trim();
-            
-            if(senhaNova && senhaNova !== confirma) return mostrarErro('As senhas não coincidem!');
-            if(senhaNova && senhaNova.length < 6) return mostrarErro('Senha precisa ter pelo menos 6 caracteres!');
-            
-            const emailMudou = novoEmail && novoEmail !== usuarioAtual.email;
-            const senhaMudou = !!senhaNova;
-            
-            // Sem alteração de acesso → salva direto
-            if(!emailMudou && !senhaMudou) {
-                await salvarDadosGerais();
-                return;
-            }
-            
-            // Precisa confirmar senha
-            dadosPendentes = { novoEmail, senhaNova };
-            abrirModal();
-        }
-        
-        async function confirmarSenhaEProsseguir() {
-            const senhaAtual = document.getElementById('senhaAtual').value.trim();
-            if(!senhaAtual) return mostrarErro('Digite sua senha atual!');
-            
-            const { novoEmail, senhaNova } = dadosPendentes;
-            const btn = document.getElementById('btnConfirmar');
-            const textoBtn = document.getElementById('textoBtnConfirmar');
-            btn.disabled = true;
-            textoBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
-            
-            try {
-                // Confirma identidade
-                const credencial = firebase.auth.EmailAuthProvider.credential(usuarioAtual.email, senhaAtual);
-                await usuarioAtual.reauthenticateWithCredential(credencial);
-                console.log('✅ Reautenticado!');
-                
-                let emailPendente = false;
-                
-                // Troca e-mail → envia link de confirmação
-                if(novoEmail && novoEmail !== usuarioAtual.email) {
-                    try {
-                        await usuarioAtual.updateEmail(novoEmail);
-                        console.log('✅ E-mail alterado');
-                        emailPendente = true;
-                    } catch(erroEmail) {
-                        if(erroEmail.code === 'auth/operation-not-allowed' || erroEmail.message.includes('verify')) {
-                            mostrarInfo('📩 Solicitação enviada! Verifique o NOVO e-mail e clique no link de confirmação. Depois faça login com o novo e-mail.');
-                            // Cria usuário novo no Firebase como alternativa
-                            await auth.sendSignInLinkToEmail(novoEmail, { url: window.location.origin, handleCodeInApp: true });
-                            emailPendente = true;
-                        } else {
-                            throw erroEmail;
-                        }
-                    }
-                }
-                
-                // Troca senha
-                if(senhaNova) {
-                    await usuarioAtual.updatePassword(senhaNova);
-                    console.log('✅ Senha alterada!');
-                }
-                
-                // Salva demais dados
-                await salvarDadosGerais();
-                if(!emailPendente) fecharModal();
-                
-            } catch(erro) {
-                console.error('❌ Erro:', erro);
-                if(erro.code === 'auth/wrong-password') {
-                    mostrarErro('Senha atual está incorreta!');
-                } else if(erro.code === 'auth/invalid-email') {
-                    mostrarErro('E-mail novo inválido!');
-                } else if(erro.code === 'auth/email-already-in-use') {
-                    mostrarErro('Esse e-mail já está cadastrado!');
-                } else {
-                    mostrarErro(erro.message || 'Erro ao processar');
-                }
-            }
-            
-            btn.disabled = false;
-            textoBtn.textContent = 'Confirmar';
+            }, { merge: true });
+            mostrarMensagem('msgSucessoPlanos');
         }
         
         function sairDoSistema() {
