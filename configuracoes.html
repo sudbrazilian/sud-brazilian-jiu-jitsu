@@ -56,7 +56,7 @@
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
         .form-grupo { display: flex; flex-direction: column; gap: 6px; }
         .form-grupo label { font-size: 14px; font-weight: 600; color: var(--texto-cinza); }
-        .form-grupo input { padding: 12px; background: var(--fundo-input); border: 1px solid var(--borda);
+        .form-grupo input, .form-grupo textarea { padding: 12px; background: var(--fundo-input); border: 1px solid var(--borda);
             border-radius: 6px; color: var(--texto-branco); font-size: 14px; }
         .item-plano { display: flex; align-items: center; gap: 10px; padding: 12px;
             background: var(--fundo-input); border-radius: 6px; margin-bottom: 10px; flex-wrap: wrap; }
@@ -88,7 +88,6 @@
 </head>
 <body>
     <button class="btn-menu" onclick="abrirFecharMenu()"><i class="fas fa-bars"></i></button>
-
     <aside class="menu-lateral fechado" id="menuLateral">
         <div class="logo">
             <img src="imagens/logosud.png" alt="Logo SUD">
@@ -105,16 +104,34 @@
             </ul>
         </nav>
     </aside>
-
     <main class="conteudo">
         <div class="cabecalho">
             <h1 class="titulo-pagina">Configurações do Sistema</h1>
-            <p class="subtitulo">Dados da academia, planos e acesso</p>
+            <p class="subtitulo">Dados da academia, textos da página inicial, planos e redes sociais</p>
         </div>
-
-        <div class="alerta-sucesso" id="alertaSucesso">✅ Configurações salvas com sucesso!</div>
+        <div class="alerta-sucesso" id="alertaSucesso">✅ Configurações salvas com sucesso! Atualize a página inicial para ver as mudanças.</div>
         <div class="alerta-erro" id="alertaErro"><span id="textoErro">Erro!</span></div>
 
+        <!-- ===== TEXTOS DA PÁGINA INICIAL ===== -->
+        <div class="card-config">
+            <h2>📝 Textos da Página Inicial</h2>
+            <div class="form-grid">
+                <div class="form-grupo" style="grid-column: 1 / -1;">
+                    <label>Texto do Banner Principal</label>
+                    <textarea id="textoBanner" rows="3" placeholder="Texto que aparece abaixo do título no banner...">Na SUD, o Jiu-Jitsu transforma vidas. Aqui você encontra respeito, disciplina, superação e uma família que te apoia em cada passo da jornada.</textarea>
+                </div>
+                <div class="form-grupo" style="grid-column: 1 / -1;">
+                    <label>Título da Seção Sobre</label>
+                    <input type="text" id="tituloSobre" value="Saúde, União e Disciplina">
+                </div>
+                <div class="form-grupo" style="grid-column: 1 / -1;">
+                    <label>Texto da Seção Sobre</label>
+                    <textarea id="textoSobre" rows="4" placeholder="Texto que aparece ao lado da imagem sobre...">A SUD Jiu-Jitsu é mais do que uma academia: é um lugar para se desenvolver fisicamente, mentalmente e socialmente. Nossos valores são baseados no respeito, na evolução constante e na força do trabalho em equipe.</textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== DADOS DA ACADEMIA ===== -->
         <div class="card-config">
             <h2>🏫 Dados da Academia</h2>
             <div class="form-grid">
@@ -131,8 +148,8 @@
                     <input type="text" id="enderecoAcademia">
                 </div>
                 <div class="form-grupo">
-                    <label>Telefone</label>
-                    <input type="text" id="telefoneAcademia">
+                    <label>Telefone / WhatsApp</label>
+                    <input type="text" id="telefoneAcademia" placeholder="(91) 99999-9999">
                 </div>
                 <div class="form-grupo">
                     <label>E-mail de Contato</label>
@@ -140,19 +157,39 @@
                 </div>
                 <div class="form-grupo">
                     <label>Horário de Funcionamento</label>
-                    <input type="text" id="horarioFuncionamento">
+                    <input type="text" id="horarioFuncionamento" placeholder="Ex: Seg a Sex 18h às 22h">
                 </div>
             </div>
         </div>
 
+        <!-- ===== REDES SOCIAIS ===== -->
         <div class="card-config">
-            <h2>📋 Planos</h2>
+            <h2>📱 Redes Sociais</h2>
+            <div class="alerta-aviso">
+                <i class="fas fa-info-circle"></i> Preencha com o nome de usuário (@sudbjj) ou link completo. Aparece no rodapé da página inicial.
+            </div>
+            <div class="form-grid">
+                <div class="form-grupo">
+                    <label><i class="fab fa-instagram"></i> Instagram</label>
+                    <input type="text" id="instagram" placeholder="@sudbjj ou link completo">
+                </div>
+                <div class="form-grupo">
+                    <label><i class="fab fa-facebook-f"></i> Facebook</label>
+                    <input type="text" id="facebook" placeholder="Link ou nome da página">
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== PLANOS ===== -->
+        <div class="card-config">
+            <h2>📋 Planos (Aparecem na página inicial)</h2>
             <button class="btn-adicionar" onclick="adicionarPlano()">
                 <i class="fas fa-plus"></i> Adicionar Novo Plano
             </button>
             <div id="listaPlanos"></div>
         </div>
 
+        <!-- ===== ACESSO ===== -->
         <div class="card-config">
             <h2>🔒 Dados de Acesso</h2>
             <div class="alerta-aviso">
@@ -193,10 +230,10 @@
             messagingSenderId: "1053972036308",
             appId: "1:1053972036308:web:215a41d7bc91502eee1941"
         };
+
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
-
         let planos = [];
 
         function abrirFecharMenu() {
@@ -212,7 +249,7 @@
 
         function mostrarSucesso() {
             document.getElementById('alertaSucesso').style.display = 'block';
-            setTimeout(() => document.getElementById('alertaSucesso').style.display = 'none', 4000);
+            setTimeout(() => document.getElementById('alertaSucesso').style.display = 'none', 5000);
         }
 
         function renderizarPlanos() {
@@ -222,9 +259,9 @@
                 const div = document.createElement('div');
                 div.className = 'item-plano';
                 div.innerHTML = `
-                    <input type="text" placeholder="Nome do plano" value="${plano.nome}"
+                    <input type="text" placeholder="Nome do plano" value="${plano.nome || ''}"
                         onchange="planos[${indice}].nome = this.value">
-                    <input type="number" step="0.01" placeholder="Valor R$" value="${plano.valor}"
+                    <input type="number" step="0.01" placeholder="Valor R$" value="${plano.valor || ''}"
                         onchange="planos[${indice}].valor = parseFloat(this.value) || 0">
                     <button class="btn-remover" onclick="removerPlano(${indice})">
                         <i class="fas fa-trash"></i>
@@ -252,23 +289,37 @@
                 const doc = await db.collection('configuracoes').doc('geral').get();
                 if (doc.exists) {
                     const dados = doc.data();
+                    
+                    // Textos da página inicial
+                    if (dados.textoBanner) document.getElementById('textoBanner').value = dados.textoBanner;
+                    if (dados.tituloSobre) document.getElementById('tituloSobre').value = dados.tituloSobre;
+                    if (dados.textoSobre) document.getElementById('textoSobre').value = dados.textoSobre;
+                    
+                    // Dados da academia
                     if (dados.nomeAcademia) document.getElementById('nomeAcademia').value = dados.nomeAcademia;
                     if (dados.cnpjAcademia) document.getElementById('cnpjAcademia').value = dados.cnpjAcademia;
                     if (dados.enderecoAcademia) document.getElementById('enderecoAcademia').value = dados.enderecoAcademia;
                     if (dados.telefoneAcademia) document.getElementById('telefoneAcademia').value = dados.telefoneAcademia;
                     if (dados.emailContato) document.getElementById('emailContato').value = dados.emailContato;
                     if (dados.horarioFuncionamento) document.getElementById('horarioFuncionamento').value = dados.horarioFuncionamento;
-                    if (dados.planos) planos = dados.planos;
+                    
+                    // Redes sociais
+                    if (dados.instagram) document.getElementById('instagram').value = dados.instagram;
+                    if (dados.facebook) document.getElementById('facebook').value = dados.facebook;
+                    
+                    // Planos
+                    if (dados.planos && Array.isArray(dados.planos)) planos = dados.planos;
                 }
             } catch (erro) {
                 console.log('Usando valores padrão');
             }
+            
             if (planos.length === 0) {
                 planos = [
-                    { nome: 'Mensal', valor: 90.00 },
-                    { nome: 'Trimestral', valor: 255.00 },
-                    { nome: 'Semestral', valor: 480.00 },
-                    { nome: 'Anual', valor: 840.00 }
+                    { nome: 'Jiu-Jitsu Infantil', valor: 80.00 },
+                    { nome: 'Jiu-Jitsu Adulto', valor: 120.00 },
+                    { nome: 'Jiu-Jitsu Feminino', valor: 100.00 },
+                    { nome: 'Competição', valor: 150.00 }
                 ];
             }
             renderizarPlanos();
@@ -277,22 +328,34 @@
         async function salvarTudo() {
             const usuario = auth.currentUser;
             if (!usuario) return mostrarErro('Faça login primeiro!');
-
+            
             const senha = document.getElementById('novaSenha').value.trim();
             const confirma = document.getElementById('confirmaSenha').value.trim();
             const novoEmail = document.getElementById('emailAdmin').value.trim();
-
+            
             if (senha && senha !== confirma) return mostrarErro('As senhas não coincidem!');
             if (senha && senha.length < 6) return mostrarErro('Senha com mínimo 6 caracteres!');
-
+            
             try {
                 const dados = {
+                    // Textos da página inicial
+                    textoBanner: document.getElementById('textoBanner').value.trim(),
+                    tituloSobre: document.getElementById('tituloSobre').value.trim(),
+                    textoSobre: document.getElementById('textoSobre').value.trim(),
+                    
+                    // Dados da academia
                     nomeAcademia: document.getElementById('nomeAcademia').value.trim(),
                     cnpjAcademia: document.getElementById('cnpjAcademia').value.trim(),
                     enderecoAcademia: document.getElementById('enderecoAcademia').value.trim(),
                     telefoneAcademia: document.getElementById('telefoneAcademia').value.trim(),
                     emailContato: document.getElementById('emailContato').value.trim(),
                     horarioFuncionamento: document.getElementById('horarioFuncionamento').value.trim(),
+                    
+                    // Redes sociais
+                    instagram: document.getElementById('instagram').value.trim(),
+                    facebook: document.getElementById('facebook').value.trim(),
+                    
+                    // Planos
                     planos: planos.filter(p => p.nome.trim() !== ''),
                     atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
                 };
@@ -305,6 +368,7 @@
                 mostrarSucesso();
                 document.getElementById('novaSenha').value = '';
                 document.getElementById('confirmaSenha').value = '';
+
             } catch (erro) {
                 console.error(erro);
                 if (erro.code === 'auth/requires-recent-login') {
