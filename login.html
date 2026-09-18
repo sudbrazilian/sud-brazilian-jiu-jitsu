@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - SUD Brazilian Jiu-Jitsu</title>
     <link rel="icon" href="imagens/logosud.png" type="image/png">
+    
+    <!-- ✅ PWA — Instalar como Aplicativo -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#D10000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SUD Jiu-Jitsu">
+    <link rel="apple-touch-icon" href="imagens/logosud.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -22,6 +32,7 @@
             --cinza: #888;
             --erro: #ff4444;
             --sucesso: #00C851;
+            --azul-instalar: #2563eb;
         }
         body {
             background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
@@ -42,7 +53,7 @@
         }
         .logo {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
         .logo img {
             height: 80px;
@@ -51,11 +62,38 @@
         .logo h1 {
             font-size: 1.3rem;
             color: var(--texto);
+            margin-bottom: 5px;
         }
         .logo p {
             font-size: 0.85rem;
             color: var(--cinza);
         }
+        
+        <!-- ✅ BOTÃO INSTALAR -->
+        .btn-instalar {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(90deg, #2563eb, #3b82f6);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: transform 0.2s;
+        }
+        .btn-instalar:hover {
+            transform: scale(1.02);
+        }
+        .btn-instalar.oculto {
+            display: none;
+        }
+        
         .form-group {
             margin-bottom: 20px;
         }
@@ -134,9 +172,14 @@
 <div class="caixa-login">
     <div class="logo">
         <img src="imagens/logosud.png" alt="SUD Brazilian Jiu-Jitsu">
-        <h1>Área Administrativa</h1>
-        <p>Acesso restrito ao responsável</p>
+        <h1>Acesse sua conta</h1>
     </div>
+
+    <!-- ✅ BOTÃO INSTALAR — APARECE AUTOMATICAMENTE -->
+    <button class="btn-instalar oculto" id="btnInstalarApp" onclick="instalarApp()">
+        <i class="fas fa-download"></i> Instalar Aplicativo
+    </button>
+
     <form id="formLogin">
         <div class="form-group">
             <label for="email">E-mail</label>
@@ -156,7 +199,6 @@
     </div>
 </div>
 
-<!-- ✅ EXATAMENTE a versão que funcionou -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js";
@@ -176,6 +218,25 @@
     const formLogin = document.getElementById('formLogin');
     const btnEntrar = document.getElementById('btnEntrar');
     const caixaMensagem = document.getElementById('caixaMensagem');
+    
+    // ✅ PWA — DETECTA SE PODE INSTALAR
+    let promptInstalacao;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        promptInstalacao = e;
+        document.getElementById('btnInstalarApp').classList.remove('oculto');
+    });
+    
+    async function instalarApp() {
+        if (!promptInstalacao) {
+            alert('A opção de instalar não está disponível agora. Acesse pelo celular.');
+            return;
+        }
+        promptInstalacao.prompt();
+        const { outcome } = await promptInstalacao.userChoice;
+        promptInstalacao = null;
+        document.getElementById('btnInstalarApp').classList.add('oculto');
+    }
     
     function mostrarMensagem(texto, tipo) {
         caixaMensagem.style.display = 'block';
