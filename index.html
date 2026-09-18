@@ -25,6 +25,7 @@
         :root {
             --vermelho: #D10000;
             --vermelho-claro: #FF3B3B;
+            --laranja: #FF6B00;
             --escuro: #050505;
             --meio-escuro: #0F0F12;
             --texto: #FFFFFF;
@@ -205,7 +206,7 @@
             max-width: 450px;
         }
         .btn-vermelho {
-            background: var(--vermelho);
+            background: var(--laranja);
             color: white;
             border: none;
             padding: 14px 32px;
@@ -261,7 +262,7 @@
             color: var(--texto-cinza);
             text-transform: uppercase;
         }
-        /* === SEÇÃO SOBRE — IGUAL AO MODELO === */
+        /* === SEÇÃO SOBRE — EXATAMENTE IGUAL AO MODELO === */
         .secao-sobre {
             padding: 70px 0;
             background: linear-gradient(90deg, rgba(20,10,10,0.95) 0%, rgba(10,10,10,0.9) 100%),
@@ -269,7 +270,7 @@
         }
         .sobre-conteudo {
             display: grid;
-            grid-template-columns: 480px 1fr;
+            grid-template-columns: 420px 1fr;
             gap: 50px;
             align-items: center;
         }
@@ -279,8 +280,8 @@
             object-fit: cover;
         }
         .sobre-texto small {
-            color: var(--vermelho);
-            font-size: 0.85rem;
+            color: var(--laranja);
+            font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 2px;
             margin-bottom: 8px;
@@ -299,47 +300,45 @@
             color: var(--texto-claro);
             margin-bottom: 30px;
             line-height: 1.7;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             max-width: 650px;
         }
         .sobre-icones {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 25px;
+            gap: 20px;
             margin-bottom: 30px;
         }
         .icone-item {
             display: flex;
+            flex-direction: column;
             align-items: flex-start;
-            gap: 10px;
+            gap: 4px;
         }
         .icone-item i {
-            color: var(--vermelho);
-            font-size: 1.2rem;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-        .icone-item div {
-            display: flex;
-            flex-direction: column;
+            color: var(--laranja);
+            font-size: 1.1rem;
+            margin-bottom: 4px;
         }
         .icone-item strong {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            line-height: 1.4;
+            line-height: 1.3;
             display: block;
+            white-space: nowrap;
         }
         .icone-item span {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--texto-cinza);
             text-transform: uppercase;
             display: block;
+            white-space: nowrap;
         }
         .btn-vermelho-escuro {
-            background: transparent;
-            color: var(--vermelho);
-            border: 1px solid var(--vermelho);
+            background: var(--laranja);
+            color: white;
+            border: none;
             padding: 10px 24px;
             border-radius: 4px;
             font-size: 0.85rem;
@@ -354,7 +353,6 @@
         }
         .btn-vermelho-escuro:hover {
             background: var(--vermelho);
-            color: white;
         }
         /* === SEÇÃO PLANOS / AULAS === */
         .secao-planos {
@@ -368,20 +366,20 @@
             margin-bottom: 40px;
         }
         .secao-planos h2 {
-            font-size: 1rem;
+            font-size: 0.9rem;
             text-transform: uppercase;
             color: var(--texto-cinza);
             letter-spacing: 2px;
         }
         .secao-planos h3 {
-            font-size: 2rem;
+            font-size: 1.8rem;
             text-transform: uppercase;
             margin-bottom: 10px;
         }
         .secao-planos .descricao-secao {
             color: var(--texto-cinza);
             max-width: 350px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
         .planos-grid {
             display: grid;
@@ -424,6 +422,25 @@
         }
         .plano-card .saiba-mais:hover {
             text-decoration: underline;
+        }
+        .btn-laranja {
+            background: var(--laranja);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-laranja:hover {
+            background: var(--vermelho);
         }
         /* === RODAPÉ === */
         footer {
@@ -612,35 +629,27 @@
                 <div class="sobre-icones">
                     <div class="icone-item">
                         <i class="fa-solid fa-shield"></i>
-                        <div>
-                            <strong>TÉCNICA</strong>
-                            <span>E QUALIDADE</span>
-                        </div>
+                        <strong>TÉCNICA</strong>
+                        <span>E QUALIDADE</span>
                     </div>
                     <div class="icone-item">
                         <i class="fa-solid fa-user-tie"></i>
-                        <div>
-                            <strong>PROFESSORES</strong>
-                            <span>QUALIFICADOS</span>
-                        </div>
+                        <strong>PROFESSORES</strong>
+                        <span>QUALIFICADOS</span>
                     </div>
                     <div class="icone-item">
                         <i class="fa-solid fa-home"></i>
-                        <div>
-                            <strong>AMBIENTE</strong>
-                            <span>FAMILIAR</span>
-                        </div>
+                        <strong>AMBIENTE</strong>
+                        <span>FAMILIAR</span>
                     </div>
                     <div class="icone-item">
                         <i class="fa-solid fa-bullseye"></i>
-                        <div>
-                            <strong>FOCO NO SEU</strong>
-                            <span>PROGRESSO</span>
-                        </div>
+                        <strong>FOCO NO SEU</strong>
+                        <span>PROGRESSO</span>
                     </div>
                 </div>
                 <a href="#planos" class="btn-vermelho-escuro">
-                    CONHEÇA MAIS <i class="fa-solid fa-arrow-right"></i>
+                    CONHEÇA MAIS →
                 </a>
             </div>
         </div>
@@ -656,7 +665,7 @@
                 <h3>ESCOLHA SEU DESAFIO</h3>
                 <p class="descricao-secao">Do iniciante ao avançado, temos um espaço feito para você evoluir no seu ritmo.</p>
             </div>
-            <a href="#horarios" class="btn-vermelho">VER HORÁRIOS <i class="fa-solid fa-arrow-right"></i></a>
+            <a href="#horarios" class="btn-laranja">VER HORÁRIOS →</a>
         </div>
         <div id="planosContainer" class="planos-grid">
             <div class="plano-card">
