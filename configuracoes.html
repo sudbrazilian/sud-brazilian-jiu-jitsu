@@ -235,23 +235,6 @@
             </div>
         </div>
 
-        <!-- ===== ACESSO ===== -->
-        <div class="card-config">
-            <div class="card-cabecalho">
-                <h2>🔒 Dados de Acesso</h2>
-                <span style="font-size:13px; color:var(--texto-cinza);">Altere direto no Firebase → Autenticação → Usuários</span>
-            </div>
-            <div class="alerta-aviso">
-                <i class="fas fa-lightbulb"></i> Para alterar e-mail ou senha: acesse o <strong>Firebase Console → Autenticação → Usuários</strong> → edite seu usuário. Mais simples e sem erros!
-            </div>
-            <div class="form-grid">
-                <div class="form-grupo">
-                    <label>E-mail de Login</label>
-                    <input type="email" id="emailAdmin" readonly style="opacity:0.7; background:#1a1a1a;">
-                </div>
-            </div>
-        </div>
-
         <div style="margin-top:10px;">
             <button class="btn btn-vermelho" onclick="history.back()">
                 <i class="fas fa-arrow-left"></i> Voltar
@@ -275,7 +258,6 @@
         
         let tiposAluno = [];
         let planos = [];
-        let usuarioAtual = null;
         
         function abrirFecharMenu() {
             document.getElementById('menuLateral').classList.toggle('aberto');
@@ -358,9 +340,6 @@
         
         // ===== CARREGAR DADOS =====
         async function carregarDados(u) {
-            usuarioAtual = u;
-            document.getElementById('emailAdmin').value = u.email || '';
-            
             try {
                 const doc = await db.collection('configuracoes').doc('geral').get();
                 if(doc.exists) {
