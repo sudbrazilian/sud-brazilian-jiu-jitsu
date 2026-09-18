@@ -4,11 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SUD Brazilian Jiu-Jitsu</title>
-
     <!-- ✅ Favicon / Logo na aba do navegador -->
     <link rel="icon" href="imagens/logosud.png" type="image/png">
     <link rel="shortcut icon" href="imagens/logosud.png" type="image/png">
-
     <!-- ✅ PWA / Ícone para celular -->
     <link rel="apple-touch-icon" href="imagens/logosud.png">
     <link rel="manifest" href="manifest.json">
@@ -16,9 +14,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="SUD Jiu-Jitsu">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
     <style>
         * {
             margin: 0;
@@ -33,6 +31,11 @@
             --meio-escuro: #121212;
             --texto: #FFFFFF;
             --texto-claro: #E0E0E0;
+            --texto-cinza: #999999;
+            --borda: #29292E;
+            --instagram: #E4405F;
+            --whatsapp: #25D366;
+            --facebook: #1877F2;
         }
         body {
             background-color: var(--escuro);
@@ -44,7 +47,6 @@
             max-width: 1280px;
             margin: 0 auto;
         }
-
         /* ========== CABEÇALHO ========== */
         header {
             display: flex;
@@ -123,7 +125,6 @@
         .btn-entrar:hover {
             background: var(--vermelho-claro);
         }
-
         /* ========== MENU HAMBÚRGUER / MOBILE ========== */
         .hamburger {
             display: none;
@@ -180,7 +181,6 @@
         .overlay.active {
             display: block;
         }
-
         /* ========== BANNER PRINCIPAL ========== */
         .banner {
             background: linear-gradient(90deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.75) 45%, rgba(0,0,0,0.35) 70%),
@@ -237,7 +237,6 @@
             background: var(--vermelho-claro);
             transform: translateY(-2px);
         }
-
         /* ========== DESTAQUES LADO DIREITO ========== */
         .destaques {
             display: flex;
@@ -269,7 +268,66 @@
             font-size: 0.75rem;
             color: #888;
         }
-
+        /* ========== SEÇÃO SOBRE / CONTATO ========== */
+        .secao {
+            padding: 60px 0;
+            border-bottom: 1px solid var(--borda);
+        }
+        .secao h2 {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            color: var(--vermelho-claro);
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        .info-card {
+            background: var(--meio-escuro);
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid var(--borda);
+        }
+        .info-card h3 {
+            font-size: 1rem;
+            color: var(--texto-cinza);
+            margin-bottom: 12px;
+        }
+        .info-card p, .info-card a {
+            font-size: 1rem;
+            color: var(--texto);
+            line-height: 1.8;
+        }
+        .redes-sociais {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .botao-rede {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .botao-rede:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .instagram { background: linear-gradient(45deg, #f09433, #E4405F, #C13584); }
+        .whatsapp { background: var(--whatsapp); }
+        .facebook { background: var(--facebook); }
+        .sem-dado {
+            color: var(--texto-cinza);
+            font-style: italic;
+        }
         /* ========== RODAPÉ ========== */
         footer {
             background: #000;
@@ -283,7 +341,6 @@
             color: #555;
             font-size: 0.8rem;
         }
-
         /* ========== RESPONSIVIDADE / CELULAR ========== */
         @media (max-width: 900px) {
             .banner-conteudo {
@@ -307,17 +364,15 @@
     </style>
 </head>
 <body>
-
 <!-- CABEÇALHO -->
 <header>
     <div class="logo-cabecalho">
         <img src="imagens/logosud.png" alt="SUD Brazilian Jiu-Jitsu">
         <div class="logo-texto">
-            <h1>SUD</h1>
-            <p>BRAZILIAN JIU-JITSU</p>
+            <h1 id="nomeCabecalho">SUD</h1>
+            <p id="subtituloCabecalho">BRAZILIAN JIU-JITSU</p>
         </div>
     </div>
-
     <nav class="nav-desktop">
         <a href="#inicio" class="ativo">Início</a>
         <a href="#sobre">Sobre</a>
@@ -327,11 +382,9 @@
         <a href="#noticias">Notícias</a>
         <a href="#contato">Contato</a>
     </nav>
-
     <a href="login.html" class="btn-entrar nav-desktop">
         <i class="fa-solid fa-user"></i> Entrar
     </a>
-
     <!-- Botão de menu no celular -->
     <div class="hamburger" id="hamburger">
         <span></span>
@@ -339,10 +392,8 @@
         <span></span>
     </div>
 </header>
-
 <!-- Fundo escuro quando abre o menu -->
 <div class="overlay" id="overlay"></div>
-
 <!-- Menu que abre no celular -->
 <nav class="menu-mobile" id="menuMobile">
     <a href="#inicio" class="ativo">Início</a>
@@ -364,8 +415,8 @@
             <div class="banner-esquerda">
                 <img src="imagens/logosud.png" alt="SUD" class="logo-banner">
                 <h2>MAIS QUE UM ESPORTE,<br>É UM <span>ESTILO DE VIDA</span>.</h2>
-                <p>Na SUD, o Jiu-Jitsu transforma vidas. Aqui você encontra respeito, disciplina, superação e uma família que te apoia em cada passo da jornada.</p>
-                <a href="https://wa.me/5591998178337" target="_blank" class="btn-vermelho">
+                <p id="textoBanner">Na SUD, o Jiu-Jitsu transforma vidas. Aqui você encontra respeito, disciplina, superação e uma família que te apoia em cada passo da jornada.</p>
+                <a id="botaoWhatsApp" href="https://wa.me/5591998178337" target="_blank" class="btn-vermelho">
                     VENHA TREINAR <i class="fa-solid fa-arrow-right"></i>
                 </a>
             </div>
@@ -396,39 +447,141 @@
     </div>
 </section>
 
-<!-- RODAPÉ -->
+<!-- SOBRE / CONTATO - DADOS DINÂMICOS -->
+<section class="secao" id="sobre">
+    <div class="container">
+        <h2>Sobre Nós</h2>
+        <div id="dadosAcademia">
+            <p style="text-align:center; padding:20px; color:#999;">🔄 Carregando informações...</p>
+        </div>
+    </div>
+</section>
+
 <footer>
     <div class="container">
         <div class="copyright">
-            <p>© 2026 SUD Brazilian Jiu-Jitsu. Todos os direitos reservados.</p>
+            <p>© 2026 <span id="nomeRodape">SUD Brazilian Jiu-Jitsu</span>. Todos os direitos reservados.</p>
         </div>
     </div>
 </footer>
 
-<!-- ✅ Código do menu funcionar no celular -->
 <script>
+    // ✅ FIREBASE
+    const firebaseConfig = {
+        apiKey: "AIzaSyDKWso0gw6T2thoS12c1erzTzVhrnagS1s",
+        authDomain: "sud-brazilian-jiu-jitsu.firebaseapp.com",
+        projectId: "sud-brazilian-jiu-jitsu",
+        storageBucket: "sud-brazilian-jiu-jitsu.firebasestorage.app",
+        messagingSenderId: "1053972036308",
+        appId: "1:1053972036308:web:215a41d7bc91502eee1941"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // ✅ MENU HAMBÚRGUER
     const hamburger = document.getElementById('hamburger');
     const menuMobile = document.getElementById('menuMobile');
     const overlay = document.getElementById('overlay');
-
     hamburger.addEventListener('click', () => {
         menuMobile.classList.toggle('open');
         overlay.classList.toggle('active');
     });
-
     overlay.addEventListener('click', () => {
         menuMobile.classList.remove('open');
         overlay.classList.remove('active');
     });
-
-    // Fecha o menu ao clicar em qualquer link
     document.querySelectorAll('.menu-mobile a').forEach(link => {
         link.addEventListener('click', () => {
             menuMobile.classList.remove('open');
             overlay.classList.remove('active');
         });
     });
-</script>
 
+    // ✅ CARREGAR DADOS DA ACADEMIA E REDES SOCIAIS
+    async function carregarDadosAcademia() {
+        try {
+            const doc = await db.collection('configuracoes').doc('geral').get();
+            const d = doc.exists ? doc.data() : {};
+
+            // Atualiza textos
+            const nomeCurto = (d.nomeAcademia || 'SUD Brazilian Jiu-Jitsu').split(' ')[0];
+            document.getElementById('nomeCabecalho').textContent = nomeCurto;
+            document.getElementById('subtituloCabecalho').textContent = d.horarioFuncionamento ? 'ACADEMIA DE JIU-JITSU' : 'BRAZILIAN JIU-JITSU';
+            document.getElementById('nomeRodape').textContent = d.nomeAcademia || 'SUD Brazilian Jiu-Jitsu';
+
+            // Monta o conteúdo
+            const container = document.getElementById('dadosAcademia');
+            container.innerHTML = `
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>Nome</h3>
+                        <p>${d.nomeAcademia || 'SUD Brazilian Jiu-Jitsu'}</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>CNPJ</h3>
+                        <p class="${!d.cnpjAcademia ? 'sem-dado' : ''}">${d.cnpjAcademia || 'Não informado'}</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Endereço</h3>
+                        <p class="${!d.enderecoAcademia ? 'sem-dado' : ''}">${d.enderecoAcademia || 'Não informado'}</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Telefone</h3>
+                        <p class="${!d.telefoneAcademia ? 'sem-dado' : ''}">${d.telefoneAcademia || 'Não informado'}</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>E-mail</h3>
+                        <p class="${!d.emailContato ? 'sem-dado' : ''}">${d.emailContato || 'Não informado'}</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Horário</h3>
+                        <p class="${!d.horarioFuncionamento ? 'sem-dado' : ''}">${d.horarioFuncionamento || 'Não informado'}</p>
+                    </div>
+                </div>
+
+                <div class="info-card" style="margin-top: 20px;">
+                    <h3>Redes Sociais</h3>
+                    <div class="redes-sociais">
+                        ${d.instagram ? `
+                            <a href="${d.instagram.startsWith('http') ? d.instagram : 'https://instagram.com/' + d.instagram.replace('@','')}" 
+                               target="_blank" class="botao-rede instagram">
+                                <i class="fab fa-instagram"></i> Instagram
+                            </a>
+                        ` : ''}
+                        
+                        ${d.whatsapp ? `
+                            <a href="https://wa.me/${d.whatsapp.replace(/\D/g, '')}" 
+                               target="_blank" class="botao-rede whatsapp">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </a>
+                        ` : ''}
+                        
+                        ${d.facebook ? `
+                            <a href="${d.facebook.startsWith('http') ? d.facebook : 'https://facebook.com/' + d.facebook}" 
+                               target="_blank" class="botao-rede facebook">
+                                <i class="fab fa-facebook-f"></i> Facebook
+                            </a>
+                        ` : ''}
+                        
+                        ${!d.instagram && !d.whatsapp && !d.facebook ? 
+                            '<p class="sem-dado">Redes sociais ainda não configuradas em Configurações</p>' : ''}
+                    </div>
+                </div>
+            `;
+
+            // Atualiza botão principal do WhatsApp
+            if (d.whatsapp) {
+                const numeroLimpo = d.whatsapp.replace(/\D/g, '');
+                const comCodigo = numeroLimpo.length === 11 ? `55${numeroLimpo}` : numeroLimpo;
+                document.getElementById('botaoWhatsApp').href = `https://wa.me/${comCodigo}`;
+            }
+
+        } catch (erro) {
+            console.error('Erro ao carregar dados:', erro);
+        }
+    }
+
+    carregarDadosAcademia();
+</script>
 </body>
 </html>
