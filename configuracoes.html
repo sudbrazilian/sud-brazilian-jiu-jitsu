@@ -59,23 +59,18 @@
         .form-grupo label { font-size: 14px; font-weight: 600; color: var(--texto-cinza); }
         .form-grupo input, .form-grupo textarea { padding: 12px; background: var(--fundo-input); border: 1px solid var(--borda);
             border-radius: 6px; color: var(--texto-branco); font-size: 14px; }
-        .item-plano { display: flex; align-items: center; gap: 10px; padding: 12px;
+        .item-lista { display: flex; align-items: center; gap: 10px; padding: 12px;
             background: var(--fundo-input); border-radius: 6px; margin-bottom: 10px; flex-wrap: wrap; }
-        .item-plano input { flex: 1; min-width: 150px; padding: 10px; background: transparent;
+        .item-lista input { flex: 1; min-width: 150px; padding: 10px; background: transparent;
             border: 1px solid var(--borda); color: var(--texto-branco); border-radius: 4px; }
         .btn-remover { background: transparent; border: none; color: var(--vermelho-claro);
             cursor: pointer; font-size: 18px; padding: 5px; }
         .btn-adicionar { background: rgba(0,200,83,0.1); border: 1px solid var(--verde); color: var(--verde);
             padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: 600; margin-bottom: 15px; }
         .btn { padding: 10px 18px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 14px; }
-        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
         .btn-verde { background: var(--verde); color: white; }
         .btn-verde-pequeno { padding: 8px 14px; font-size: 13px; }
         .btn-vermelho { background: var(--vermelho-principal); color: white; }
-        .alerta-sucesso { background: rgba(0,200,83,0.1); border: 1px solid var(--verde); color: var(--verde);
-            padding: 12px; border-radius: 6px; margin: 12px 0; display: none; font-size: 14px; }
-        .alerta-erro { background: rgba(255,59,59,0.1); border: 1px solid var(--vermelho-claro); color: var(--vermelho-claro);
-            padding: 12px; border-radius: 6px; margin: 12px 0; display: none; font-size: 14px; }
         .alerta-aviso { background: rgba(255,193,7,0.1); border: 1px solid var(--amarelo); color: var(--amarelo);
             padding: 12px; border-radius: 6px; margin-bottom: 15px; font-size: 13px; }
         .mensagem-salvo { color: var(--verde); font-size: 13px; display: none; align-items: center; gap: 6px; }
@@ -102,7 +97,7 @@
                 <li><a href="alunos.html"><i class="fas fa-users"></i> Alunos</a></li>
                 <li><a href="financeiro.html"><i class="fas fa-dollar-sign"></i> Financeiro</a></li>
                 <li><a href="relatorios.html"><i class="fas fa-chart-bar"></i> Relatórios</a></li>
-                <li><a href="configuracoes.html" class="ativo"><i class="fas fa-cog"></i> Configurações</a></li>
+                <li><a href="#" class="ativo"><i class="fas fa-cog"></i> Configurações</a></li>
                 <li><a href="#" class="sair" onclick="sairDoSistema()"><i class="fas fa-sign-out-alt"></i> Sair</a></li>
             </ul>
         </nav>
@@ -114,11 +109,45 @@
             <p class="subtitulo">Salve cada seção separadamente</p>
         </div>
 
-        <!-- ===== 1. TEXTOS DA PÁGINA INICIAL ===== -->
+        <!-- ===== TIPOS DE ALUNO ===== -->
+        <div class="card-config">
+            <div class="card-cabecalho">
+                <h2>👥 Tipos de Aluno</h2>
+                <button class="btn btn-verde btn-verde-pequeno" onclick="salvarTipos()">
+                    <i class="fas fa-save"></i> Salvar
+                </button>
+            </div>
+            <div id="msgSucessoTipos" class="mensagem-salvo">
+                <i class="fas fa-check-circle"></i> Salvo com sucesso!
+            </div>
+            <button class="btn-adicionar" onclick="adicionarTipo()">
+                <i class="fas fa-plus"></i> Adicionar Novo Tipo
+            </button>
+            <div id="listaTipos"></div>
+        </div>
+
+        <!-- ===== PLANOS ===== -->
+        <div class="card-config">
+            <div class="card-cabecalho">
+                <h2>📋 Planos</h2>
+                <button class="btn btn-verde btn-verde-pequeno" onclick="salvarPlanos()">
+                    <i class="fas fa-save"></i> Salvar
+                </button>
+            </div>
+            <div id="msgSucessoPlanos" class="mensagem-salvo">
+                <i class="fas fa-check-circle"></i> Salvo com sucesso!
+            </div>
+            <button class="btn-adicionar" onclick="adicionarPlano()">
+                <i class="fas fa-plus"></i> Adicionar Novo Plano
+            </button>
+            <div id="listaPlanos"></div>
+        </div>
+
+        <!-- ===== TEXTOS DA PÁGINA INICIAL ===== -->
         <div class="card-config">
             <div class="card-cabecalho">
                 <h2>📝 Textos da Página Inicial</h2>
-                <button class="btn btn-verde btn-verde-pequeno" id="btnSalvarTextos" onclick="salvarTextos()">
+                <button class="btn btn-verde btn-verde-pequeno" onclick="salvarTextos()">
                     <i class="fas fa-save"></i> Salvar
                 </button>
             </div>
@@ -141,11 +170,11 @@
             </div>
         </div>
 
-        <!-- ===== 2. DADOS DA ACADEMIA ===== -->
+        <!-- ===== DADOS DA ACADEMIA ===== -->
         <div class="card-config">
             <div class="card-cabecalho">
                 <h2>🏫 Dados da Academia</h2>
-                <button class="btn btn-verde btn-verde-pequeno" id="btnSalvarAcademia" onclick="salvarAcademia()">
+                <button class="btn btn-verde btn-verde-pequeno" onclick="salvarAcademia()">
                     <i class="fas fa-save"></i> Salvar
                 </button>
             </div>
@@ -180,11 +209,11 @@
             </div>
         </div>
 
-        <!-- ===== 3. REDES SOCIAIS ===== -->
+        <!-- ===== REDES SOCIAIS ===== -->
         <div class="card-config">
             <div class="card-cabecalho">
                 <h2>📱 Redes Sociais</h2>
-                <button class="btn btn-verde btn-verde-pequeno" id="btnSalvarRedes" onclick="salvarRedes()">
+                <button class="btn btn-verde btn-verde-pequeno" onclick="salvarRedes()">
                     <i class="fas fa-save"></i> Salvar
                 </button>
             </div>
@@ -206,24 +235,7 @@
             </div>
         </div>
 
-        <!-- ===== 4. PLANOS ===== -->
-        <div class="card-config">
-            <div class="card-cabecalho">
-                <h2>📋 Planos</h2>
-                <button class="btn btn-verde btn-verde-pequeno" id="btnSalvarPlanos" onclick="salvarPlanos()">
-                    <i class="fas fa-save"></i> Salvar
-                </button>
-            </div>
-            <div id="msgSucessoPlanos" class="mensagem-salvo">
-                <i class="fas fa-check-circle"></i> Salvo com sucesso!
-            </div>
-            <button class="btn-adicionar" onclick="adicionarPlano()">
-                <i class="fas fa-plus"></i> Adicionar Novo Plano
-            </button>
-            <div id="listaPlanos"></div>
-        </div>
-
-        <!-- ===== 5. ACESSO ===== -->
+        <!-- ===== ACESSO ===== -->
         <div class="card-config">
             <div class="card-cabecalho">
                 <h2>🔒 Dados de Acesso</h2>
@@ -261,6 +273,7 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
         
+        let tiposAluno = [];
         let planos = [];
         let usuarioAtual = null;
         
@@ -275,12 +288,46 @@
             setTimeout(() => el.style.display = 'none', 3000);
         }
         
+        // ===== TIPOS DE ALUNO =====
+        function renderizarTipos() {
+            const container = document.getElementById('listaTipos');
+            container.innerHTML = '';
+            tiposAluno.forEach((tipo, i) => {
+                const div = document.createElement('div');
+                div.className = 'item-lista';
+                div.innerHTML = `
+                    <input type="text" placeholder="Nome do tipo" value="${tipo.nome||''}"
+                        oninput="tiposAluno[${i}].nome=this.value">
+                    <button class="btn-remover" onclick="removerTipo(${i})"><i class="fas fa-trash"></i></button>
+                `;
+                container.appendChild(div);
+            });
+        }
+        
+        function adicionarTipo() {
+            tiposAluno.push({nome:''});
+            renderizarTipos();
+        }
+        
+        function removerTipo(i) {
+            if(confirm('Remover este tipo?')) { tiposAluno.splice(i,1); renderizarTipos(); }
+        }
+        
+        async function salvarTipos() {
+            await db.collection('configuracoes').doc('geral').set({
+                tiposAluno: tiposAluno.filter(t => t.nome?.trim()),
+                atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true });
+            mostrarMensagem('msgSucessoTipos');
+        }
+        
+        // ===== PLANOS =====
         function renderizarPlanos() {
             const container = document.getElementById('listaPlanos');
             container.innerHTML = '';
             planos.forEach((plano, i) => {
                 const div = document.createElement('div');
-                div.className = 'item-plano';
+                div.className = 'item-lista';
                 div.innerHTML = `
                     <input type="text" placeholder="Nome do plano" value="${plano.nome||''}"
                         oninput="planos[${i}].nome=this.value">
@@ -301,6 +348,15 @@
             if(confirm('Remover este plano?')) { planos.splice(i,1); renderizarPlanos(); }
         }
         
+        async function salvarPlanos() {
+            await db.collection('configuracoes').doc('geral').set({
+                planos: planos.filter(p => p.nome?.trim()),
+                atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true });
+            mostrarMensagem('msgSucessoPlanos');
+        }
+        
+        // ===== CARREGAR DADOS =====
         async function carregarDados(u) {
             usuarioAtual = u;
             document.getElementById('emailAdmin').value = u.email || '';
@@ -309,27 +365,51 @@
                 const doc = await db.collection('configuracoes').doc('geral').get();
                 if(doc.exists) {
                     const d = doc.data();
+                    // Tipos de Aluno
+                    if(d.tiposAluno?.length) tiposAluno = d.tiposAluno;
+                    else tiposAluno = [
+                        {nome:'Kids'},
+                        {nome:'Baby Class'},
+                        {nome:'Comercial'},
+                        {nome:'Competidor'},
+                        {nome:'Bolsista'}
+                    ];
+                    // Planos
+                    if(d.planos?.length) planos = d.planos;
+                    else planos = [
+                        {nome:'Mensal',valor:90.00},
+                        {nome:'Trimestral',valor:255.00},
+                        {nome:'Semestral',valor:480.00},
+                        {nome:'Anual',valor:840.00}
+                    ];
+                    // Textos
                     if(d.textoBanner) document.getElementById('textoBanner').value = d.textoBanner;
                     if(d.tituloSobre) document.getElementById('tituloSobre').value = d.tituloSobre;
                     if(d.textoSobre) document.getElementById('textoSobre').value = d.textoSobre;
+                    // Academia
                     if(d.nomeAcademia) document.getElementById('nomeAcademia').value = d.nomeAcademia;
                     if(d.cnpjAcademia) document.getElementById('cnpjAcademia').value = d.cnpjAcademia;
                     if(d.enderecoAcademia) document.getElementById('enderecoAcademia').value = d.enderecoAcademia;
                     if(d.telefoneAcademia) document.getElementById('telefoneAcademia').value = d.telefoneAcademia;
                     if(d.emailContato) document.getElementById('emailContato').value = d.emailContato;
                     if(d.horarioFuncionamento) document.getElementById('horarioFuncionamento').value = d.horarioFuncionamento;
+                    // Redes
                     if(d.instagram) document.getElementById('instagram').value = d.instagram;
                     if(d.facebook) document.getElementById('facebook').value = d.facebook;
-                    if(d.planos?.length) planos = d.planos;
                 }
-            } catch(e) { console.log('Carregando padrões...'); }
+            } catch(e) { 
+                console.log('Carregando padrões...');
+                tiposAluno = [
+                    {nome:'Kids'}, {nome:'Baby Class'}, {nome:'Comercial'},
+                    {nome:'Competidor'}, {nome:'Bolsista'}
+                ];
+                planos = [
+                    {nome:'Mensal',valor:90.00}, {nome:'Trimestral',valor:255.00},
+                    {nome:'Semestral',valor:480.00}, {nome:'Anual',valor:840.00}
+                ];
+            }
             
-            if(!planos.length) planos = [
-                {nome:'Jiu-Jitsu Infantil',valor:80},
-                {nome:'Jiu-Jitsu Adulto',valor:120},
-                {nome:'Jiu-Jitsu Feminino',valor:100},
-                {nome:'Competição',valor:150}
-            ];
+            renderizarTipos();
             renderizarPlanos();
         }
         
@@ -363,14 +443,6 @@
                 atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
             }, { merge: true });
             mostrarMensagem('msgSucessoRedes');
-        }
-        
-        async function salvarPlanos() {
-            await db.collection('configuracoes').doc('geral').set({
-                planos: planos.filter(p => p.nome?.trim()),
-                atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
-            }, { merge: true });
-            mostrarMensagem('msgSucessoPlanos');
         }
         
         function sairDoSistema() {
