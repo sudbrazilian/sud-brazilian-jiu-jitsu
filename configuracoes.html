@@ -76,12 +76,15 @@
             padding: 15px; border-radius: 6px; margin-bottom: 20px; display: none; }
         .alerta-aviso { background: rgba(255,193,7,0.1); border: 1px solid var(--amarelo); color: var(--amarelo);
             padding: 12px; border-radius: 6px; margin-bottom: 15px; font-size: 13px; }
-        .modal-senha { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none;
-            align-items: center; justify-content: center; z-index: 9999; padding: 20px; }
+        .modal-senha { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none;
+            align-items: center; justify-content: center; z-index: 99999; padding: 20px; }
         .modal-conteudo { background: var(--fundo-card); padding: 25px; border-radius: 10px;
-            border: 1px solid var(--borda); max-width: 400px; width: 100%; }
-        .modal-conteudo h3 { margin-bottom: 15px; color: var(--amarelo); }
-        .modal-botoes { margin-top: 15px; display: flex; gap: 10px; justify-content: flex-end; }
+            border: 1px solid var(--borda); max-width: 420px; width: 100%; }
+        .modal-conteudo h3 { margin-bottom: 10px; color: var(--amarelo); font-size: 18px; }
+        .modal-conteudo p { margin-bottom: 15px; font-size: 14px; color: #aaa; }
+        .modal-botoes { margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end; }
+        .btn-cinza { background: #333; color: white; }
+        .carregando { opacity: 0.6; pointer-events: none; }
         @media (max-width: 992px) {
             .conteudo { margin-left: 0; width: 100%; padding: 80px 15px 15px; }
             .btn-menu { display: flex; align-items: center; justify-content: center; }
@@ -111,18 +114,20 @@
         </nav>
     </aside>
 
-    <!-- Modal: Pedir senha atual antes de trocar e-mail/senha -->
+    <!-- Modal: Pedir senha atual -->
     <div class="modal-senha" id="modalSenha">
         <div class="modal-conteudo">
             <h3>🔐 Confirme sua senha atual</h3>
-            <p style="margin-bottom:12px; font-size:14px; color:#aaa;">Por segurança, digite sua senha atual para alterar dados de acesso</p>
+            <p>Por segurança, digite sua senha atual para alterar dados de acesso</p>
             <div class="form-grupo">
                 <label>Senha Atual</label>
-                <input type="password" id="senhaAtual" placeholder="Digite sua senha atual">
+                <input type="password" id="senhaAtual" placeholder="Digite sua senha atual...">
             </div>
             <div class="modal-botoes">
-                <button class="btn" style="background:#333; color:white;" onclick="fecharModal()">Cancelar</button>
-                <button class="btn btn-verde" onclick="confirmarSenhaEProsseguir()">Confirmar</button>
+                <button class="btn btn-cinza" onclick="fecharModal()">Cancelar</button>
+                <button class="btn btn-verde" id="btnConfirmar" onclick="confirmarSenhaEProsseguir()">
+                    <span id="textoBtnConfirmar">Confirmar</span>
+                </button>
             </div>
         </div>
     </div>
@@ -236,7 +241,7 @@
         </div>
         
         <div class="botoes">
-            <button class="btn btn-verde" onclick="salvarTudo()">
+            <button class="btn btn-verde" id="btnSalvar" onclick="salvarTudo()">
                 <i class="fas fa-save"></i> Salvar Alterações
             </button>
             <button class="btn btn-vermelho" onclick="history.back()">
@@ -261,7 +266,7 @@
         
         let planos = [];
         let usuarioAtual = null;
-        let dadosParaSalvarFinal = null;
+        let dadosPendentes = null;
         
         function abrirFecharMenu() {
             document.getElementById('menuLateral').classList.toggle('aberto');
@@ -285,11 +290,12 @@
         function abrirModal() {
             document.getElementById('modalSenha').style.display = 'flex';
             document.getElementById('senhaAtual').value = '';
+            document.getElementById('senhaAtual').focus();
         }
         
         function fecharModal() {
             document.getElementById('modalSenha').style.display = 'none';
-            dadosParaSalvarFinal = null;
+            dadosPendentes = null;
         }
         
         function renderizarPlanos() {
@@ -315,7 +321,7 @@
         }
         
         function removerPlano(i) {
-            if(confirm('Remover?')) { planos.splice(i,1); renderizarPlanos(); }
+            if(confirm('Remover este plano?')) { planos.splice(i,1); renderizarPlanos(); }
         }
         
         async function carregarDados(u) {
@@ -350,73 +356,7 @@
             renderizarPlanos();
         }
         
-        async function salvarTudo() {
-            if(!usuarioAtual) return mostrarErro('Faça login primeiro!');
-            
-            const novoEmail = document.getElementById('emailAdmin').value.trim();
-            const senha = document.getElementById('novaSenha').value.trim();
-            const confirma = document.getElementById('confirmaSenha').value.trim();
-            
-            if(senha && senha !== confirma) return mostrarErro('As senhas não coincidem!');
-            if(senha && senha.length < 6) return mostrarErro('Senha com mínimo 6 caracteres!');
-            
-            const emailMudou = novoEmail && novoEmail !== usuarioAtual.email;
-            const senhaMudou = !!senha;
-            
-            // Se não mudar e-mail nem senha → salva direto sem pedir senha
-            if(!emailMudou && !senhaMudou) {
-                await salvarDadosNoFirestore();
-                return;
-            }
-            
-            // Se mudar e-mail ou senha → pede confirmação da senha atual
-            dadosParaSalvarFinal = { novoEmail, senha };
-            abrirModal();
-        }
-        
-        async function confirmarSenhaEProsseguir() {
-            const senhaAtual = document.getElementById('senhaAtual').value.trim();
-            if(!senhaAtual) return mostrarErro('Digite sua senha atual!');
-            
-            const { novoEmail, senha } = dadosParaSalvarFinal;
-            
-            try {
-                // Reautentica = atualiza o login para poder trocar e-mail/senha
-                const credencial = firebase.auth.EmailAuthProvider.credential(usuarioAtual.email, senhaAtual);
-                await usuarioAtual.reauthenticateWithCredential(credencial);
-                console.log('✅ Reautenticado!');
-                
-                // Troca e-mail se mudou
-                if(novoEmail && novoEmail !== usuarioAtual.email) {
-                    await usuarioAtual.updateEmail(novoEmail);
-                    console.log('✅ E-mail alterado para:', novoEmail);
-                }
-                
-                // Troca senha se mudou
-                if(senha) {
-                    await usuarioAtual.updatePassword(senha);
-                    console.log('✅ Senha alterada!');
-                }
-                
-                // Salva os demais dados no Firestore
-                await salvarDadosNoFirestore();
-                fecharModal();
-                
-            } catch(erro) {
-                console.error(erro);
-                if(erro.code === 'auth/wrong-password') {
-                    mostrarErro('Senha atual está incorreta!');
-                } else if(erro.code === 'auth/invalid-email') {
-                    mostrarErro('E-mail novo inválido!');
-                } else if(erro.code === 'auth/email-already-in-use') {
-                    mostrarErro('Esse e-mail já está cadastrado!');
-                } else {
-                    mostrarErro(erro.message);
-                }
-            }
-        }
-        
-        async function salvarDadosNoFirestore() {
+        async function salvarDadosGerais() {
             const dados = {
                 textoBanner: document.getElementById('textoBanner').value.trim(),
                 tituloSobre: document.getElementById('tituloSobre').value.trim(),
@@ -437,6 +377,82 @@
             mostrarSucesso();
             document.getElementById('novaSenha').value = '';
             document.getElementById('confirmaSenha').value = '';
+        }
+        
+        async function salvarTudo() {
+            if(!usuarioAtual) return mostrarErro('Faça login primeiro!');
+            
+            const novoEmail = document.getElementById('emailAdmin').value.trim();
+            const senhaNova = document.getElementById('novaSenha').value.trim();
+            const confirma = document.getElementById('confirmaSenha').value.trim();
+            
+            if(senhaNova && senhaNova !== confirma) return mostrarErro('As senhas não coincidem!');
+            if(senhaNova && senhaNova.length < 6) return mostrarErro('Senha precisa ter pelo menos 6 caracteres!');
+            
+            const emailMudou = novoEmail && novoEmail !== usuarioAtual.email;
+            const senhaMudou = !!senhaNova;
+            
+            // Sem alteração de acesso → salva direto
+            if(!emailMudou && !senhaMudou) {
+                await salvarDadosGerais();
+                return;
+            }
+            
+            // Precisa confirmar senha
+            dadosPendentes = { novoEmail, senhaNova };
+            abrirModal();
+        }
+        
+        async function confirmarSenhaEProsseguir() {
+            const senhaAtual = document.getElementById('senhaAtual').value.trim();
+            if(!senhaAtual) return mostrarErro('Digite sua senha atual!');
+            
+            const { novoEmail, senhaNova } = dadosPendentes;
+            
+            // Bloqueia botão durante o processo
+            const btn = document.getElementById('btnConfirmar');
+            const textoBtn = document.getElementById('textoBtnConfirmar');
+            btn.disabled = true;
+            textoBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+            
+            try {
+                // Reautentica = confirma identidade
+                const credencial = firebase.auth.EmailAuthProvider.credential(usuarioAtual.email, senhaAtual);
+                await usuarioAtual.reauthenticateWithCredential(credencial);
+                console.log('✅ Reautenticado!');
+                
+                // Troca e-mail
+                if(novoEmail && novoEmail !== usuarioAtual.email) {
+                    await usuarioAtual.updateEmail(novoEmail);
+                    console.log('✅ E-mail alterado para:', novoEmail);
+                }
+                
+                // Troca senha
+                if(senhaNova) {
+                    await usuarioAtual.updatePassword(senhaNova);
+                    console.log('✅ Senha alterada!');
+                }
+                
+                // Salva demais dados
+                await salvarDadosGerais();
+                fecharModal();
+                
+            } catch(erro) {
+                console.error('❌ Erro:', erro);
+                if(erro.code === 'auth/wrong-password') {
+                    mostrarErro('Senha atual está incorreta!');
+                } else if(erro.code === 'auth/invalid-email') {
+                    mostrarErro('E-mail novo inválido!');
+                } else if(erro.code === 'auth/email-already-in-use') {
+                    mostrarErro('Esse e-mail já está cadastrado!');
+                } else {
+                    mostrarErro(erro.message || 'Erro ao processar');
+                }
+            }
+            
+            // Libera botão
+            btn.disabled = false;
+            textoBtn.textContent = 'Confirmar';
         }
         
         function sairDoSistema() {
