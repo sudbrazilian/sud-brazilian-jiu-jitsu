@@ -6,7 +6,7 @@
     <title>Login - SUD Brazilian Jiu-Jitsu</title>
     <link rel="icon" href="imagens/logosud.png" type="image/png">
     
-    <!-- ✅ PWA — Instalar como Aplicativo -->
+    <!-- PWA - Instalar como Aplicativo -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#D10000">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -32,7 +32,6 @@
             --cinza: #888;
             --erro: #ff4444;
             --sucesso: #00C851;
-            --azul-instalar: #2563eb;
         }
         body {
             background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
@@ -68,8 +67,6 @@
             font-size: 0.85rem;
             color: var(--cinza);
         }
-        
-        <!-- ✅ BOTÃO INSTALAR -->
         .btn-instalar {
             width: 100%;
             padding: 12px;
@@ -93,7 +90,6 @@
         .btn-instalar.oculto {
             display: none;
         }
-        
         .form-group {
             margin-bottom: 20px;
         }
@@ -175,15 +171,14 @@
         <h1>Acesse sua conta</h1>
     </div>
 
-    <!-- ✅ BOTÃO INSTALAR — APARECE AUTOMATICAMENTE -->
     <button class="btn-instalar oculto" id="btnInstalarApp" onclick="instalarApp()">
         <i class="fas fa-download"></i> Instalar Aplicativo
     </button>
 
     <form id="formLogin">
         <div class="form-group">
-            <label for="email">E-mail</label>
-            <input type="email" id="email" required placeholder="seu@email.com">
+            <label for="email">E-mail ou Telefone</label>
+            <input type="text" id="email" required placeholder="seu@email.com">
         </div>
         <div class="form-group">
             <label for="senha">Senha</label>
@@ -219,7 +214,6 @@
     const btnEntrar = document.getElementById('btnEntrar');
     const caixaMensagem = document.getElementById('caixaMensagem');
     
-    // ✅ PWA — DETECTA SE PODE INSTALAR
     let promptInstalacao;
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
@@ -227,7 +221,7 @@
         document.getElementById('btnInstalarApp').classList.remove('oculto');
     });
     
-    async function instalarApp() {
+    window.instalarApp = async function() {
         if (!promptInstalacao) {
             alert('A opção de instalar não está disponível agora. Acesse pelo celular.');
             return;
@@ -236,7 +230,7 @@
         const { outcome } = await promptInstalacao.userChoice;
         promptInstalacao = null;
         document.getElementById('btnInstalarApp').classList.add('oculto');
-    }
+    };
     
     function mostrarMensagem(texto, tipo) {
         caixaMensagem.style.display = 'block';
