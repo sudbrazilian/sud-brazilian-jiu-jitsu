@@ -109,9 +109,8 @@
             <h1 class="titulo-pagina">Configurações do Sistema</h1>
             <p class="subtitulo">Dados da academia, textos da página inicial, planos e redes sociais</p>
         </div>
-        <div class="alerta-sucesso" id="alertaSucesso">✅ Configurações salvas com sucesso! Atualize a página inicial para ver as mudanças.</div>
+        <div class="alerta-sucesso" id="alertaSucesso">✅ Configurações salvas com sucesso! Atualize a página para ver as mudanças.</div>
         <div class="alerta-erro" id="alertaErro"><span id="textoErro">Erro!</span></div>
-
         <!-- ===== TEXTOS DA PÁGINA INICIAL ===== -->
         <div class="card-config">
             <h2>📝 Textos da Página Inicial</h2>
@@ -130,7 +129,6 @@
                 </div>
             </div>
         </div>
-
         <!-- ===== DADOS DA ACADEMIA ===== -->
         <div class="card-config">
             <h2>🏫 Dados da Academia</h2>
@@ -161,7 +159,6 @@
                 </div>
             </div>
         </div>
-
         <!-- ===== REDES SOCIAIS ===== -->
         <div class="card-config">
             <h2>📱 Redes Sociais</h2>
@@ -179,7 +176,6 @@
                 </div>
             </div>
         </div>
-
         <!-- ===== PLANOS ===== -->
         <div class="card-config">
             <h2>📋 Planos (Aparecem na página inicial)</h2>
@@ -188,12 +184,11 @@
             </button>
             <div id="listaPlanos"></div>
         </div>
-
         <!-- ===== ACESSO ===== -->
         <div class="card-config">
             <h2>🔒 Dados de Acesso</h2>
             <div class="alerta-aviso">
-                <i class="fas fa-exclamation-triangle"></i> Alterar e-mail ou senha afeta seu login! Anote antes de salvar.
+                <i class="fas fa-exclamation-triangle"></i> Alterar e-mail ou senha pode exigir novo login! Anote antes de salvar.
             </div>
             <div class="form-grid">
                 <div class="form-grupo">
@@ -210,7 +205,6 @@
                 </div>
             </div>
         </div>
-
         <div class="botoes">
             <button class="btn btn-verde" onclick="salvarTudo()">
                 <i class="fas fa-save"></i> Salvar Alterações
@@ -220,7 +214,6 @@
             </button>
         </div>
     </main>
-
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyDKWso0gw6T2thoS12c1erzTzVhrnagS1s",
@@ -230,28 +223,39 @@
             messagingSenderId: "1053972036308",
             appId: "1:1053972036308:web:215a41d7bc91502eee1941"
         };
-
-        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
         const auth = firebase.auth();
         const db = firebase.firestore();
+        
         let planos = [];
-
+        let usuarioAtual = null;
+        
         function abrirFecharMenu() {
             document.getElementById('menuLateral').classList.toggle('aberto');
             document.getElementById('menuLateral').classList.toggle('fechado');
         }
-
+        
         function mostrarErro(msg) {
+            console.error('ERRO:', msg);
             document.getElementById('textoErro').textContent = msg;
             document.getElementById('alertaErro').style.display = 'block';
-            setTimeout(() => document.getElementById('alertaErro').style.display = 'none', 5000);
+            document.getElementById('alertaSucesso').style.display = 'none';
+            setTimeout(() => {
+                document.getElementById('alertaErro').style.display = 'none';
+            }, 6000);
         }
-
+        
         function mostrarSucesso() {
             document.getElementById('alertaSucesso').style.display = 'block';
-            setTimeout(() => document.getElementById('alertaSucesso').style.display = 'none', 5000);
+            document.getElementById('alertaErro').style.display = 'none';
+            setTimeout(() => {
+                document.getElementById('alertaSucesso').style.display = 'none';
+            }, 4000);
         }
-
+        
         function renderizarPlanos() {
             const container = document.getElementById('listaPlanos');
             container.innerHTML = '';
@@ -260,9 +264,9 @@
                 div.className = 'item-plano';
                 div.innerHTML = `
                     <input type="text" placeholder="Nome do plano" value="${plano.nome || ''}"
-                        onchange="planos[${indice}].nome = this.value">
+                        oninput="planos[${indice}].nome = this.value">
                     <input type="number" step="0.01" placeholder="Valor R$" value="${plano.valor || ''}"
-                        onchange="planos[${indice}].valor = parseFloat(this.value) || 0">
+                        oninput="planos[${indice}].valor = parseFloat(this.value) || 0">
                     <button class="btn-remover" onclick="removerPlano(${indice})">
                         <i class="fas fa-trash"></i>
                     </button>
@@ -270,32 +274,34 @@
                 container.appendChild(div);
             });
         }
-
+        
         function adicionarPlano() {
             planos.push({ nome: '', valor: 0 });
             renderizarPlanos();
         }
-
+        
         function removerPlano(indice) {
             if (confirm('Remover este plano?')) {
                 planos.splice(indice, 1);
                 renderizarPlanos();
             }
         }
-
+        
         async function carregarDados(usuario) {
+            usuarioAtual = usuario;
             document.getElementById('emailAdmin').value = usuario.email || '';
+            
             try {
-                const doc = await db.collection('configuracoes').doc('geral').get();
+                const docRef = db.collection('configuracoes').doc('geral');
+                const doc = await docRef.get();
+                
                 if (doc.exists) {
                     const dados = doc.data();
                     
-                    // Textos da página inicial
                     if (dados.textoBanner) document.getElementById('textoBanner').value = dados.textoBanner;
                     if (dados.tituloSobre) document.getElementById('tituloSobre').value = dados.tituloSobre;
                     if (dados.textoSobre) document.getElementById('textoSobre').value = dados.textoSobre;
                     
-                    // Dados da academia
                     if (dados.nomeAcademia) document.getElementById('nomeAcademia').value = dados.nomeAcademia;
                     if (dados.cnpjAcademia) document.getElementById('cnpjAcademia').value = dados.cnpjAcademia;
                     if (dados.enderecoAcademia) document.getElementById('enderecoAcademia').value = dados.enderecoAcademia;
@@ -303,15 +309,15 @@
                     if (dados.emailContato) document.getElementById('emailContato').value = dados.emailContato;
                     if (dados.horarioFuncionamento) document.getElementById('horarioFuncionamento').value = dados.horarioFuncionamento;
                     
-                    // Redes sociais
                     if (dados.instagram) document.getElementById('instagram').value = dados.instagram;
                     if (dados.facebook) document.getElementById('facebook').value = dados.facebook;
                     
-                    // Planos
-                    if (dados.planos && Array.isArray(dados.planos)) planos = dados.planos;
+                    if (dados.planos && Array.isArray(dados.planos) && dados.planos.length > 0) {
+                        planos = dados.planos;
+                    }
                 }
             } catch (erro) {
-                console.log('Usando valores padrão');
+                console.log('Nenhum dado salvo ainda, usando padrões:', erro);
             }
             
             if (planos.length === 0) {
@@ -324,67 +330,82 @@
             }
             renderizarPlanos();
         }
-
+        
         async function salvarTudo() {
-            const usuario = auth.currentUser;
-            if (!usuario) return mostrarErro('Faça login primeiro!');
+            if (!usuarioAtual) {
+                return mostrarErro('Faça login primeiro!');
+            }
             
             const senha = document.getElementById('novaSenha').value.trim();
             const confirma = document.getElementById('confirmaSenha').value.trim();
             const novoEmail = document.getElementById('emailAdmin').value.trim();
             
-            if (senha && senha !== confirma) return mostrarErro('As senhas não coincidem!');
-            if (senha && senha.length < 6) return mostrarErro('Senha com mínimo 6 caracteres!');
+            if (senha && senha !== confirma) {
+                return mostrarErro('As senhas não coincidem!');
+            }
+            if (senha && senha.length < 6) {
+                return mostrarErro('Senha precisa ter pelo menos 6 caracteres!');
+            }
             
             try {
-                const dados = {
-                    // Textos da página inicial
+                const dadosParaSalvar = {
                     textoBanner: document.getElementById('textoBanner').value.trim(),
                     tituloSobre: document.getElementById('tituloSobre').value.trim(),
                     textoSobre: document.getElementById('textoSobre').value.trim(),
-                    
-                    // Dados da academia
                     nomeAcademia: document.getElementById('nomeAcademia').value.trim(),
                     cnpjAcademia: document.getElementById('cnpjAcademia').value.trim(),
                     enderecoAcademia: document.getElementById('enderecoAcademia').value.trim(),
                     telefoneAcademia: document.getElementById('telefoneAcademia').value.trim(),
                     emailContato: document.getElementById('emailContato').value.trim(),
                     horarioFuncionamento: document.getElementById('horarioFuncionamento').value.trim(),
-                    
-                    // Redes sociais
                     instagram: document.getElementById('instagram').value.trim(),
                     facebook: document.getElementById('facebook').value.trim(),
-                    
-                    // Planos
-                    planos: planos.filter(p => p.nome.trim() !== ''),
+                    planos: planos.filter(p => p.nome && p.nome.trim() !== ''),
                     atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
                 };
-
-                await db.collection('configuracoes').doc('geral').set(dados, { merge: true });
-
-                if (novoEmail && novoEmail !== usuario.email) await usuario.updateEmail(novoEmail);
-                if (senha) await usuario.updatePassword(senha);
-
+                
+                await db.collection('configuracoes').doc('geral').set(dadosParaSalvar, { merge: true });
+                console.log('✅ Dados salvos no Firestore!');
+                
+                if (novoEmail && novoEmail !== usuarioAtual.email) {
+                    await usuarioAtual.updateEmail(novoEmail);
+                    console.log('✅ E-mail atualizado!');
+                }
+                
+                if (senha) {
+                    await usuarioAtual.updatePassword(senha);
+                    console.log('✅ Senha atualizada!');
+                }
+                
                 mostrarSucesso();
                 document.getElementById('novaSenha').value = '';
                 document.getElementById('confirmaSenha').value = '';
-
+                
             } catch (erro) {
-                console.error(erro);
+                console.error('❌ Erro ao salvar:', erro);
                 if (erro.code === 'auth/requires-recent-login') {
-                    mostrarErro('Faça login novamente e tente logo após.');
+                    mostrarErro('Por segurança, faça login novamente e salve logo após.');
+                } else if (erro.code === 'permission-denied') {
+                    mostrarErro('Sem permissão para salvar. Verifique as regras do Firestore.');
                 } else {
-                    mostrarErro(erro.message);
+                    mostrarErro(erro.message || 'Erro desconhecido ao salvar');
                 }
             }
         }
-
+        
         function sairDoSistema() {
-            if (confirm('Deseja sair?')) auth.signOut().then(() => window.location.href = 'login.html');
+            if (confirm('Deseja sair?')) {
+                auth.signOut().then(() => {
+                    window.location.href = 'login.html';
+                });
+            }
         }
-
+        
         auth.onAuthStateChanged(u => {
-            if (!u) { window.location.href = 'login.html'; return; }
+            if (!u) {
+                window.location.href = 'login.html';
+                return;
+            }
             carregarDados(u);
         });
     </script>
