@@ -29,201 +29,57 @@
             --borda: #29292E;
             --fundo-input: #0C0C0E;
         }
-        html, body {
-            background: var(--fundo-escuro);
-            color: var(--texto-branco);
-            min-height: 100vh;
-        }
-        .btn-menu {
-            display: none;
-            position: fixed;
-            top: 15px;
-            left: 15px;
-            z-index: 9999;
-            background: var(--vermelho-principal);
-            border: none;
-            color: white;
-            width: 48px;
-            height: 48px;
-            border-radius: 8px;
-            font-size: 22px;
-            cursor: pointer;
-        }
-        .menu-lateral {
-            width: 240px;
-            background: var(--fundo-card);
-            border-right: 1px solid var(--borda);
-            padding: 30px 0;
-            position: fixed;
-            height: 100vh;
-            top: 0;
-            left: 0;
-            z-index: 999;
-            transition: transform 0.3s ease;
-            overflow-y: auto;
-        }
+        html, body { background: var(--fundo-escuro); color: var(--texto-branco); min-height: 100vh; }
+        .btn-menu { display: none; position: fixed; top: 15px; left: 15px; z-index: 9999;
+            background: var(--vermelho-principal); border: none; color: white;
+            width: 48px; height: 48px; border-radius: 8px; font-size: 22px; cursor: pointer; }
+        .menu-lateral { width: 240px; background: var(--fundo-card); border-right: 1px solid var(--borda);
+            padding: 30px 0; position: fixed; height: 100vh; top: 0; left: 0; z-index: 999;
+            transition: transform 0.3s ease; overflow-y: auto; }
         .menu-lateral.fechado { transform: translateX(-100%); }
         .menu-lateral.aberto { transform: translateX(0); }
-        .logo {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        .logo img {
-            width: 90px;
-            margin-bottom: 10px;
-        }
-        .logo h1 {
-            font-size: 14px;
-            font-weight: 700;
-            line-height: 1.3;
-            color: var(--texto-branco);
-        }
-        .menu-navegacao ul {
-            list-style: none;
-            padding: 0 15px;
-        }
-        .menu-navegacao li a {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 15px;
-            margin-bottom: 5px;
-            color: var(--texto-cinza);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            border-radius: 6px;
-        }
-        .menu-navegacao li a.ativo,
-        .menu-navegacao li a:hover {
-            background: rgba(209, 0, 0, 0.1);
-            color: var(--vermelho-principal);
-        }
-        .menu-navegacao li a.sair {
-            color: #FF4D4D;
-            margin-top: 20px;
-        }
-        .conteudo {
-            margin-left: 240px;
-            padding: 25px 30px;
-            min-height: 100vh;
-            width: calc(100% - 240px);
-        }
-        .cabecalho {
-            margin-bottom: 25px;
-        }
-        .titulo-pagina {
-            font-size: 26px;
-            font-weight: 800;
-            margin-bottom: 5px;
-        }
-        .subtitulo {
-            color: var(--texto-cinza);
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-        .card-config {
-            background: var(--fundo-card);
-            border: 1px solid var(--borda);
-            border-radius: 10px;
-            padding: 25px;
-            margin-bottom: 25px;
-        }
-        .card-config h2 {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: var(--vermelho-claro);
-        }
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 15px;
-        }
-        .form-grupo {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        .form-grupo label {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--texto-cinza);
-        }
-        .form-grupo input {
-            padding: 12px;
-            background: var(--fundo-input);
-            border: 1px solid var(--borda);
-            border-radius: 6px;
-            color: var(--texto-branco);
-            font-size: 14px;
-        }
-        .botoes {
-            margin-top: 20px;
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .btn-verde {
-            background: var(--verde);
-            color: white;
-        }
-        .btn-vermelho {
-            background: var(--vermelho-principal);
-            color: white;
-        }
-        .alerta-sucesso {
-            background: rgba(0, 200, 83, 0.1);
-            border: 1px solid var(--verde);
-            color: var(--verde);
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            display: none;
-        }
-        .alerta-erro {
-            background: rgba(255, 59, 59, 0.1);
-            border: 1px solid var(--vermelho-claro);
-            color: var(--vermelho-claro);
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            display: none;
-        }
-        .alerta-aviso {
-            background: rgba(255, 193, 7, 0.1);
-            border: 1px solid var(--amarelo);
-            color: var(--amarelo);
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            font-size: 13px;
-        }
+        .logo { text-align: center; margin-bottom: 40px; }
+        .logo img { width: 90px; margin-bottom: 10px; }
+        .logo h1 { font-size: 14px; font-weight: 700; line-height: 1.3; color: var(--texto-branco); }
+        .menu-navegacao ul { list-style: none; padding: 0 15px; }
+        .menu-navegacao li a { display: flex; align-items: center; gap: 10px; padding: 12px 15px; margin-bottom: 5px;
+            color: var(--texto-cinza); text-decoration: none; font-size: 14px; font-weight: 600; border-radius: 6px; }
+        .menu-navegacao li a.ativo, .menu-navegacao li a:hover { background: rgba(209,0,0,0.1); color: var(--vermelho-principal); }
+        .menu-navegacao li a.sair { color: #FF4D4D; margin-top: 20px; }
+        .conteudo { margin-left: 240px; padding: 25px 30px; min-height: 100vh; width: calc(100% - 240px); }
+        .cabecalho { margin-bottom: 25px; }
+        .titulo-pagina { font-size: 26px; font-weight: 800; margin-bottom: 5px; }
+        .subtitulo { color: var(--texto-cinza); font-size: 14px; margin-bottom: 20px; }
+        .card-config { background: var(--fundo-card); border: 1px solid var(--borda); border-radius: 10px;
+            padding: 25px; margin-bottom: 25px; }
+        .card-config h2 { font-size: 18px; font-weight: 700; margin-bottom: 20px; color: var(--vermelho-claro); }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+        .form-grupo { display: flex; flex-direction: column; gap: 6px; }
+        .form-grupo label { font-size: 14px; font-weight: 600; color: var(--texto-cinza); }
+        .form-grupo input { padding: 12px; background: var(--fundo-input); border: 1px solid var(--borda);
+            border-radius: 6px; color: var(--texto-branco); font-size: 14px; }
+        .item-plano { display: flex; align-items: center; gap: 10px; padding: 12px;
+            background: var(--fundo-input); border-radius: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+        .item-plano input { flex: 1; min-width: 150px; padding: 10px; background: transparent;
+            border: 1px solid var(--borda); color: var(--texto-branco); border-radius: 4px; }
+        .btn-remover { background: transparent; border: none; color: var(--vermelho-claro);
+            cursor: pointer; font-size: 18px; padding: 5px; }
+        .btn-adicionar { background: rgba(0,200,83,0.1); border: 1px solid var(--verde); color: var(--verde);
+            padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: 600; margin-bottom: 15px; }
+        .botoes { margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap; }
+        .btn { padding: 12px 24px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 14px; }
+        .btn-verde { background: var(--verde); color: white; }
+        .btn-vermelho { background: var(--vermelho-principal); color: white; }
+        .alerta-sucesso { background: rgba(0,200,83,0.1); border: 1px solid var(--verde); color: var(--verde);
+            padding: 15px; border-radius: 6px; margin-bottom: 20px; display: none; }
+        .alerta-erro { background: rgba(255,59,59,0.1); border: 1px solid var(--vermelho-claro); color: var(--vermelho-claro);
+            padding: 15px; border-radius: 6px; margin-bottom: 20px; display: none; }
+        .alerta-aviso { background: rgba(255,193,7,0.1); border: 1px solid var(--amarelo); color: var(--amarelo);
+            padding: 12px; border-radius: 6px; margin-bottom: 15px; font-size: 13px; }
         @media (max-width: 992px) {
-            .conteudo {
-                margin-left: 0;
-                width: 100%;
-                padding: 80px 15px 15px;
-            }
-            .btn-menu {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            .menu-lateral {
-                transform: translateX(-100%);
-            }
-            .menu-lateral.aberto {
-                transform: translateX(0);
-            }
+            .conteudo { margin-left: 0; width: 100%; padding: 80px 15px 15px; }
+            .btn-menu { display: flex; align-items: center; justify-content: center; }
+            .menu-lateral { transform: translateX(-100%); }
         }
     </style>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
@@ -231,9 +87,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
-    <button class="btn-menu" onclick="abrirFecharMenu()">
-        <i class="fas fa-bars"></i>
-    </button>
+    <button class="btn-menu" onclick="abrirFecharMenu()"><i class="fas fa-bars"></i></button>
 
     <aside class="menu-lateral fechado" id="menuLateral">
         <div class="logo">
@@ -247,7 +101,6 @@
                 <li><a href="financeiro.html"><i class="fas fa-dollar-sign"></i> Financeiro</a></li>
                 <li><a href="relatorios.html"><i class="fas fa-chart-bar"></i> Relatórios</a></li>
                 <li><a href="configuracoes.html" class="ativo"><i class="fas fa-cog"></i> Configurações</a></li>
-                <li id="itemInstalarApp" style="display:none;"><a href="#" onclick="instalarApp()"><i class="fas fa-download"></i> Instalar App</a></li>
                 <li><a href="#" class="sair" onclick="sairDoSistema()"><i class="fas fa-sign-out-alt"></i> Sair</a></li>
             </ul>
         </nav>
@@ -256,77 +109,59 @@
     <main class="conteudo">
         <div class="cabecalho">
             <h1 class="titulo-pagina">Configurações do Sistema</h1>
-            <p class="subtitulo">Dados da academia, valores dos planos e dados de acesso</p>
+            <p class="subtitulo">Dados da academia, planos e acesso</p>
         </div>
 
-        <div class="alerta-sucesso" id="alertaSucesso">
-            <i class="fas fa-check-circle"></i> ✅ Configurações salvas com sucesso!
-        </div>
-        <div class="alerta-erro" id="alertaErro">
-            <i class="fas fa-exclamation-circle"></i> <span id="textoErro">Ocorreu um erro!</span>
-        </div>
+        <div class="alerta-sucesso" id="alertaSucesso">✅ Configurações salvas com sucesso!</div>
+        <div class="alerta-erro" id="alertaErro"><span id="textoErro">Erro!</span></div>
 
         <div class="card-config">
             <h2>🏫 Dados da Academia</h2>
             <div class="form-grid">
                 <div class="form-grupo">
                     <label>Nome da Academia</label>
-                    <input type="text" id="nomeAcademia" placeholder="SUD Brazilian Jiu-Jitsu" value="SUD Brazilian Jiu-Jitsu">
+                    <input type="text" id="nomeAcademia" value="SUD Brazilian Jiu-Jitsu">
                 </div>
                 <div class="form-grupo">
                     <label>CNPJ / Razão Social</label>
-                    <input type="text" id="cnpjAcademia" placeholder="00.000.000/0001-00">
+                    <input type="text" id="cnpjAcademia">
                 </div>
                 <div class="form-grupo">
                     <label>Endereço Completo</label>
-                    <input type="text" id="enderecoAcademia" placeholder="Rua, Número, Bairro - Cidade/UF">
+                    <input type="text" id="enderecoAcademia">
                 </div>
                 <div class="form-grupo">
                     <label>Telefone</label>
-                    <input type="text" id="telefoneAcademia" placeholder="(91) 90000-0000">
+                    <input type="text" id="telefoneAcademia">
                 </div>
                 <div class="form-grupo">
                     <label>E-mail de Contato</label>
-                    <input type="email" id="emailContato" placeholder="contato@sudbjj.com.br">
+                    <input type="email" id="emailContato">
                 </div>
                 <div class="form-grupo">
                     <label>Horário de Funcionamento</label>
-                    <input type="text" id="horarioFuncionamento" placeholder="Seg-Sex: 08h às 20h">
+                    <input type="text" id="horarioFuncionamento">
                 </div>
             </div>
         </div>
 
         <div class="card-config">
-            <h2>💰 Valores dos Planos</h2>
-            <div class="form-grid">
-                <div class="form-grupo">
-                    <label>Plano Mensal (R$)</label>
-                    <input type="number" step="0.01" id="planoMensal" placeholder="90.00" value="90.00">
-                </div>
-                <div class="form-grupo">
-                    <label>Plano Trimestral (R$)</label>
-                    <input type="number" step="0.01" id="planoTrimestral" placeholder="255.00" value="255.00">
-                </div>
-                <div class="form-grupo">
-                    <label>Plano Semestral (R$)</label>
-                    <input type="number" step="0.01" id="planoSemestral" placeholder="480.00" value="480.00">
-                </div>
-                <div class="form-grupo">
-                    <label>Plano Anual (R$)</label>
-                    <input type="number" step="0.01" id="planoAnual" placeholder="840.00" value="840.00">
-                </div>
-            </div>
+            <h2>📋 Planos</h2>
+            <button class="btn-adicionar" onclick="adicionarPlano()">
+                <i class="fas fa-plus"></i> Adicionar Novo Plano
+            </button>
+            <div id="listaPlanos"></div>
         </div>
 
         <div class="card-config">
             <h2>🔒 Dados de Acesso</h2>
             <div class="alerta-aviso">
-                <i class="fas fa-exclamation-triangle"></i> <strong>Atenção:</strong> Alterar e-mail ou senha afeta seu login! Anote os novos dados antes de salvar.
+                <i class="fas fa-exclamation-triangle"></i> Alterar e-mail ou senha afeta seu login! Anote antes de salvar.
             </div>
             <div class="form-grid">
                 <div class="form-grupo">
                     <label>E-mail do Administrador</label>
-                    <input type="email" id="emailAdmin" placeholder="seu@email.com">
+                    <input type="email" id="emailAdmin">
                 </div>
                 <div class="form-grupo">
                     <label>Nova Senha</label>
@@ -334,7 +169,7 @@
                 </div>
                 <div class="form-grupo">
                     <label>Confirmar Nova Senha</label>
-                    <input type="password" id="confirmaSenha" placeholder="Repita a senha">
+                    <input type="password" id="confirmaSenha">
                 </div>
             </div>
         </div>
@@ -343,7 +178,7 @@
             <button class="btn btn-verde" onclick="salvarTudo()">
                 <i class="fas fa-save"></i> Salvar Alterações
             </button>
-            <button class="btn btn-vermelho" onclick="voltar()">
+            <button class="btn btn-vermelho" onclick="history.back()">
                 <i class="fas fa-arrow-left"></i> Voltar
             </button>
         </div>
@@ -358,30 +193,57 @@
             messagingSenderId: "1053972036308",
             appId: "1:1053972036308:web:215a41d7bc91502eee1941"
         };
-
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
 
+        let planos = [];
+
         function abrirFecharMenu() {
-            const menu = document.getElementById('menuLateral');
-            menu.classList.toggle('aberto');
-            menu.classList.toggle('fechado');
+            document.getElementById('menuLateral').classList.toggle('aberto');
+            document.getElementById('menuLateral').classList.toggle('fechado');
         }
 
-        function mostrarErro(mensagem) {
-            document.getElementById('textoErro').textContent = mensagem;
+        function mostrarErro(msg) {
+            document.getElementById('textoErro').textContent = msg;
             document.getElementById('alertaErro').style.display = 'block';
-            setTimeout(() => {
-                document.getElementById('alertaErro').style.display = 'none';
-            }, 5000);
+            setTimeout(() => document.getElementById('alertaErro').style.display = 'none', 5000);
         }
 
         function mostrarSucesso() {
             document.getElementById('alertaSucesso').style.display = 'block';
-            setTimeout(() => {
-                document.getElementById('alertaSucesso').style.display = 'none';
-            }, 4000);
+            setTimeout(() => document.getElementById('alertaSucesso').style.display = 'none', 4000);
+        }
+
+        function renderizarPlanos() {
+            const container = document.getElementById('listaPlanos');
+            container.innerHTML = '';
+            planos.forEach((plano, indice) => {
+                const div = document.createElement('div');
+                div.className = 'item-plano';
+                div.innerHTML = `
+                    <input type="text" placeholder="Nome do plano" value="${plano.nome}"
+                        onchange="planos[${indice}].nome = this.value">
+                    <input type="number" step="0.01" placeholder="Valor R$" value="${plano.valor}"
+                        onchange="planos[${indice}].valor = parseFloat(this.value) || 0">
+                    <button class="btn-remover" onclick="removerPlano(${indice})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function adicionarPlano() {
+            planos.push({ nome: '', valor: 0 });
+            renderizarPlanos();
+        }
+
+        function removerPlano(indice) {
+            if (confirm('Remover este plano?')) {
+                planos.splice(indice, 1);
+                renderizarPlanos();
+            }
         }
 
         async function carregarDados(usuario) {
@@ -396,35 +258,32 @@
                     if (dados.telefoneAcademia) document.getElementById('telefoneAcademia').value = dados.telefoneAcademia;
                     if (dados.emailContato) document.getElementById('emailContato').value = dados.emailContato;
                     if (dados.horarioFuncionamento) document.getElementById('horarioFuncionamento').value = dados.horarioFuncionamento;
-                    if (dados.planoMensal) document.getElementById('planoMensal').value = dados.planoMensal;
-                    if (dados.planoTrimestral) document.getElementById('planoTrimestral').value = dados.planoTrimestral;
-                    if (dados.planoSemestral) document.getElementById('planoSemestral').value = dados.planoSemestral;
-                    if (dados.planoAnual) document.getElementById('planoAnual').value = dados.planoAnual;
+                    if (dados.planos) planos = dados.planos;
                 }
             } catch (erro) {
-                console.log('Ainda sem dados salvos — usando valores padrão');
+                console.log('Usando valores padrão');
             }
+            if (planos.length === 0) {
+                planos = [
+                    { nome: 'Mensal', valor: 90.00 },
+                    { nome: 'Trimestral', valor: 255.00 },
+                    { nome: 'Semestral', valor: 480.00 },
+                    { nome: 'Anual', valor: 840.00 }
+                ];
+            }
+            renderizarPlanos();
         }
 
         async function salvarTudo() {
             const usuario = auth.currentUser;
-            if (!usuario) {
-                mostrarErro('Você precisa estar logado!');
-                return;
-            }
+            if (!usuario) return mostrarErro('Faça login primeiro!');
 
-            const novaSenha = document.getElementById('novaSenha').value.trim();
-            const confirmaSenha = document.getElementById('confirmaSenha').value.trim();
+            const senha = document.getElementById('novaSenha').value.trim();
+            const confirma = document.getElementById('confirmaSenha').value.trim();
             const novoEmail = document.getElementById('emailAdmin').value.trim();
 
-            if (novaSenha && novaSenha !== confirmaSenha) {
-                mostrarErro('As senhas não coincidem!');
-                return;
-            }
-            if (novaSenha && novaSenha.length < 6) {
-                mostrarErro('A senha precisa ter pelo menos 6 caracteres!');
-                return;
-            }
+            if (senha && senha !== confirma) return mostrarErro('As senhas não coincidem!');
+            if (senha && senha.length < 6) return mostrarErro('Senha com mínimo 6 caracteres!');
 
             try {
                 const dados = {
@@ -434,57 +293,35 @@
                     telefoneAcademia: document.getElementById('telefoneAcademia').value.trim(),
                     emailContato: document.getElementById('emailContato').value.trim(),
                     horarioFuncionamento: document.getElementById('horarioFuncionamento').value.trim(),
-                    planoMensal: document.getElementById('planoMensal').value || null,
-                    planoTrimestral: document.getElementById('planoTrimestral').value || null,
-                    planoSemestral: document.getElementById('planoSemestral').value || null,
-                    planoAnual: document.getElementById('planoAnual').value || null,
+                    planos: planos.filter(p => p.nome.trim() !== ''),
                     atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
                 };
 
                 await db.collection('configuracoes').doc('geral').set(dados, { merge: true });
 
-                if (novoEmail && novoEmail !== usuario.email) {
-                    await usuario.updateEmail(novoEmail);
-                }
-
-                if (novaSenha) {
-                    await usuario.updatePassword(novaSenha);
-                }
+                if (novoEmail && novoEmail !== usuario.email) await usuario.updateEmail(novoEmail);
+                if (senha) await usuario.updatePassword(senha);
 
                 mostrarSucesso();
                 document.getElementById('novaSenha').value = '';
                 document.getElementById('confirmaSenha').value = '';
-
             } catch (erro) {
                 console.error(erro);
                 if (erro.code === 'auth/requires-recent-login') {
-                    mostrarErro('Faça login novamente e tente alterar logo após.');
-                } else if (erro.code === 'auth/invalid-email') {
-                    mostrarErro('E-mail inválido!');
+                    mostrarErro('Faça login novamente e tente logo após.');
                 } else {
                     mostrarErro(erro.message);
                 }
             }
         }
 
-        function voltar() {
-            history.back();
-        }
-
         function sairDoSistema() {
-            if (confirm('Deseja sair do sistema?')) {
-                auth.signOut().then(() => {
-                    window.location.href = 'login.html';
-                });
-            }
+            if (confirm('Deseja sair?')) auth.signOut().then(() => window.location.href = 'login.html');
         }
 
-        auth.onAuthStateChanged((usuario) => {
-            if (!usuario) {
-                window.location.href = 'login.html';
-                return;
-            }
-            carregarDados(usuario);
+        auth.onAuthStateChanged(u => {
+            if (!u) { window.location.href = 'login.html'; return; }
+            carregarDados(u);
         });
     </script>
 </body>
