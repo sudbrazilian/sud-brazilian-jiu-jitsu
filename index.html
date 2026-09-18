@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SUD Brazilian Jiu-Jitsu</title>
-    <!-- ✅ Favicon / Logo na aba do navegador -->
     <link rel="icon" href="imagens/logosud.png" type="image/png">
     <link rel="shortcut icon" href="imagens/logosud.png" type="image/png">
-    <!-- ✅ PWA / Ícone para celular -->
     <link rel="apple-touch-icon" href="imagens/logosud.png">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#D10000">
@@ -24,6 +22,7 @@
             box-sizing: border-box;
             font-family: 'Segoe UI', 'Roboto', sans-serif;
         }
+
         :root {
             --vermelho: #D10000;
             --vermelho-claro: #FF3B3B;
@@ -37,17 +36,20 @@
             --whatsapp: #25D366;
             --facebook: #1877F2;
         }
+
         body {
             background-color: var(--escuro);
             color: var(--texto);
             line-height: 1.6;
         }
+
         .container {
             width: 92%;
             max-width: 1280px;
             margin: 0 auto;
         }
-        /* ========== CABEÇALHO ========== */
+
+        /* CABEÇALHO */
         header {
             display: flex;
             justify-content: space-between;
@@ -60,32 +62,39 @@
             z-index: 1000;
             background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
         }
+
         .logo-cabecalho {
             display: flex;
             align-items: center;
             gap: 12px;
         }
+
         .logo-cabecalho img {
             height: 48px;
         }
+
         .logo-texto h1 {
             font-size: 1.1rem;
             font-weight: 700;
             letter-spacing: 1px;
         }
+
         .logo-texto p {
             font-size: 0.65rem;
             color: #999;
             letter-spacing: 2px;
             text-transform: uppercase;
         }
+
         .nav-desktop {
             display: flex;
             align-items: center;
         }
+
         nav {
             gap: 32px;
         }
+
         nav a {
             color: var(--texto);
             text-decoration: none;
@@ -95,9 +104,11 @@
             padding: 6px 0;
             margin: 0 12px;
         }
+
         nav a.ativo {
             color: var(--vermelho-claro);
         }
+
         nav a.ativo::after {
             content: '';
             position: absolute;
@@ -107,6 +118,7 @@
             height: 2px;
             background: var(--vermelho);
         }
+
         .btn-entrar {
             background: var(--vermelho);
             color: white;
@@ -122,10 +134,12 @@
             align-items: center;
             gap: 8px;
         }
+
         .btn-entrar:hover {
             background: var(--vermelho-claro);
         }
-        /* ========== MENU HAMBÚRGUER / MOBILE ========== */
+
+        /* MENU HAMBÚRGUER */
         .hamburger {
             display: none;
             flex-direction: column;
@@ -133,6 +147,7 @@
             cursor: pointer;
             z-index: 1001;
         }
+
         .hamburger span {
             width: 25px;
             height: 3px;
@@ -140,6 +155,7 @@
             border-radius: 2px;
             transition: 0.3s;
         }
+
         .menu-mobile {
             display: flex;
             position: fixed;
@@ -156,18 +172,22 @@
             transform: translateX(100%);
             transition: transform 0.3s ease;
         }
+
         .menu-mobile.open {
             transform: translateX(0);
         }
+
         .menu-mobile a {
             color: var(--texto);
             text-decoration: none;
             font-size: 1rem;
             font-weight: 500;
         }
+
         .menu-mobile a.ativo {
             color: var(--vermelho-claro);
         }
+
         .overlay {
             display: none;
             position: fixed;
@@ -178,10 +198,12 @@
             background: rgba(0, 0, 0, 0.6);
             z-index: 999;
         }
+
         .overlay.active {
             display: block;
         }
-        /* ========== BANNER PRINCIPAL ========== */
+
+        /* BANNER PRINCIPAL */
         .banner {
             background: linear-gradient(90deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.75) 45%, rgba(0,0,0,0.35) 70%),
                         url('imagens/capa-sud.jpg') center/cover no-repeat;
@@ -190,6 +212,7 @@
             align-items: center;
             padding-top: 70px;
         }
+
         .banner-conteudo {
             display: grid;
             grid-template-columns: 1fr auto;
@@ -197,27 +220,33 @@
             align-items: center;
             width: 100%;
         }
+
         .banner-esquerda {
             max-width: 520px;
         }
+
         .logo-banner {
             height: 140px;
             margin-bottom: 25px;
         }
+
         .banner-esquerda h2 {
             font-size: 2.4rem;
             line-height: 1.2;
             margin-bottom: 15px;
         }
+
         .banner-esquerda h2 span {
             color: var(--vermelho);
         }
+
         .banner-esquerda p {
             color: var(--texto-claro);
             font-size: 1rem;
             margin-bottom: 35px;
             line-height: 1.7;
         }
+
         .btn-vermelho {
             background: var(--vermelho);
             color: white;
@@ -233,21 +262,25 @@
             align-items: center;
             gap: 8px;
         }
+
         .btn-vermelho:hover {
             background: var(--vermelho-claro);
             transform: translateY(-2px);
         }
-        /* ========== DESTAQUES LADO DIREITO ========== */
+
+        /* DESTAQUES LADO DIREITO */
         .destaques {
             display: flex;
             flex-direction: column;
             gap: 25px;
         }
+
         .destaque-item {
             display: flex;
             align-items: center;
             gap: 15px;
         }
+
         .destaque-icone {
             width: 44px;
             height: 44px;
@@ -260,80 +293,255 @@
             color: var(--vermelho-claro);
             font-size: 1.1rem;
         }
+
         .destaque-texto p {
             font-size: 0.9rem;
             font-weight: 600;
         }
+
         .destaque-texto span {
             font-size: 0.75rem;
             color: #888;
         }
-        /* ========== SEÇÃO SOBRE / CONTATO ========== */
-        .secao {
-            padding: 60px 0;
-            border-bottom: 1px solid var(--borda);
+
+        /* SEÇÃO SOBRE */
+        .secao-sobre {
+            padding: 80px 0;
+            background: var(--meio-escuro);
         }
-        .secao h2 {
+
+        .sobre-conteudo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .sobre-imagem img {
+            width: 100%;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .sobre-texto h2 {
             font-size: 1.8rem;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             color: var(--vermelho-claro);
         }
-        .info-grid {
+
+        .sobre-texto h2 span {
+            color: var(--texto);
+        }
+
+        .sobre-texto p {
+            color: var(--texto-claro);
+            margin-bottom: 30px;
+            line-height: 1.7;
+        }
+
+        .sobre-icones {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .icone-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icone-item i {
+            color: var(--vermelho-claro);
+            font-size: 1.2rem;
+        }
+
+        /* SEÇÃO PLANOS / DESAFIO */
+        .secao-planos {
+            padding: 80px 0;
+            background: var(--escuro);
+        }
+
+        .secao-planos h2 {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 40px;
+            color: var(--vermelho-claro);
+        }
+
+        .planos-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 25px;
             margin-bottom: 30px;
         }
-        .info-card {
+
+        .plano-card {
             background: var(--meio-escuro);
-            padding: 25px;
-            border-radius: 10px;
             border: 1px solid var(--borda);
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s, border-color 0.3s;
         }
-        .info-card h3 {
+
+        .plano-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--vermelho);
+        }
+
+        .plano-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--vermelho-claro);
+        }
+
+        .plano-card .preco {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .plano-card .preco span {
             font-size: 1rem;
+            font-weight: 400;
             color: var(--texto-cinza);
-            margin-bottom: 12px;
         }
-        .info-card p, .info-card a {
-            font-size: 1rem;
-            color: var(--texto);
-            line-height: 1.8;
+
+        .plano-card ul {
+            list-style: none;
+            margin-bottom: 20px;
+            text-align: left;
         }
-        .redes-sociais {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-top: 10px;
+
+        .plano-card ul li {
+            padding: 8px 0;
+            color: var(--texto-claro);
+            font-size: 0.9rem;
         }
-        .botao-rede {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 20px;
-            border-radius: 8px;
+
+        .plano-card ul li::before {
+            content: '✓ ';
+            color: var(--vermelho-claro);
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .btn-whatsapp {
+            background: var(--whatsapp);
             color: white;
-            text-decoration: none;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 6px;
+            font-size: 1rem;
             font-weight: 600;
-            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
-        .botao-rede:hover {
+
+        .btn-whatsapp:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
         }
-        .instagram { background: linear-gradient(45deg, #f09433, #E4405F, #C13584); }
-        .whatsapp { background: var(--whatsapp); }
-        .facebook { background: var(--facebook); }
-        .sem-dado {
-            color: var(--texto-cinza);
-            font-style: italic;
+
+        .centro-btn {
+            text-align: center;
+            margin-top: 20px;
         }
-        /* ========== RODAPÉ ========== */
+
+        /* RODAPÉ */
         footer {
             background: #000;
             padding: 50px 0 20px;
             border-top: 1px solid #1a1a1a;
         }
+
+        .rodape-conteudo {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .rodape-logo img {
+            height: 60px;
+            margin-bottom: 10px;
+        }
+
+        .rodape-logo p {
+            font-size: 0.9rem;
+            color: var(--texto-cinza);
+        }
+
+        .rodape-links {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .rodape-coluna h4 {
+            font-size: 1rem;
+            margin-bottom: 15px;
+            color: var(--vermelho-claro);
+        }
+
+        .rodape-coluna a {
+            display: block;
+            color: var(--texto-cinza);
+            text-decoration: none;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .rodape-coluna a:hover {
+            color: var(--vermelho-claro);
+        }
+
+        .rodape-redes {
+            text-align: right;
+        }
+
+        .rodape-redes h4 {
+            font-size: 1rem;
+            margin-bottom: 15px;
+            color: var(--vermelho-claro);
+        }
+
+        .redes-sociais {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .botao-rede {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .botao-rede:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .instagram { background: linear-gradient(45deg, #f09433, #E4405F, #C13584); }
+        .whatsapp { background: var(--whatsapp); }
+        .facebook { background: var(--facebook); }
+
         .copyright {
             text-align: center;
             padding-top: 20px;
@@ -341,29 +549,56 @@
             color: #555;
             font-size: 0.8rem;
         }
-        /* ========== RESPONSIVIDADE / CELULAR ========== */
+
+        /* RESPONSIVIDADE */
         @media (max-width: 900px) {
             .banner-conteudo {
                 grid-template-columns: 1fr;
             }
+
             .destaques {
                 flex-direction: row;
                 flex-wrap: wrap;
                 justify-content: flex-start;
             }
+
             .nav-desktop {
                 display: none;
             }
+
             .hamburger {
                 display: flex;
             }
+
             .banner-esquerda h2 {
                 font-size: 1.8rem;
+            }
+
+            .sobre-conteudo {
+                grid-template-columns: 1fr;
+            }
+
+            .rodape-conteudo {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .rodape-links {
+                grid-template-columns: 1fr;
+            }
+
+            .rodape-redes {
+                text-align: center;
+            }
+
+            .redes-sociais {
+                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
+
 <!-- CABEÇALHO -->
 <header>
     <div class="logo-cabecalho">
@@ -385,16 +620,15 @@
     <a href="login.html" class="btn-entrar nav-desktop">
         <i class="fa-solid fa-user"></i> Entrar
     </a>
-    <!-- Botão de menu no celular -->
     <div class="hamburger" id="hamburger">
         <span></span>
         <span></span>
         <span></span>
     </div>
 </header>
-<!-- Fundo escuro quando abre o menu -->
+
 <div class="overlay" id="overlay"></div>
-<!-- Menu que abre no celular -->
+
 <nav class="menu-mobile" id="menuMobile">
     <a href="#inicio" class="ativo">Início</a>
     <a href="#sobre">Sobre</a>
@@ -416,7 +650,7 @@
                 <img src="imagens/logosud.png" alt="SUD" class="logo-banner">
                 <h2>MAIS QUE UM ESPORTE,<br>É UM <span>ESTILO DE VIDA</span>.</h2>
                 <p id="textoBanner">Na SUD, o Jiu-Jitsu transforma vidas. Aqui você encontra respeito, disciplina, superação e uma família que te apoia em cada passo da jornada.</p>
-                <a id="botaoWhatsApp" href="https://wa.me/5591998178337" target="_blank" class="btn-vermelho">
+                <a id="botaoWhatsAppBanner" href="https://wa.me/5591998178337" target="_blank" class="btn-vermelho">
                     VENHA TREINAR <i class="fa-solid fa-arrow-right"></i>
                 </a>
             </div>
@@ -447,26 +681,136 @@
     </div>
 </section>
 
-<!-- SOBRE / CONTATO - DADOS DINÂMICOS -->
-<section class="secao" id="sobre">
+<!-- SEÇÃO SOBRE -->
+<section class="secao-sobre" id="sobre">
     <div class="container">
-        <h2>Sobre Nós</h2>
-        <div id="dadosAcademia">
-            <p style="text-align:center; padding:20px; color:#999;">🔄 Carregando informações...</p>
+        <div class="sobre-conteudo">
+            <div class="sobre-imagem">
+                <img src="imagens/sobre.png" alt="Sobre a SUD">
+            </div>
+            <div class="sobre-texto">
+                <h2>Saúde, <span>União e Disciplina</span></h2>
+                <p id="textoSobre">A SUD Jiu-Jitsu é mais do que uma academia: é um lugar para se desenvolver fisicamente, mentalmente e socialmente. Nossos valores são baseados no respeito, na evolução constante e na força do trabalho em equipe.</p>
+                
+                <div class="sobre-icones">
+                    <div class="icone-item"><i class="fa-solid fa-shield-heart"></i> Saúde</div>
+                    <div class="icone-item"><i class="fa-solid fa-people-group"></i> União</div>
+                    <div class="icone-item"><i class="fa-solid fa-book"></i> Disciplina</div>
+                    <div class="icone-item"><i class="fa-solid fa-star"></i> Excelência</div>
+                </div>
+
+                <a id="botaoConhecaMais" href="#contato" class="btn-vermelho">
+                    CONHEÇA MAIS <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
         </div>
     </div>
 </section>
 
-<footer>
+<!-- SEÇÃO PLANOS / DESAFIO -->
+<section class="secao-planos" id="planos">
     <div class="container">
+        <h2>Escolha seu desafio</h2>
+        <div id="planosContainer" class="planos-grid">
+            <div class="plano-card">
+                <h3>Jiu-Jitsu Infantil</h3>
+                <div class="preco">R$ 80<span>/mês</span></div>
+                <ul>
+                    <li>2 treinos por semana</li>
+                    <li>Material didático incluso</li>
+                    <li>Acompanhamento do professor</li>
+                </ul>
+            </div>
+
+            <div class="plano-card">
+                <h3>Jiu-Jitsu Adulto</h3>
+                <div class="preco">R$ 120<span>/mês</span></div>
+                <ul>
+                    <li>3 treinos por semana</li>
+                    <li>Preparação para competições</li>
+                    <li>Grupo de apoio</li>
+                </ul>
+            </div>
+
+            <div class="plano-card">
+                <h3>Jiu-Jitsu Feminino</h3>
+                <div class="preco">R$ 100<span>/mês</span></div>
+                <ul>
+                    <li>2 treinos por semana</li>
+                    <li>Ambiente seguro e acolhedor</li>
+                    <li>Foco em defesa pessoal</li>
+                </ul>
+            </div>
+
+            <div class="plano-card">
+                <h3>Competição</h3>
+                <div class="preco">R$ 150<span>/mês</span></div>
+                <ul>
+                    <li>4 treinos por semana</li>
+                    <li>Preparação avançada</li>
+                    <li>Simulação de lutas</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="centro-btn">
+            <a id="botaoDesafioWhatsApp" href="https://wa.me/5591998178337" target="_blank" class="btn-whatsapp">
+                <i class="fab fa-whatsapp"></i> ESCREVER NO WHATSAPP
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- RODAPÉ -->
+<footer id="contato">
+    <div class="container">
+        <div class="rodape-conteudo">
+            <div class="rodape-logo">
+                <img src="imagens/logosud.png" alt="SUD">
+                <p id="nomeRodape">SUD Brazilian Jiu-Jitsu</p>
+                <p id="enderecoRodape" style="margin-top: 10px; font-size: 0.85rem;">Endereço da academia</p>
+            </div>
+
+            <div class="rodape-links">
+                <div class="rodape-coluna">
+                    <h4>Links Rápidos</h4>
+                    <a href="#inicio">Início</a>
+                    <a href="#sobre">Sobre</a>
+                    <a href="#aulas">Aulas</a>
+                    <a href="#horarios">Horários</a>
+                </div>
+                <div class="rodape-coluna">
+                    <h4>Mais Informações</h4>
+                    <a href="#galeria">Galeria</a>
+                    <a href="#noticias">Notícias</a>
+                    <a href="#contato">Contato</a>
+                    <a href="login.html">Área Administrativa</a>
+                </div>
+            </div>
+
+            <div class="rodape-redes">
+                <h4>Redes Sociais</h4>
+                <div class="redes-sociais">
+                    <a id="rodapeInstagram" href="#" target="_blank" class="botao-rede instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a id="rodapeWhatsApp" href="#" target="_blank" class="botao-rede whatsapp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a id="rodapeFacebook" href="#" target="_blank" class="botao-rede facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
         <div class="copyright">
-            <p>© 2026 <span id="nomeRodape">SUD Brazilian Jiu-Jitsu</span>. Todos os direitos reservados.</p>
+            <p>© 2026 <span id="nomeRodapeCopyright">SUD Brazilian Jiu-Jitsu</span>. Todos os direitos reservados.</p>
         </div>
     </div>
 </footer>
 
 <script>
-    // ✅ FIREBASE
     const firebaseConfig = {
         apiKey: "AIzaSyDKWso0gw6T2thoS12c1erzTzVhrnagS1s",
         authDomain: "sud-brazilian-jiu-jitsu.firebaseapp.com",
@@ -475,21 +819,24 @@
         messagingSenderId: "1053972036308",
         appId: "1:1053972036308:web:215a41d7bc91502eee1941"
     };
+
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // ✅ MENU HAMBÚRGUER
     const hamburger = document.getElementById('hamburger');
     const menuMobile = document.getElementById('menuMobile');
     const overlay = document.getElementById('overlay');
+
     hamburger.addEventListener('click', () => {
         menuMobile.classList.toggle('open');
         overlay.classList.toggle('active');
     });
+
     overlay.addEventListener('click', () => {
         menuMobile.classList.remove('open');
         overlay.classList.remove('active');
     });
+
     document.querySelectorAll('.menu-mobile a').forEach(link => {
         link.addEventListener('click', () => {
             menuMobile.classList.remove('open');
@@ -497,83 +844,54 @@
         });
     });
 
-    // ✅ CARREGAR DADOS DA ACADEMIA E REDES SOCIAIS
     async function carregarDadosAcademia() {
         try {
             const doc = await db.collection('configuracoes').doc('geral').get();
             const d = doc.exists ? doc.data() : {};
 
-            // Atualiza textos
             const nomeCurto = (d.nomeAcademia || 'SUD Brazilian Jiu-Jitsu').split(' ')[0];
             document.getElementById('nomeCabecalho').textContent = nomeCurto;
             document.getElementById('subtituloCabecalho').textContent = d.horarioFuncionamento ? 'ACADEMIA DE JIU-JITSU' : 'BRAZILIAN JIU-JITSU';
             document.getElementById('nomeRodape').textContent = d.nomeAcademia || 'SUD Brazilian Jiu-Jitsu';
+            document.getElementById('nomeRodapeCopyright').textContent = d.nomeAcademia || 'SUD Brazilian Jiu-Jitsu';
+            document.getElementById('enderecoRodape').textContent = d.enderecoAcademia || 'Endereço não informado';
 
-            // Monta o conteúdo
-            const container = document.getElementById('dadosAcademia');
-            container.innerHTML = `
-                <div class="info-grid">
-                    <div class="info-card">
-                        <h3>Nome</h3>
-                        <p>${d.nomeAcademia || 'SUD Brazilian Jiu-Jitsu'}</p>
-                    </div>
-                    <div class="info-card">
-                        <h3>CNPJ</h3>
-                        <p class="${!d.cnpjAcademia ? 'sem-dado' : ''}">${d.cnpjAcademia || 'Não informado'}</p>
-                    </div>
-                    <div class="info-card">
-                        <h3>Endereço</h3>
-                        <p class="${!d.enderecoAcademia ? 'sem-dado' : ''}">${d.enderecoAcademia || 'Não informado'}</p>
-                    </div>
-                    <div class="info-card">
-                        <h3>Telefone</h3>
-                        <p class="${!d.telefoneAcademia ? 'sem-dado' : ''}">${d.telefoneAcademia || 'Não informado'}</p>
-                    </div>
-                    <div class="info-card">
-                        <h3>E-mail</h3>
-                        <p class="${!d.emailContato ? 'sem-dado' : ''}">${d.emailContato || 'Não informado'}</p>
-                    </div>
-                    <div class="info-card">
-                        <h3>Horário</h3>
-                        <p class="${!d.horarioFuncionamento ? 'sem-dado' : ''}">${d.horarioFuncionamento || 'Não informado'}</p>
-                    </div>
-                </div>
-
-                <div class="info-card" style="margin-top: 20px;">
-                    <h3>Redes Sociais</h3>
-                    <div class="redes-sociais">
-                        ${d.instagram ? `
-                            <a href="${d.instagram.startsWith('http') ? d.instagram : 'https://instagram.com/' + d.instagram.replace('@','')}" 
-                               target="_blank" class="botao-rede instagram">
-                                <i class="fab fa-instagram"></i> Instagram
-                            </a>
-                        ` : ''}
-                        
-                        ${d.whatsapp ? `
-                            <a href="https://wa.me/${d.whatsapp.replace(/\D/g, '')}" 
-                               target="_blank" class="botao-rede whatsapp">
-                                <i class="fab fa-whatsapp"></i> WhatsApp
-                            </a>
-                        ` : ''}
-                        
-                        ${d.facebook ? `
-                            <a href="${d.facebook.startsWith('http') ? d.facebook : 'https://facebook.com/' + d.facebook}" 
-                               target="_blank" class="botao-rede facebook">
-                                <i class="fab fa-facebook-f"></i> Facebook
-                            </a>
-                        ` : ''}
-                        
-                        ${!d.instagram && !d.whatsapp && !d.facebook ? 
-                            '<p class="sem-dado">Redes sociais ainda não configuradas em Configurações</p>' : ''}
-                    </div>
-                </div>
-            `;
-
-            // Atualiza botão principal do WhatsApp
-            if (d.whatsapp) {
-                const numeroLimpo = d.whatsapp.replace(/\D/g, '');
+            if (d.telefoneAcademia) {
+                const numeroLimpo = d.telefoneAcademia.replace(/\D/g, '');
                 const comCodigo = numeroLimpo.length === 11 ? `55${numeroLimpo}` : numeroLimpo;
-                document.getElementById('botaoWhatsApp').href = `https://wa.me/${comCodigo}`;
+                document.getElementById('botaoWhatsAppBanner').href = `https://wa.me/${comCodigo}`;
+                document.getElementById('botaoDesafioWhatsApp').href = `https://wa.me/${comCodigo}`;
+                document.getElementById('rodapeWhatsApp').href = `https://wa.me/${comCodigo}`;
+            }
+
+            if (d.instagram) {
+                const link = d.instagram.startsWith('http') ? d.instagram : 'https://instagram.com/' + d.instagram.replace('@','');
+                document.getElementById('rodapeInstagram').href = link;
+            }
+
+            if (d.facebook) {
+                const link = d.facebook.startsWith('http') ? d.facebook : 'https://facebook.com/' + d.facebook;
+                document.getElementById('rodapeFacebook').href = link;
+            }
+
+            if (d.planos && Array.isArray(d.planos)) {
+                const container = document.getElementById('planosContainer');
+                container.innerHTML = '';
+
+                d.planos.forEach(plano => {
+                    const card = document.createElement('div');
+                    card.className = 'plano-card';
+                    card.innerHTML = `
+                        <h3>${plano.nome}</h3>
+                        <div class="preco">R$ ${plano.valor.toFixed(2).replace('.', ',')}<span>/mês</span></div>
+                        <ul>
+                            <li>Plano de treinamento</li>
+                            <li>Acompanhamento do professor</li>
+                            <li>Acesso aos treinos</li>
+                        </ul>
+                    `;
+                    container.appendChild(card);
+                });
             }
 
         } catch (erro) {
@@ -583,5 +901,6 @@
 
     carregarDadosAcademia();
 </script>
+
 </body>
 </html>
