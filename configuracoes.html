@@ -68,14 +68,18 @@
             padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: 600; margin-bottom: 15px; }
         .botoes { margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap; }
         .btn { padding: 12px 24px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 14px; }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
         .btn-verde { background: var(--verde); color: white; }
         .btn-vermelho { background: var(--vermelho-principal); color: white; }
+        .btn-cinza { background: #333; color: white; }
         .alerta-sucesso { background: rgba(0,200,83,0.1); border: 1px solid var(--verde); color: var(--verde);
             padding: 15px; border-radius: 6px; margin-bottom: 20px; display: none; }
         .alerta-erro { background: rgba(255,59,59,0.1); border: 1px solid var(--vermelho-claro); color: var(--vermelho-claro);
             padding: 15px; border-radius: 6px; margin-bottom: 20px; display: none; }
         .alerta-aviso { background: rgba(255,193,7,0.1); border: 1px solid var(--amarelo); color: var(--amarelo);
             padding: 12px; border-radius: 6px; margin-bottom: 15px; font-size: 13px; }
+        .alerta-info { background: rgba(59,130,246,0.1); border: 1px solid #3B82F6; color: #93C5FD;
+            padding: 15px; border-radius: 6px; margin-bottom: 20px; display: none; }
         .modal-senha { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none;
             align-items: center; justify-content: center; z-index: 99999; padding: 20px; }
         .modal-conteudo { background: var(--fundo-card); padding: 25px; border-radius: 10px;
@@ -83,8 +87,6 @@
         .modal-conteudo h3 { margin-bottom: 10px; color: var(--amarelo); font-size: 18px; }
         .modal-conteudo p { margin-bottom: 15px; font-size: 14px; color: #aaa; }
         .modal-botoes { margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end; }
-        .btn-cinza { background: #333; color: white; }
-        .carregando { opacity: 0.6; pointer-events: none; }
         @media (max-width: 992px) {
             .conteudo { margin-left: 0; width: 100%; padding: 80px 15px 15px; }
             .btn-menu { display: flex; align-items: center; justify-content: center; }
@@ -139,6 +141,7 @@
         </div>
         <div class="alerta-sucesso" id="alertaSucesso">✅ Configurações salvas com sucesso!</div>
         <div class="alerta-erro" id="alertaErro"><span id="textoErro">Erro!</span></div>
+        <div class="alerta-info" id="alertaInfo">📩 Link de confirmação enviado! Verifique o e-mail e clique para confirmar.</div>
         
         <!-- ===== TEXTOS DA PÁGINA INICIAL ===== -->
         <div class="card-config">
@@ -222,12 +225,16 @@
             <h2>🔒 Dados de Acesso</h2>
             <div class="alerta-aviso">
                 <i class="fas fa-exclamation-triangle"></i> 
-                Alterar e-mail ou senha pede confirmação da senha atual por segurança.
+                Trocar o e-mail → você receberá um link de confirmação no NOVO e-mail. Clique nele para concluir.
             </div>
             <div class="form-grid">
                 <div class="form-grupo">
-                    <label>E-mail de Login</label>
-                    <input type="email" id="emailAdmin" placeholder="novo@email.com">
+                    <label>E-mail de Login Atual</label>
+                    <input type="email" id="emailAtual" readonly style="opacity:0.7; background:#1a1a1a;">
+                </div>
+                <div class="form-grupo">
+                    <label>Novo E-mail de Login</label>
+                    <input type="email" id="novoEmail" placeholder="novo@email.com">
                 </div>
                 <div class="form-grupo">
                     <label>Nova Senha</label>
@@ -278,13 +285,22 @@
             document.getElementById('textoErro').textContent = msg;
             document.getElementById('alertaErro').style.display = 'block';
             document.getElementById('alertaSucesso').style.display = 'none';
+            document.getElementById('alertaInfo').style.display = 'none';
             setTimeout(() => document.getElementById('alertaErro').style.display = 'none', 6000);
         }
         
         function mostrarSucesso() {
             document.getElementById('alertaSucesso').style.display = 'block';
             document.getElementById('alertaErro').style.display = 'none';
+            document.getElementById('alertaInfo').style.display = 'none';
             setTimeout(() => document.getElementById('alertaSucesso').style.display = 'none', 4000);
+        }
+        
+        function mostrarInfo(msg) {
+            document.getElementById('alertaInfo').textContent = msg;
+            document.getElementById('alertaInfo').style.display = 'block';
+            document.getElementById('alertaSucesso').style.display = 'none';
+            document.getElementById('alertaErro').style.display = 'none';
         }
         
         function abrirModal() {
@@ -326,7 +342,7 @@
         
         async function carregarDados(u) {
             usuarioAtual = u;
-            document.getElementById('emailAdmin').value = u.email || '';
+            document.getElementById('emailAtual').value = u.email || '';
             
             try {
                 const doc = await db.collection('configuracoes').doc('geral').get();
@@ -382,7 +398,7 @@
         async function salvarTudo() {
             if(!usuarioAtual) return mostrarErro('Faça login primeiro!');
             
-            const novoEmail = document.getElementById('emailAdmin').value.trim();
+            const novoEmail = document.getElementById('novoEmail').value.trim();
             const senhaNova = document.getElementById('novaSenha').value.trim();
             const confirma = document.getElementById('confirmaSenha').value.trim();
             
@@ -408,23 +424,35 @@
             if(!senhaAtual) return mostrarErro('Digite sua senha atual!');
             
             const { novoEmail, senhaNova } = dadosPendentes;
-            
-            // Bloqueia botão durante o processo
             const btn = document.getElementById('btnConfirmar');
             const textoBtn = document.getElementById('textoBtnConfirmar');
             btn.disabled = true;
             textoBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
             
             try {
-                // Reautentica = confirma identidade
+                // Confirma identidade
                 const credencial = firebase.auth.EmailAuthProvider.credential(usuarioAtual.email, senhaAtual);
                 await usuarioAtual.reauthenticateWithCredential(credencial);
                 console.log('✅ Reautenticado!');
                 
-                // Troca e-mail
+                let emailPendente = false;
+                
+                // Troca e-mail → envia link de confirmação
                 if(novoEmail && novoEmail !== usuarioAtual.email) {
-                    await usuarioAtual.updateEmail(novoEmail);
-                    console.log('✅ E-mail alterado para:', novoEmail);
+                    try {
+                        await usuarioAtual.updateEmail(novoEmail);
+                        console.log('✅ E-mail alterado');
+                        emailPendente = true;
+                    } catch(erroEmail) {
+                        if(erroEmail.code === 'auth/operation-not-allowed' || erroEmail.message.includes('verify')) {
+                            mostrarInfo('📩 Solicitação enviada! Verifique o NOVO e-mail e clique no link de confirmação. Depois faça login com o novo e-mail.');
+                            // Cria usuário novo no Firebase como alternativa
+                            await auth.sendSignInLinkToEmail(novoEmail, { url: window.location.origin, handleCodeInApp: true });
+                            emailPendente = true;
+                        } else {
+                            throw erroEmail;
+                        }
+                    }
                 }
                 
                 // Troca senha
@@ -435,7 +463,7 @@
                 
                 // Salva demais dados
                 await salvarDadosGerais();
-                fecharModal();
+                if(!emailPendente) fecharModal();
                 
             } catch(erro) {
                 console.error('❌ Erro:', erro);
@@ -450,7 +478,6 @@
                 }
             }
             
-            // Libera botão
             btn.disabled = false;
             textoBtn.textContent = 'Confirmar';
         }
