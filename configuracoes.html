@@ -76,6 +76,7 @@
             padding: 15px; border-radius: 6px; margin-bottom: 20px; display: none; }
         .alerta-aviso { background: rgba(255,193,7,0.1); border: 1px solid var(--amarelo); color: var(--amarelo);
             padding: 12px; border-radius: 6px; margin-bottom: 15px; font-size: 13px; }
+        .aviso-email { color: var(--amarelo); font-size: 12px; margin-top: 4px; }
         @media (max-width: 992px) {
             .conteudo { margin-left: 0; width: 100%; padding: 80px 15px 15px; }
             .btn-menu { display: flex; align-items: center; justify-content: center; }
@@ -109,8 +110,9 @@
             <h1 class="titulo-pagina">Configurações do Sistema</h1>
             <p class="subtitulo">Dados da academia, textos da página inicial, planos e redes sociais</p>
         </div>
-        <div class="alerta-sucesso" id="alertaSucesso">✅ Configurações salvas com sucesso! Atualize a página para ver as mudanças.</div>
+        <div class="alerta-sucesso" id="alertaSucesso">✅ Configurações salvas com sucesso!</div>
         <div class="alerta-erro" id="alertaErro"><span id="textoErro">Erro!</span></div>
+        
         <!-- ===== TEXTOS DA PÁGINA INICIAL ===== -->
         <div class="card-config">
             <h2>📝 Textos da Página Inicial</h2>
@@ -129,6 +131,7 @@
                 </div>
             </div>
         </div>
+        
         <!-- ===== DADOS DA ACADEMIA ===== -->
         <div class="card-config">
             <h2>🏫 Dados da Academia</h2>
@@ -159,6 +162,7 @@
                 </div>
             </div>
         </div>
+        
         <!-- ===== REDES SOCIAIS ===== -->
         <div class="card-config">
             <h2>📱 Redes Sociais</h2>
@@ -176,6 +180,7 @@
                 </div>
             </div>
         </div>
+        
         <!-- ===== PLANOS ===== -->
         <div class="card-config">
             <h2>📋 Planos (Aparecem na página inicial)</h2>
@@ -184,16 +189,20 @@
             </button>
             <div id="listaPlanos"></div>
         </div>
+        
         <!-- ===== ACESSO ===== -->
         <div class="card-config">
             <h2>🔒 Dados de Acesso</h2>
             <div class="alerta-aviso">
-                <i class="fas fa-exclamation-triangle"></i> Alterar e-mail ou senha pode exigir novo login! Anote antes de salvar.
+                <i class="fas fa-exclamation-triangle"></i> 
+                <strong>E-mail de login:</strong> Para alterar, crie uma nova conta diretamente no Firebase → Autenticação.<br>
+                A senha pode ser alterada abaixo com segurança.
             </div>
             <div class="form-grid">
                 <div class="form-grupo">
-                    <label>E-mail do Administrador</label>
-                    <input type="email" id="emailAdmin">
+                    <label>E-mail de Login (não editável)</label>
+                    <input type="email" id="emailAdmin" readonly style="background:#1a1a1a; opacity:0.7;">
+                    <span class="aviso-email">Para trocar, crie novo usuário no Firebase → Autenticação</span>
                 </div>
                 <div class="form-grupo">
                     <label>Nova Senha</label>
@@ -205,6 +214,7 @@
                 </div>
             </div>
         </div>
+        
         <div class="botoes">
             <button class="btn btn-verde" onclick="salvarTudo()">
                 <i class="fas fa-save"></i> Salvar Alterações
@@ -214,6 +224,7 @@
             </button>
         </div>
     </main>
+    
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyDKWso0gw6T2thoS12c1erzTzVhrnagS1s",
@@ -338,7 +349,6 @@
             
             const senha = document.getElementById('novaSenha').value.trim();
             const confirma = document.getElementById('confirmaSenha').value.trim();
-            const novoEmail = document.getElementById('emailAdmin').value.trim();
             
             if (senha && senha !== confirma) {
                 return mostrarErro('As senhas não coincidem!');
@@ -367,11 +377,6 @@
                 await db.collection('configuracoes').doc('geral').set(dadosParaSalvar, { merge: true });
                 console.log('✅ Dados salvos no Firestore!');
                 
-                if (novoEmail && novoEmail !== usuarioAtual.email) {
-                    await usuarioAtual.updateEmail(novoEmail);
-                    console.log('✅ E-mail atualizado!');
-                }
-                
                 if (senha) {
                     await usuarioAtual.updatePassword(senha);
                     console.log('✅ Senha atualizada!');
@@ -384,9 +389,7 @@
             } catch (erro) {
                 console.error('❌ Erro ao salvar:', erro);
                 if (erro.code === 'auth/requires-recent-login') {
-                    mostrarErro('Por segurança, faça login novamente e salve logo após.');
-                } else if (erro.code === 'permission-denied') {
-                    mostrarErro('Sem permissão para salvar. Verifique as regras do Firestore.');
+                    mostrarErro('Faça login novamente e salve logo após.');
                 } else {
                     mostrarErro(erro.message || 'Erro desconhecido ao salvar');
                 }
