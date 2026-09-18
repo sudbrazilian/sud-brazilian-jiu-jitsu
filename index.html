@@ -262,7 +262,7 @@
             color: var(--texto-cinza);
             text-transform: uppercase;
         }
-        /* === SEÇÃO SOBRE — FOTO AUMENTADA === */
+        /* === SEÇÃO SOBRE === */
         .secao-sobre {
             padding: 70px 0;
             background: linear-gradient(90deg, rgba(20,10,10,0.95) 0%, rgba(10,10,10,0.9) 100%),
@@ -270,7 +270,7 @@
         }
         .sobre-conteudo {
             display: grid;
-            grid-template-columns: 600px 1fr; /* ✅ FOTO AUMENTADA */
+            grid-template-columns: 600px 1fr;
             gap: 50px;
             align-items: center;
         }
@@ -353,94 +353,6 @@
             gap: 8px;
         }
         .btn-vermelho-escuro:hover {
-            background: var(--vermelho);
-        }
-        /* === SEÇÃO PLANOS / AULAS === */
-        .secao-planos {
-            padding: 70px 0;
-            background: var(--escuro);
-        }
-        .secao-planos .cabecalho-secao {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 40px;
-        }
-        .secao-planos h2 {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            color: var(--texto-cinza);
-            letter-spacing: 2px;
-        }
-        .secao-planos h3 {
-            font-size: 1.8rem;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-        .secao-planos .descricao-secao {
-            color: var(--texto-cinza);
-            max-width: 350px;
-            font-size: 0.85rem;
-        }
-        .planos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
-        }
-        .plano-card {
-            background: var(--meio-escuro);
-            border: 1px solid var(--borda);
-            border-radius: 6px;
-            padding: 25px;
-            transition: all 0.3s;
-        }
-        .plano-card:hover {
-            border-color: var(--vermelho);
-            transform: translateY(-3px);
-        }
-        .plano-card i {
-            color: var(--vermelho);
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-        }
-        .plano-card h4 {
-            font-size: 1rem;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-            color: var(--vermelho-claro);
-        }
-        .plano-card p {
-            font-size: 0.85rem;
-            color: var(--texto-cinza);
-            margin-bottom: 15px;
-        }
-        .plano-card .saiba-mais {
-            color: var(--vermelho);
-            text-decoration: none;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .plano-card .saiba-mais:hover {
-            text-decoration: underline;
-        }
-        .btn-laranja {
-            background: var(--laranja);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn-laranja:hover {
             background: var(--vermelho);
         }
         /* === RODAPÉ === */
@@ -526,7 +438,7 @@
                 justify-content: center;
             }
             .sobre-conteudo {
-                grid-template-columns: 1fr; /* No celular, fica em cima do texto */
+                grid-template-columns: 1fr;
             }
             .sobre-icones {
                 grid-template-columns: repeat(2, 1fr);
@@ -551,10 +463,6 @@
     <nav class="nav-desktop">
         <a href="#inicio" class="ativo">Início</a>
         <a href="#sobre">Sobre</a>
-        <a href="#planos">Aulas</a>
-        <a href="#horarios">Horários</a>
-        <a href="#galeria">Galeria</a>
-        <a href="#noticias">Notícias</a>
         <a href="#contato">Contato</a>
         <a href="login.html" class="btn-entrar">Entrar</a>
     </nav>
@@ -568,10 +476,6 @@
 <nav class="menu-mobile" id="menuMobile">
     <a href="#inicio" class="ativo">Início</a>
     <a href="#sobre">Sobre</a>
-    <a href="#planos">Aulas</a>
-    <a href="#horarios">Horários</a>
-    <a href="#galeria">Galeria</a>
-    <a href="#noticias">Notícias</a>
     <a href="#contato">Contato</a>
     <a href="login.html" class="btn-entrar">Entrar</a>
 </nav>
@@ -615,7 +519,7 @@
     </div>
 </section>
 
-<!-- SEÇÃO SOBRE — FOTO AUMENTADA -->
+<!-- SEÇÃO SOBRE -->
 <section class="secao-sobre" id="sobre">
     <div class="container">
         <div class="sobre-conteudo">
@@ -649,49 +553,9 @@
                         <span>PROGRESSO</span>
                     </div>
                 </div>
-                <a href="#planos" class="btn-vermelho-escuro">
-                    CONHEÇA MAIS →
+                <a href="#contato" class="btn-vermelho-escuro">
+                    FALE CONOSCO →
                 </a>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- SEÇÃO AULAS / PLANOS -->
-<section class="secao-planos" id="planos">
-    <div class="container">
-        <div class="cabecalho-secao">
-            <div>
-                <h2>NOSSAS AULAS</h2>
-                <h3>ESCOLHA SEU DESAFIO</h3>
-                <p class="descricao-secao">Do iniciante ao avançado, temos um espaço feito para você evoluir no seu ritmo.</p>
-            </div>
-            <a href="#horarios" class="btn-laranja">VER HORÁRIOS →</a>
-        </div>
-        <div id="planosContainer" class="planos-grid">
-            <div class="plano-card">
-                <i class="fa-solid fa-child"></i>
-                <h4>Jiu-Jitsu Infantil</h4>
-                <p>Disciplina, respeito e confiança desde cedo.</p>
-                <a href="#" class="saiba-mais">Saiba mais →</a>
-            </div>
-            <div class="plano-card">
-                <i class="fa-solid fa-user-ninja"></i>
-                <h4>Jiu-Jitsu Adulto</h4>
-                <p>Técnica, saúde e evolução constante.</p>
-                <a href="#" class="saiba-mais">Saiba mais →</a>
-            </div>
-            <div class="plano-card">
-                <i class="fa-solid fa-venus"></i>
-                <h4>Jiu-Jitsu Feminino</h4>
-                <p>Força, união e empoderamento.</p>
-                <a href="#" class="saiba-mais">Saiba mais →</a>
-            </div>
-            <div class="plano-card">
-                <i class="fa-solid fa-trophy"></i>
-                <h4>Jiu-Jitsu Competitivo</h4>
-                <p>Prepare-se para os desafios.</p>
-                <a href="#" class="saiba-mais">Saiba mais →</a>
             </div>
         </div>
     </div>
@@ -711,7 +575,6 @@
                 <h4>Links Rápidos</h4>
                 <a href="#inicio">Início</a>
                 <a href="#sobre">Sobre</a>
-                <a href="#planos">Aulas</a>
                 <a href="#contato">Contato</a>
                 <a href="login.html">Área Administrativa</a>
             </div>
