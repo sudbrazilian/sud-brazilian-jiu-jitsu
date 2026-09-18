@@ -27,7 +27,7 @@
             --vermelho: #D10000;
             --vermelho-claro: #FF3B3B;
             --escuro: #050505;
-            --meio-escuro: #121212;
+            --meio-escuro: #0F0F12;
             --texto: #FFFFFF;
             --texto-claro: #E0E0E0;
             --texto-cinza: #999999;
@@ -91,32 +91,17 @@
             align-items: center;
         }
 
-        nav {
-            gap: 32px;
-        }
-
         nav a {
             color: var(--texto);
             text-decoration: none;
             font-size: 0.9rem;
             font-weight: 500;
-            position: relative;
-            padding: 6px 0;
-            margin: 0 12px;
+            padding: 6px 12px;
+            margin: 0 8px;
         }
 
         nav a.ativo {
             color: var(--vermelho-claro);
-        }
-
-        nav a.ativo::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: var(--vermelho);
         }
 
         .btn-entrar {
@@ -153,11 +138,9 @@
             height: 3px;
             background: var(--texto);
             border-radius: 2px;
-            transition: 0.3s;
         }
 
         .menu-mobile {
-            display: flex;
             position: fixed;
             top: 0;
             right: 0;
@@ -165,6 +148,7 @@
             max-width: 300px;
             height: 100vh;
             background: rgba(0, 0, 0, 0.98);
+            display: flex;
             flex-direction: column;
             padding: 80px 30px;
             gap: 20px;
@@ -181,11 +165,6 @@
             color: var(--texto);
             text-decoration: none;
             font-size: 1rem;
-            font-weight: 500;
-        }
-
-        .menu-mobile a.ativo {
-            color: var(--vermelho-claro);
         }
 
         .overlay {
@@ -304,7 +283,7 @@
             color: #888;
         }
 
-        /* SEÇÃO SOBRE */
+        /* SEÇÃO SOBRE — IGUAL AO MODELO */
         .secao-sobre {
             padding: 80px 0;
             background: var(--meio-escuro);
@@ -312,52 +291,74 @@
 
         .sobre-conteudo {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
+            grid-template-columns: 500px 1fr;
+            gap: 50px;
             align-items: center;
         }
 
         .sobre-imagem img {
             width: 100%;
-            border-radius: 10px;
             object-fit: cover;
         }
 
-        .sobre-texto h2 {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
+        .sobre-texto small {
             color: var(--vermelho-claro);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .sobre-texto h2 {
+            font-size: 2rem;
+            line-height: 1.2;
+            margin-bottom: 20px;
         }
 
         .sobre-texto h2 span {
-            color: var(--texto);
+            color: var(--vermelho-claro);
         }
 
         .sobre-texto p {
             color: var(--texto-claro);
             margin-bottom: 30px;
             line-height: 1.7;
+            font-size: 0.95rem;
         }
 
         .sobre-icones {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-bottom: 25px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
         }
 
         .icone-item {
             display: flex;
-            align-items: center;
-            gap: 10px;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
         }
 
         .icone-item i {
             color: var(--vermelho-claro);
-            font-size: 1.2rem;
+            font-size: 1.3rem;
+            margin-bottom: 4px;
         }
 
-        /* SEÇÃO PLANOS / DESAFIO */
+        .icone-item strong {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .icone-item span {
+            font-size: 0.75rem;
+            color: var(--texto-cinza);
+        }
+
+        /* SEÇÃO PLANOS */
         .secao-planos {
             padding: 80px 0;
             background: var(--escuro);
@@ -372,7 +373,7 @@
 
         .planos-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 25px;
             margin-bottom: 30px;
         }
@@ -392,40 +393,21 @@
         }
 
         .plano-card h3 {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             margin-bottom: 10px;
             color: var(--vermelho-claro);
         }
 
         .plano-card .preco {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 800;
             margin-bottom: 15px;
         }
 
         .plano-card .preco span {
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 400;
             color: var(--texto-cinza);
-        }
-
-        .plano-card ul {
-            list-style: none;
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .plano-card ul li {
-            padding: 8px 0;
-            color: var(--texto-claro);
-            font-size: 0.9rem;
-        }
-
-        .plano-card ul li::before {
-            content: '✓ ';
-            color: var(--vermelho-claro);
-            font-weight: bold;
-            margin-right: 8px;
         }
 
         .btn-whatsapp {
@@ -496,7 +478,6 @@
             text-decoration: none;
             margin-bottom: 8px;
             font-size: 0.9rem;
-            transition: color 0.2s;
         }
 
         .rodape-coluna a:hover {
@@ -517,7 +498,6 @@
             display: flex;
             gap: 12px;
             justify-content: flex-end;
-            flex-wrap: wrap;
         }
 
         .botao-rede {
@@ -530,12 +510,11 @@
             color: white;
             text-decoration: none;
             font-size: 1.2rem;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s;
         }
 
         .botao-rede:hover {
             transform: translateY(-3px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
 
         .instagram { background: linear-gradient(45deg, #f09433, #E4405F, #C13584); }
@@ -551,7 +530,7 @@
         }
 
         /* RESPONSIVIDADE */
-        @media (max-width: 900px) {
+        @media (max-width: 992px) {
             .banner-conteudo {
                 grid-template-columns: 1fr;
             }
@@ -559,7 +538,6 @@
             .destaques {
                 flex-direction: row;
                 flex-wrap: wrap;
-                justify-content: flex-start;
             }
 
             .nav-desktop {
@@ -576,6 +554,10 @@
 
             .sobre-conteudo {
                 grid-template-columns: 1fr;
+            }
+
+            .sobre-icones {
+                grid-template-columns: repeat(2, 1fr);
             }
 
             .rodape-conteudo {
@@ -611,10 +593,7 @@
     <nav class="nav-desktop">
         <a href="#inicio" class="ativo">Início</a>
         <a href="#sobre">Sobre</a>
-        <a href="#aulas">Aulas</a>
-        <a href="#horarios">Horários</a>
-        <a href="#galeria">Galeria</a>
-        <a href="#noticias">Notícias</a>
+        <a href="#planos">Aulas</a>
         <a href="#contato">Contato</a>
     </nav>
     <a href="login.html" class="btn-entrar nav-desktop">
@@ -632,10 +611,7 @@
 <nav class="menu-mobile" id="menuMobile">
     <a href="#inicio" class="ativo">Início</a>
     <a href="#sobre">Sobre</a>
-    <a href="#aulas">Aulas</a>
-    <a href="#horarios">Horários</a>
-    <a href="#galeria">Galeria</a>
-    <a href="#noticias">Notícias</a>
+    <a href="#planos">Aulas</a>
     <a href="#contato">Contato</a>
     <a href="login.html" class="btn-entrar">
         <i class="fa-solid fa-user"></i> Entrar
@@ -681,7 +657,7 @@
     </div>
 </section>
 
-<!-- SEÇÃO SOBRE -->
+<!-- SEÇÃO SOBRE — IGUAL AO MODELO DA FOTO -->
 <section class="secao-sobre" id="sobre">
     <div class="container">
         <div class="sobre-conteudo">
@@ -689,17 +665,34 @@
                 <img src="imagens/sobre.png" alt="Sobre a SUD">
             </div>
             <div class="sobre-texto">
-                <h2>Saúde, <span>União e Disciplina</span></h2>
+                <small>SOBRE A SUD</small>
+                <h2 id="tituloSobre">Saúde, <span>União e Disciplina</span>.</h2>
                 <p id="textoSobre">A SUD Jiu-Jitsu é mais do que uma academia: é um lugar para se desenvolver fisicamente, mentalmente e socialmente. Nossos valores são baseados no respeito, na evolução constante e na força do trabalho em equipe.</p>
                 
                 <div class="sobre-icones">
-                    <div class="icone-item"><i class="fa-solid fa-shield-heart"></i> Saúde</div>
-                    <div class="icone-item"><i class="fa-solid fa-people-group"></i> União</div>
-                    <div class="icone-item"><i class="fa-solid fa-book"></i> Disciplina</div>
-                    <div class="icone-item"><i class="fa-solid fa-star"></i> Excelência</div>
+                    <div class="icone-item">
+                        <i class="fa-solid fa-shield-heart"></i>
+                        <strong>Técnica</strong>
+                        <span>e Qualidade</span>
+                    </div>
+                    <div class="icone-item">
+                        <i class="fa-solid fa-user-tie"></i>
+                        <strong>Professores</strong>
+                        <span>Qualificados</span>
+                    </div>
+                    <div class="icone-item">
+                        <i class="fa-solid fa-home"></i>
+                        <strong>Ambiente</strong>
+                        <span>Familiar</span>
+                    </div>
+                    <div class="icone-item">
+                        <i class="fa-solid fa-bullseye"></i>
+                        <strong>Foco no</strong>
+                        <span>Seu Progresso</span>
+                    </div>
                 </div>
 
-                <a id="botaoConhecaMais" href="#contato" class="btn-vermelho">
+                <a id="botaoConhecaMais" href="#planos" class="btn-vermelho">
                     CONHEÇA MAIS <i class="fa-solid fa-arrow-right"></i>
                 </a>
             </div>
@@ -707,50 +700,12 @@
     </div>
 </section>
 
-<!-- SEÇÃO PLANOS / DESAFIO -->
+<!-- SEÇÃO PLANOS -->
 <section class="secao-planos" id="planos">
     <div class="container">
         <h2>Escolha seu desafio</h2>
         <div id="planosContainer" class="planos-grid">
-            <div class="plano-card">
-                <h3>Jiu-Jitsu Infantil</h3>
-                <div class="preco">R$ 80<span>/mês</span></div>
-                <ul>
-                    <li>2 treinos por semana</li>
-                    <li>Material didático incluso</li>
-                    <li>Acompanhamento do professor</li>
-                </ul>
-            </div>
-
-            <div class="plano-card">
-                <h3>Jiu-Jitsu Adulto</h3>
-                <div class="preco">R$ 120<span>/mês</span></div>
-                <ul>
-                    <li>3 treinos por semana</li>
-                    <li>Preparação para competições</li>
-                    <li>Grupo de apoio</li>
-                </ul>
-            </div>
-
-            <div class="plano-card">
-                <h3>Jiu-Jitsu Feminino</h3>
-                <div class="preco">R$ 100<span>/mês</span></div>
-                <ul>
-                    <li>2 treinos por semana</li>
-                    <li>Ambiente seguro e acolhedor</li>
-                    <li>Foco em defesa pessoal</li>
-                </ul>
-            </div>
-
-            <div class="plano-card">
-                <h3>Competição</h3>
-                <div class="preco">R$ 150<span>/mês</span></div>
-                <ul>
-                    <li>4 treinos por semana</li>
-                    <li>Preparação avançada</li>
-                    <li>Simulação de lutas</li>
-                </ul>
-            </div>
+            <!-- Planos carregados do Firebase -->
         </div>
 
         <div class="centro-btn">
@@ -776,14 +731,11 @@
                     <h4>Links Rápidos</h4>
                     <a href="#inicio">Início</a>
                     <a href="#sobre">Sobre</a>
-                    <a href="#aulas">Aulas</a>
-                    <a href="#horarios">Horários</a>
+                    <a href="#planos">Aulas</a>
+                    <a href="#contato">Contato</a>
                 </div>
                 <div class="rodape-coluna">
                     <h4>Mais Informações</h4>
-                    <a href="#galeria">Galeria</a>
-                    <a href="#noticias">Notícias</a>
-                    <a href="#contato">Contato</a>
                     <a href="login.html">Área Administrativa</a>
                 </div>
             </div>
@@ -849,13 +801,21 @@
             const doc = await db.collection('configuracoes').doc('geral').get();
             const d = doc.exists ? doc.data() : {};
 
+            // Textos da página inicial — vêm das Configurações
+            if (d.textoBanner) document.getElementById('textoBanner').textContent = d.textoBanner;
+            if (d.tituloSobre) {
+                document.getElementById('tituloSobre').innerHTML = d.tituloSobre.replace(/(União e Disciplina)/, '<span>$1</span>');
+            }
+            if (d.textoSobre) document.getElementById('textoSobre').textContent = d.textoSobre;
+
+            // Nome
             const nomeCurto = (d.nomeAcademia || 'SUD Brazilian Jiu-Jitsu').split(' ')[0];
             document.getElementById('nomeCabecalho').textContent = nomeCurto;
-            document.getElementById('subtituloCabecalho').textContent = d.horarioFuncionamento ? 'ACADEMIA DE JIU-JITSU' : 'BRAZILIAN JIU-JITSU';
             document.getElementById('nomeRodape').textContent = d.nomeAcademia || 'SUD Brazilian Jiu-Jitsu';
             document.getElementById('nomeRodapeCopyright').textContent = d.nomeAcademia || 'SUD Brazilian Jiu-Jitsu';
             document.getElementById('enderecoRodape').textContent = d.enderecoAcademia || 'Endereço não informado';
 
+            // WhatsApp
             if (d.telefoneAcademia) {
                 const numeroLimpo = d.telefoneAcademia.replace(/\D/g, '');
                 const comCodigo = numeroLimpo.length === 11 ? `55${numeroLimpo}` : numeroLimpo;
@@ -864,31 +824,27 @@
                 document.getElementById('rodapeWhatsApp').href = `https://wa.me/${comCodigo}`;
             }
 
+            // Redes sociais
             if (d.instagram) {
                 const link = d.instagram.startsWith('http') ? d.instagram : 'https://instagram.com/' + d.instagram.replace('@','');
                 document.getElementById('rodapeInstagram').href = link;
             }
-
             if (d.facebook) {
                 const link = d.facebook.startsWith('http') ? d.facebook : 'https://facebook.com/' + d.facebook;
                 document.getElementById('rodapeFacebook').href = link;
             }
 
+            // Planos
             if (d.planos && Array.isArray(d.planos)) {
                 const container = document.getElementById('planosContainer');
                 container.innerHTML = '';
-
                 d.planos.forEach(plano => {
+                    if (!plano.nome) return;
                     const card = document.createElement('div');
                     card.className = 'plano-card';
                     card.innerHTML = `
                         <h3>${plano.nome}</h3>
-                        <div class="preco">R$ ${plano.valor.toFixed(2).replace('.', ',')}<span>/mês</span></div>
-                        <ul>
-                            <li>Plano de treinamento</li>
-                            <li>Acompanhamento do professor</li>
-                            <li>Acesso aos treinos</li>
-                        </ul>
+                        <div class="preco">R$ ${(plano.valor || 0).toFixed(2).replace('.', ',')}<span>/mês</span></div>
                     `;
                     container.appendChild(card);
                 });
