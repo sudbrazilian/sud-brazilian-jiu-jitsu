@@ -225,11 +225,7 @@
             <input type="text" id="buscaAluno" placeholder="🔍 Buscar por nome, CPF ou responsável...">
             <select id="filtroTipo">
                 <option value="">Todos os Tipos</option>
-                <option value="Kids">Kids</option>
-                <option value="Baby Class">Baby Class</option>
-                <option value="Comercial">Comercial</option>
-                <option value="Competidor">Competidor</option>
-                <option value="Bolsista">Bolsista</option>
+                <!-- Preenchido dinamicamente -->
             </select>
             <select id="filtroPeriodo">
                 <option value="">Todos os Planos</option>
@@ -276,11 +272,7 @@
                             <label>Tipo de Aluno *</label>
                             <select id="tipoAluno" onchange="atualizarValorPlano()" required>
                                 <option value="">Selecione</option>
-                                <option value="Kids">Kids</option>
-                                <option value="Baby Class">Baby Class</option>
-                                <option value="Comercial">Comercial</option>
-                                <option value="Competidor">Competidor</option>
-                                <option value="Bolsista">Bolsista (Gratuito)</option>
+                                <!-- Preenchido dinamicamente -->
                             </select>
                         </div>
                         <div class="campo">
@@ -312,7 +304,7 @@
                 </div>
                 <div class="secao">
                     <h3>Plano e Valores</h3>
-                    <p class="aviso-valores">💡 Planos carregados das Configurações do sistema</p>
+                    <p class="aviso-valores">💡 Planos e Tipos carregados das Configurações do sistema</p>
                     <div class="linha">
                         <div class="campo">
                             <label>Plano *</label>
@@ -371,17 +363,35 @@
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
-
         let planosSistema = [];
+        let tiposSistema = [];
         let alunosCarregados = [];
 
-        // Carregar planos dinâmicos do Firebase
-        async function carregarPlanosDoSistema() {
+        // Carregar Tipos e Planos do Firebase
+        async function carregarConfiguracoes() {
             try {
                 const doc = await db.collection('configuracoes').doc('geral').get();
-                if (doc.exists && doc.data().planos) {
-                    planosSistema = doc.data().planos;
+                if (doc.exists) {
+                    const dados = doc.data();
+                    // Tipos de Aluno
+                    if (dados.tiposAluno && Array.isArray(dados.tiposAluno)) {
+                        tiposSistema = dados.tiposAluno.map(t => typeof t === 'object' ? t.nome : t).filter(nome => nome?.trim());
+                    } else {
+                        tiposSistema = ['Kids', 'Baby Class', 'Comercial', 'Competidor', 'Bolsista'];
+                    }
+                    // Planos
+                    if (dados.planos && Array.isArray(dados.planos)) {
+                        planosSistema = dados.planos;
+                    } else {
+                        planosSistema = [
+                            { nome: 'Mensal', valor: 90.00 },
+                            { nome: 'Trimestral', valor: 255.00 },
+                            { nome: 'Semestral', valor: 480.00 },
+                            { nome: 'Anual', valor: 840.00 }
+                        ];
+                    }
                 } else {
+                    tiposSistema = ['Kids', 'Baby Class', 'Comercial', 'Competidor', 'Bolsista'];
                     planosSistema = [
                         { nome: 'Mensal', valor: 90.00 },
                         { nome: 'Trimestral', valor: 255.00 },
@@ -390,7 +400,8 @@
                     ];
                 }
             } catch (erro) {
-                console.warn('Usando planos padrão:', erro);
+                console.warn('Usando padrões:', erro);
+                tiposSistema = ['Kids', 'Baby Class', 'Comercial', 'Competidor', 'Bolsista'];
                 planosSistema = [
                     { nome: 'Mensal', valor: 90.00 },
                     { nome: 'Trimestral', valor: 255.00 },
@@ -398,26 +409,52 @@
                     { nome: 'Anual', valor: 840.00 }
                 ];
             }
-            preencherSelectPlanos();
+            preencherSelects();
         }
 
-        function preencherSelectPlanos() {
-            const selectCadastro = document.getElementById('periodoAluno');
-            const selectFiltro = document.getElementById('filtroPeriodo');
+        function preencherSelects() {
+            // Select de Tipo no cadastro
+            const selectTipoCadastro = document.getElementById('tipoAluno');
+            // Select de Filtro por Tipo
+            const selectFiltroTipo = document.getElementById('filtroTipo');
+            // Select de Plano no cadastro
+            const selectPlanoCadastro = document.getElementById('periodoAluno');
+            // Select de Filtro por Plano
+            const selectFiltroPlano = document.getElementById('filtroPeriodo');
+
+            // Limpar e preencher Tipos
+            selectTipoCadastro.innerHTML = '<option value="">Selecione</option>';
+            selectFiltroTipo.innerHTML = '<option value="">Todos os Tipos</option>';
             
-            selectCadastro.innerHTML = '<option value="">Selecione</option>';
-            selectFiltro.innerHTML = '<option value="">Todos os Planos</option>';
-            
-            planosSistema.forEach(p => {
+            tiposSistema.forEach(tipo => {
+                const nome = tipo.trim();
+                if (!nome) return;
                 const opt = document.createElement('option');
-                opt.value = p.nome;
-                opt.textContent = `${p.nome} — R$ ${p.valor.toFixed(2).replace('.', ',')}`;
-                selectCadastro.appendChild(opt);
+                opt.value = nome;
+                opt.textContent = nome + (nome === 'Bolsista' ? ' (Gratuito)' : '');
+                selectTipoCadastro.appendChild(opt);
                 
                 const optFiltro = document.createElement('option');
-                optFiltro.value = p.nome;
-                optFiltro.textContent = p.nome;
-                selectFiltro.appendChild(optFiltro);
+                optFiltro.value = nome;
+                optFiltro.textContent = nome;
+                selectFiltroTipo.appendChild(optFiltro);
+            });
+
+            // Limpar e preencher Planos
+            selectPlanoCadastro.innerHTML = '<option value="">Selecione</option>';
+            selectFiltroPlano.innerHTML = '<option value="">Todos os Planos</option>';
+            
+            planosSistema.forEach(plano => {
+                if (!plano.nome) return;
+                const opt = document.createElement('option');
+                opt.value = plano.nome;
+                opt.textContent = `${plano.nome} — R$ ${(plano.valor || 0).toFixed(2).replace('.', ',')}`;
+                selectPlanoCadastro.appendChild(opt);
+                
+                const optFiltro = document.createElement('option');
+                optFiltro.value = plano.nome;
+                optFiltro.textContent = plano.nome;
+                selectFiltroPlano.appendChild(optFiltro);
             });
         }
 
@@ -604,7 +641,7 @@
             document.getElementById('matriculaAluno').valueAsDate = new Date();
             document.getElementById('valorFinalAluno').value = 'Selecione o tipo e o plano';
             document.getElementById('valorFinalAluno').className = 'valor-final valor-vazio';
-            preencherSelectPlanos();
+            preencherSelects();
             document.getElementById('modalCadastro').style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
@@ -623,6 +660,7 @@
                 document.getElementById('tituloModal').textContent = 'Editar Aluno';
                 document.getElementById('nomeAluno').value = dados.nome || '';
                 document.getElementById('cpfAluno').value = formatarCPF(dados.cpf || '');
+                preencherSelects();
                 document.getElementById('tipoAluno').value = dados.tipo || '';
                 document.getElementById('nascimentoAluno').value = dados.dataNascimento ? dados.dataNascimento.toDate().toISOString().split('T')[0] : '';
                 document.getElementById('responsavelAluno').value = dados.responsavel || '';
@@ -634,7 +672,6 @@
                 else if (dados.dataMatricula) dataVenc = dados.dataMatricula.toDate();
                 document.getElementById('matriculaAluno').value = dataVenc ? dataVenc.toISOString().split('T')[0] : '';
                 
-                preencherSelectPlanos();
                 document.getElementById('periodoAluno').value = dados.periodo || '';
                 document.getElementById('descontoAluno').value = dados.desconto || 0;
                 document.getElementById('faixaAluno').value = dados.faixa || '';
@@ -758,6 +795,7 @@
             promptInstalacao = e;
             document.getElementById('itemInstalarApp').style.display = 'block';
         });
+
         async function instalarApp() {
             if (!promptInstalacao) return alert('A opção de instalar não está disponível agora.');
             promptInstalacao.prompt();
@@ -770,7 +808,7 @@
                 window.location.href = 'login.html';
             } else {
                 carregarTema();
-                carregarPlanosDoSistema();
+                carregarConfiguracoes();
                 carregarAlunos();
             }
         });
