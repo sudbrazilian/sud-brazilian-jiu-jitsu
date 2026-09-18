@@ -76,7 +76,12 @@
             padding: 15px; border-radius: 6px; margin-bottom: 20px; display: none; }
         .alerta-aviso { background: rgba(255,193,7,0.1); border: 1px solid var(--amarelo); color: var(--amarelo);
             padding: 12px; border-radius: 6px; margin-bottom: 15px; font-size: 13px; }
-        .aviso-email { color: var(--amarelo); font-size: 12px; margin-top: 4px; }
+        .modal-senha { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none;
+            align-items: center; justify-content: center; z-index: 9999; padding: 20px; }
+        .modal-conteudo { background: var(--fundo-card); padding: 25px; border-radius: 10px;
+            border: 1px solid var(--borda); max-width: 400px; width: 100%; }
+        .modal-conteudo h3 { margin-bottom: 15px; color: var(--amarelo); }
+        .modal-botoes { margin-top: 15px; display: flex; gap: 10px; justify-content: flex-end; }
         @media (max-width: 992px) {
             .conteudo { margin-left: 0; width: 100%; padding: 80px 15px 15px; }
             .btn-menu { display: flex; align-items: center; justify-content: center; }
@@ -105,6 +110,23 @@
             </ul>
         </nav>
     </aside>
+
+    <!-- Modal: Pedir senha atual antes de trocar e-mail/senha -->
+    <div class="modal-senha" id="modalSenha">
+        <div class="modal-conteudo">
+            <h3>🔐 Confirme sua senha atual</h3>
+            <p style="margin-bottom:12px; font-size:14px; color:#aaa;">Por segurança, digite sua senha atual para alterar dados de acesso</p>
+            <div class="form-grupo">
+                <label>Senha Atual</label>
+                <input type="password" id="senhaAtual" placeholder="Digite sua senha atual">
+            </div>
+            <div class="modal-botoes">
+                <button class="btn" style="background:#333; color:white;" onclick="fecharModal()">Cancelar</button>
+                <button class="btn btn-verde" onclick="confirmarSenhaEProsseguir()">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
     <main class="conteudo">
         <div class="cabecalho">
             <h1 class="titulo-pagina">Configurações do Sistema</h1>
@@ -119,7 +141,7 @@
             <div class="form-grid">
                 <div class="form-grupo" style="grid-column: 1 / -1;">
                     <label>Texto do Banner Principal</label>
-                    <textarea id="textoBanner" rows="3" placeholder="Texto que aparece abaixo do título no banner...">Na SUD, o Jiu-Jitsu transforma vidas. Aqui você encontra respeito, disciplina, superação e uma família que te apoia em cada passo da jornada.</textarea>
+                    <textarea id="textoBanner" rows="3">Na SUD, o Jiu-Jitsu transforma vidas. Aqui você encontra respeito, disciplina, superação e uma família que te apoia em cada passo da jornada.</textarea>
                 </div>
                 <div class="form-grupo" style="grid-column: 1 / -1;">
                     <label>Título da Seção Sobre</label>
@@ -127,7 +149,7 @@
                 </div>
                 <div class="form-grupo" style="grid-column: 1 / -1;">
                     <label>Texto da Seção Sobre</label>
-                    <textarea id="textoSobre" rows="4" placeholder="Texto que aparece ao lado da imagem sobre...">A SUD Jiu-Jitsu é mais do que uma academia: é um lugar para se desenvolver fisicamente, mentalmente e socialmente. Nossos valores são baseados no respeito, na evolução constante e na força do trabalho em equipe.</textarea>
+                    <textarea id="textoSobre" rows="4">A SUD Jiu-Jitsu é mais do que uma academia: é um lugar para se desenvolver fisicamente, mentalmente e socialmente. Nossos valores são baseados no respeito, na evolução constante e na força do trabalho em equipe.</textarea>
                 </div>
             </div>
         </div>
@@ -195,14 +217,12 @@
             <h2>🔒 Dados de Acesso</h2>
             <div class="alerta-aviso">
                 <i class="fas fa-exclamation-triangle"></i> 
-                <strong>E-mail de login:</strong> Para alterar, crie uma nova conta diretamente no Firebase → Autenticação.<br>
-                A senha pode ser alterada abaixo com segurança.
+                Alterar e-mail ou senha pede confirmação da senha atual por segurança.
             </div>
             <div class="form-grid">
                 <div class="form-grupo">
-                    <label>E-mail de Login (não editável)</label>
-                    <input type="email" id="emailAdmin" readonly style="background:#1a1a1a; opacity:0.7;">
-                    <span class="aviso-email">Para trocar, crie novo usuário no Firebase → Autenticação</span>
+                    <label>E-mail de Login</label>
+                    <input type="email" id="emailAdmin" placeholder="novo@email.com">
                 </div>
                 <div class="form-grupo">
                     <label>Nova Senha</label>
@@ -235,14 +255,13 @@
             appId: "1:1053972036308:web:215a41d7bc91502eee1941"
         };
         
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
         
         let planos = [];
         let usuarioAtual = null;
+        let dadosParaSalvarFinal = null;
         
         function abrirFecharMenu() {
             document.getElementById('menuLateral').classList.toggle('aberto');
@@ -254,161 +273,178 @@
             document.getElementById('textoErro').textContent = msg;
             document.getElementById('alertaErro').style.display = 'block';
             document.getElementById('alertaSucesso').style.display = 'none';
-            setTimeout(() => {
-                document.getElementById('alertaErro').style.display = 'none';
-            }, 6000);
+            setTimeout(() => document.getElementById('alertaErro').style.display = 'none', 6000);
         }
         
         function mostrarSucesso() {
             document.getElementById('alertaSucesso').style.display = 'block';
             document.getElementById('alertaErro').style.display = 'none';
-            setTimeout(() => {
-                document.getElementById('alertaSucesso').style.display = 'none';
-            }, 4000);
+            setTimeout(() => document.getElementById('alertaSucesso').style.display = 'none', 4000);
+        }
+        
+        function abrirModal() {
+            document.getElementById('modalSenha').style.display = 'flex';
+            document.getElementById('senhaAtual').value = '';
+        }
+        
+        function fecharModal() {
+            document.getElementById('modalSenha').style.display = 'none';
+            dadosParaSalvarFinal = null;
         }
         
         function renderizarPlanos() {
             const container = document.getElementById('listaPlanos');
             container.innerHTML = '';
-            planos.forEach((plano, indice) => {
+            planos.forEach((plano, i) => {
                 const div = document.createElement('div');
                 div.className = 'item-plano';
                 div.innerHTML = `
-                    <input type="text" placeholder="Nome do plano" value="${plano.nome || ''}"
-                        oninput="planos[${indice}].nome = this.value">
-                    <input type="number" step="0.01" placeholder="Valor R$" value="${plano.valor || ''}"
-                        oninput="planos[${indice}].valor = parseFloat(this.value) || 0">
-                    <button class="btn-remover" onclick="removerPlano(${indice})">
-                        <i class="fas fa-trash"></i>
-                    </button>
+                    <input type="text" placeholder="Nome do plano" value="${plano.nome||''}"
+                        oninput="planos[${i}].nome=this.value">
+                    <input type="number" step="0.01" placeholder="Valor R$" value="${plano.valor||''}"
+                        oninput="planos[${i}].valor=parseFloat(this.value)||0">
+                    <button class="btn-remover" onclick="removerPlano(${i})"><i class="fas fa-trash"></i></button>
                 `;
                 container.appendChild(div);
             });
         }
         
         function adicionarPlano() {
-            planos.push({ nome: '', valor: 0 });
+            planos.push({nome:'',valor:0});
             renderizarPlanos();
         }
         
-        function removerPlano(indice) {
-            if (confirm('Remover este plano?')) {
-                planos.splice(indice, 1);
-                renderizarPlanos();
-            }
+        function removerPlano(i) {
+            if(confirm('Remover?')) { planos.splice(i,1); renderizarPlanos(); }
         }
         
-        async function carregarDados(usuario) {
-            usuarioAtual = usuario;
-            document.getElementById('emailAdmin').value = usuario.email || '';
+        async function carregarDados(u) {
+            usuarioAtual = u;
+            document.getElementById('emailAdmin').value = u.email || '';
             
             try {
-                const docRef = db.collection('configuracoes').doc('geral');
-                const doc = await docRef.get();
-                
-                if (doc.exists) {
-                    const dados = doc.data();
-                    
-                    if (dados.textoBanner) document.getElementById('textoBanner').value = dados.textoBanner;
-                    if (dados.tituloSobre) document.getElementById('tituloSobre').value = dados.tituloSobre;
-                    if (dados.textoSobre) document.getElementById('textoSobre').value = dados.textoSobre;
-                    
-                    if (dados.nomeAcademia) document.getElementById('nomeAcademia').value = dados.nomeAcademia;
-                    if (dados.cnpjAcademia) document.getElementById('cnpjAcademia').value = dados.cnpjAcademia;
-                    if (dados.enderecoAcademia) document.getElementById('enderecoAcademia').value = dados.enderecoAcademia;
-                    if (dados.telefoneAcademia) document.getElementById('telefoneAcademia').value = dados.telefoneAcademia;
-                    if (dados.emailContato) document.getElementById('emailContato').value = dados.emailContato;
-                    if (dados.horarioFuncionamento) document.getElementById('horarioFuncionamento').value = dados.horarioFuncionamento;
-                    
-                    if (dados.instagram) document.getElementById('instagram').value = dados.instagram;
-                    if (dados.facebook) document.getElementById('facebook').value = dados.facebook;
-                    
-                    if (dados.planos && Array.isArray(dados.planos) && dados.planos.length > 0) {
-                        planos = dados.planos;
-                    }
+                const doc = await db.collection('configuracoes').doc('geral').get();
+                if(doc.exists) {
+                    const d = doc.data();
+                    if(d.textoBanner) document.getElementById('textoBanner').value = d.textoBanner;
+                    if(d.tituloSobre) document.getElementById('tituloSobre').value = d.tituloSobre;
+                    if(d.textoSobre) document.getElementById('textoSobre').value = d.textoSobre;
+                    if(d.nomeAcademia) document.getElementById('nomeAcademia').value = d.nomeAcademia;
+                    if(d.cnpjAcademia) document.getElementById('cnpjAcademia').value = d.cnpjAcademia;
+                    if(d.enderecoAcademia) document.getElementById('enderecoAcademia').value = d.enderecoAcademia;
+                    if(d.telefoneAcademia) document.getElementById('telefoneAcademia').value = d.telefoneAcademia;
+                    if(d.emailContato) document.getElementById('emailContato').value = d.emailContato;
+                    if(d.horarioFuncionamento) document.getElementById('horarioFuncionamento').value = d.horarioFuncionamento;
+                    if(d.instagram) document.getElementById('instagram').value = d.instagram;
+                    if(d.facebook) document.getElementById('facebook').value = d.facebook;
+                    if(d.planos?.length) planos = d.planos;
                 }
-            } catch (erro) {
-                console.log('Nenhum dado salvo ainda, usando padrões:', erro);
-            }
+            } catch(e) { console.log('Carregando padrões...'); }
             
-            if (planos.length === 0) {
-                planos = [
-                    { nome: 'Jiu-Jitsu Infantil', valor: 80.00 },
-                    { nome: 'Jiu-Jitsu Adulto', valor: 120.00 },
-                    { nome: 'Jiu-Jitsu Feminino', valor: 100.00 },
-                    { nome: 'Competição', valor: 150.00 }
-                ];
-            }
+            if(!planos.length) planos = [
+                {nome:'Jiu-Jitsu Infantil',valor:80},
+                {nome:'Jiu-Jitsu Adulto',valor:120},
+                {nome:'Jiu-Jitsu Feminino',valor:100},
+                {nome:'Competição',valor:150}
+            ];
             renderizarPlanos();
         }
         
         async function salvarTudo() {
-            if (!usuarioAtual) {
-                return mostrarErro('Faça login primeiro!');
-            }
+            if(!usuarioAtual) return mostrarErro('Faça login primeiro!');
             
+            const novoEmail = document.getElementById('emailAdmin').value.trim();
             const senha = document.getElementById('novaSenha').value.trim();
             const confirma = document.getElementById('confirmaSenha').value.trim();
             
-            if (senha && senha !== confirma) {
-                return mostrarErro('As senhas não coincidem!');
-            }
-            if (senha && senha.length < 6) {
-                return mostrarErro('Senha precisa ter pelo menos 6 caracteres!');
+            if(senha && senha !== confirma) return mostrarErro('As senhas não coincidem!');
+            if(senha && senha.length < 6) return mostrarErro('Senha com mínimo 6 caracteres!');
+            
+            const emailMudou = novoEmail && novoEmail !== usuarioAtual.email;
+            const senhaMudou = !!senha;
+            
+            // Se não mudar e-mail nem senha → salva direto sem pedir senha
+            if(!emailMudou && !senhaMudou) {
+                await salvarDadosNoFirestore();
+                return;
             }
             
+            // Se mudar e-mail ou senha → pede confirmação da senha atual
+            dadosParaSalvarFinal = { novoEmail, senha };
+            abrirModal();
+        }
+        
+        async function confirmarSenhaEProsseguir() {
+            const senhaAtual = document.getElementById('senhaAtual').value.trim();
+            if(!senhaAtual) return mostrarErro('Digite sua senha atual!');
+            
+            const { novoEmail, senha } = dadosParaSalvarFinal;
+            
             try {
-                const dadosParaSalvar = {
-                    textoBanner: document.getElementById('textoBanner').value.trim(),
-                    tituloSobre: document.getElementById('tituloSobre').value.trim(),
-                    textoSobre: document.getElementById('textoSobre').value.trim(),
-                    nomeAcademia: document.getElementById('nomeAcademia').value.trim(),
-                    cnpjAcademia: document.getElementById('cnpjAcademia').value.trim(),
-                    enderecoAcademia: document.getElementById('enderecoAcademia').value.trim(),
-                    telefoneAcademia: document.getElementById('telefoneAcademia').value.trim(),
-                    emailContato: document.getElementById('emailContato').value.trim(),
-                    horarioFuncionamento: document.getElementById('horarioFuncionamento').value.trim(),
-                    instagram: document.getElementById('instagram').value.trim(),
-                    facebook: document.getElementById('facebook').value.trim(),
-                    planos: planos.filter(p => p.nome && p.nome.trim() !== ''),
-                    atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
-                };
+                // Reautentica = atualiza o login para poder trocar e-mail/senha
+                const credencial = firebase.auth.EmailAuthProvider.credential(usuarioAtual.email, senhaAtual);
+                await usuarioAtual.reauthenticateWithCredential(credencial);
+                console.log('✅ Reautenticado!');
                 
-                await db.collection('configuracoes').doc('geral').set(dadosParaSalvar, { merge: true });
-                console.log('✅ Dados salvos no Firestore!');
-                
-                if (senha) {
-                    await usuarioAtual.updatePassword(senha);
-                    console.log('✅ Senha atualizada!');
+                // Troca e-mail se mudou
+                if(novoEmail && novoEmail !== usuarioAtual.email) {
+                    await usuarioAtual.updateEmail(novoEmail);
+                    console.log('✅ E-mail alterado para:', novoEmail);
                 }
                 
-                mostrarSucesso();
-                document.getElementById('novaSenha').value = '';
-                document.getElementById('confirmaSenha').value = '';
+                // Troca senha se mudou
+                if(senha) {
+                    await usuarioAtual.updatePassword(senha);
+                    console.log('✅ Senha alterada!');
+                }
                 
-            } catch (erro) {
-                console.error('❌ Erro ao salvar:', erro);
-                if (erro.code === 'auth/requires-recent-login') {
-                    mostrarErro('Faça login novamente e salve logo após.');
+                // Salva os demais dados no Firestore
+                await salvarDadosNoFirestore();
+                fecharModal();
+                
+            } catch(erro) {
+                console.error(erro);
+                if(erro.code === 'auth/wrong-password') {
+                    mostrarErro('Senha atual está incorreta!');
+                } else if(erro.code === 'auth/invalid-email') {
+                    mostrarErro('E-mail novo inválido!');
+                } else if(erro.code === 'auth/email-already-in-use') {
+                    mostrarErro('Esse e-mail já está cadastrado!');
                 } else {
-                    mostrarErro(erro.message || 'Erro desconhecido ao salvar');
+                    mostrarErro(erro.message);
                 }
             }
+        }
+        
+        async function salvarDadosNoFirestore() {
+            const dados = {
+                textoBanner: document.getElementById('textoBanner').value.trim(),
+                tituloSobre: document.getElementById('tituloSobre').value.trim(),
+                textoSobre: document.getElementById('textoSobre').value.trim(),
+                nomeAcademia: document.getElementById('nomeAcademia').value.trim(),
+                cnpjAcademia: document.getElementById('cnpjAcademia').value.trim(),
+                enderecoAcademia: document.getElementById('enderecoAcademia').value.trim(),
+                telefoneAcademia: document.getElementById('telefoneAcademia').value.trim(),
+                emailContato: document.getElementById('emailContato').value.trim(),
+                horarioFuncionamento: document.getElementById('horarioFuncionamento').value.trim(),
+                instagram: document.getElementById('instagram').value.trim(),
+                facebook: document.getElementById('facebook').value.trim(),
+                planos: planos.filter(p => p.nome?.trim()),
+                atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            
+            await db.collection('configuracoes').doc('geral').set(dados, { merge: true });
+            mostrarSucesso();
+            document.getElementById('novaSenha').value = '';
+            document.getElementById('confirmaSenha').value = '';
         }
         
         function sairDoSistema() {
-            if (confirm('Deseja sair?')) {
-                auth.signOut().then(() => {
-                    window.location.href = 'login.html';
-                });
-            }
+            if(confirm('Deseja sair?')) auth.signOut().then(() => window.location.href='login.html');
         }
         
         auth.onAuthStateChanged(u => {
-            if (!u) {
-                window.location.href = 'login.html';
-                return;
-            }
+            if(!u) { window.location.href='login.html'; return; }
             carregarDados(u);
         });
     </script>
