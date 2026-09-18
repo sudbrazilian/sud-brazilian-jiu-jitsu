@@ -479,7 +479,6 @@
     <a href="#contato">Contato</a>
     <a href="login.html" class="btn-entrar">Entrar</a>
 </nav>
-
 <!-- BANNER PRINCIPAL -->
 <section class="banner" id="inicio">
     <div class="container">
@@ -518,7 +517,6 @@
         </div>
     </div>
 </section>
-
 <!-- SEÇÃO SOBRE -->
 <section class="secao-sobre" id="sobre">
     <div class="container">
@@ -560,7 +558,6 @@
         </div>
     </div>
 </section>
-
 <!-- RODAPÉ -->
 <footer id="contato">
     <div class="container">
@@ -581,7 +578,7 @@
             <div class="rodape-coluna">
                 <h4>Siga nas Redes</h4>
                 <div class="redes-sociais">
-                    <a id="rodapeInstagram" href="#" target="_blank" class="botao-rede"><i class="fab fa-instagram"></i></a>
+                    <a id="rodapeInstagram" href="https://www.instagram.com/sudbrazilianjiujitsu/" target="_blank" class="botao-rede"><i class="fab fa-instagram"></i></a>
                     <a id="rodapeWhatsApp" href="#" target="_blank" class="botao-rede"><i class="fab fa-whatsapp"></i></a>
                     <a id="rodapeFacebook" href="#" target="_blank" class="botao-rede"><i class="fab fa-facebook-f"></i></a>
                 </div>
@@ -592,7 +589,6 @@
         </div>
     </div>
 </footer>
-
 <script>
     const firebaseConfig = {
         apiKey: "AIzaSyDKWso0gw6T2thoS12c1erzTzVhrnagS1s",
@@ -604,7 +600,6 @@
     };
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-
     // Menu Mobile
     const hamburger = document.getElementById('hamburger');
     const menuMobile = document.getElementById('menuMobile');
@@ -623,7 +618,6 @@
             overlay.classList.remove('active');
         });
     });
-
     // Carregar dados do Firebase
     async function carregarDadosAcademia() {
         try {
