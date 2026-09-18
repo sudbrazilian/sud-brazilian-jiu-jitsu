@@ -1,18 +1,16 @@
 {
-  "name": "PJJ Pará Jiu-Jitsu",
-  "short_name": "PJJ Pará",
-  "description": "Sistema de Gestão e Financeiro - PJJ Pará Jiu-Jitsu",
-  "start_url": "admin.html",
+  "name": "SUD Brazilian Jiu-Jitsu",
+  "short_name": "SUD Jiu-Jitsu",
+  "description": "Sistema de gestão SUD Brazilian Jiu-Jitsu",
+  "start_url": "index.html",
   "display": "standalone",
   "background_color": "#121214",
   "theme_color": "#D10000",
-  "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "imagens/logopjj.png",
+      "src": "imagens/logosud.png",
       "sizes": "any",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     }
   ]
 }
