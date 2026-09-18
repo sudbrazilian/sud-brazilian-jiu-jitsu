@@ -31,7 +31,6 @@
             --texto-claro: #E0E0E0;
             --texto-cinza: #999999;
             --borda: #29292E;
-            --sombra: rgba(209, 0, 0, 0.15);
         }
         body {
             background-color: var(--escuro);
@@ -92,8 +91,6 @@
         }
         .nav-desktop a.ativo {
             color: var(--vermelho);
-            border-bottom: 2px solid var(--vermelho);
-            padding-bottom: 4px;
         }
         .nav-desktop a:hover {
             color: var(--vermelho-claro);
@@ -264,7 +261,7 @@
             color: var(--texto-cinza);
             text-transform: uppercase;
         }
-        /* === SEÇÃO SOBRE — EXATAMENTE IGUAL AO MODELO === */
+        /* === SEÇÃO SOBRE — IGUAL AO MODELO === */
         .secao-sobre {
             padding: 70px 0;
             background: linear-gradient(90deg, rgba(20,10,10,0.95) 0%, rgba(10,10,10,0.9) 100%),
@@ -272,7 +269,7 @@
         }
         .sobre-conteudo {
             display: grid;
-            grid-template-columns: 420px 1fr;
+            grid-template-columns: 480px 1fr;
             gap: 50px;
             align-items: center;
         }
@@ -280,11 +277,10 @@
             width: 100%;
             height: auto;
             object-fit: cover;
-            border-radius: 4px;
         }
         .sobre-texto small {
-            color: var(--vermelho-claro);
-            font-size: 0.8rem;
+            color: var(--vermelho);
+            font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 2px;
             margin-bottom: 8px;
@@ -297,41 +293,68 @@
             margin-bottom: 20px;
             text-transform: uppercase;
             letter-spacing: 1px;
+            color: #fff;
         }
         .sobre-texto p {
             color: var(--texto-claro);
             margin-bottom: 30px;
             line-height: 1.7;
             font-size: 0.95rem;
-            max-width: 600px;
+            max-width: 650px;
         }
         .sobre-icones {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
+            gap: 25px;
             margin-bottom: 30px;
         }
         .icone-item {
             display: flex;
-            flex-direction: column;
             align-items: flex-start;
-            gap: 4px;
+            gap: 10px;
         }
         .icone-item i {
-            color: var(--vermelho-claro);
+            color: var(--vermelho);
             font-size: 1.2rem;
-            margin-bottom: 6px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .icone-item div {
+            display: flex;
+            flex-direction: column;
         }
         .icone-item strong {
             font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            line-height: 1.3;
+            line-height: 1.4;
+            display: block;
         }
         .icone-item span {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: var(--texto-cinza);
             text-transform: uppercase;
+            display: block;
+        }
+        .btn-vermelho-escuro {
+            background: transparent;
+            color: var(--vermelho);
+            border: 1px solid var(--vermelho);
+            padding: 10px 24px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-vermelho-escuro:hover {
+            background: var(--vermelho);
+            color: white;
         }
         /* === SEÇÃO PLANOS / AULAS === */
         .secao-planos {
@@ -401,26 +424,6 @@
         }
         .plano-card .saiba-mais:hover {
             text-decoration: underline;
-        }
-        .btn-vermelho-escuro {
-            background: transparent;
-            color: var(--vermelho);
-            border: 1px solid var(--vermelho);
-            padding: 12px 24px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn-vermelho-escuro:hover {
-            background: var(--vermelho);
-            color: white;
         }
         /* === RODAPÉ === */
         footer {
@@ -603,29 +606,37 @@
             </div>
             <div class="sobre-texto">
                 <small>SOBRE A SUD</small>
-                <h2>TRADIÇÃO, DISCIPLINA<br>E EVOLUÇÃO.</h2>
+                <h2>TRADIÇÃO, DISCIPLINA E EVOLUÇÃO.</h2>
                 <p>A SUD Brazilian Jiu-Jitsu é mais do que uma academia, é um projeto de vida. Nosso objetivo é formar atletas, cidadãos e seres humanos melhores, através do Jiu-Jitsu.</p>
                 
                 <div class="sobre-icones">
                     <div class="icone-item">
                         <i class="fa-solid fa-shield"></i>
-                        <strong>TÉCNICA</strong>
-                        <span>E QUALIDADE</span>
+                        <div>
+                            <strong>TÉCNICA</strong>
+                            <span>E QUALIDADE</span>
+                        </div>
                     </div>
                     <div class="icone-item">
                         <i class="fa-solid fa-user-tie"></i>
-                        <strong>PROFESSORES</strong>
-                        <span>QUALIFICADOS</span>
+                        <div>
+                            <strong>PROFESSORES</strong>
+                            <span>QUALIFICADOS</span>
+                        </div>
                     </div>
                     <div class="icone-item">
                         <i class="fa-solid fa-home"></i>
-                        <strong>AMBIENTE</strong>
-                        <span>FAMILIAR</span>
+                        <div>
+                            <strong>AMBIENTE</strong>
+                            <span>FAMILIAR</span>
+                        </div>
                     </div>
                     <div class="icone-item">
                         <i class="fa-solid fa-bullseye"></i>
-                        <strong>FOCO NO</strong>
-                        <span>SEU PROGRESSO</span>
+                        <div>
+                            <strong>FOCO NO SEU</strong>
+                            <span>PROGRESSO</span>
+                        </div>
                     </div>
                 </div>
                 <a href="#planos" class="btn-vermelho-escuro">
@@ -696,9 +707,6 @@
             </div>
             <div class="rodape-coluna">
                 <h4>Siga nas Redes</h4>
-                <a id="rodapeInstagram" href="#" target="_blank">Instagram</a>
-                <a id="rodapeWhatsApp" href="#" target="_blank">WhatsApp</a>
-                <a id="rodapeFacebook" href="#" target="_blank">Facebook</a>
                 <div class="redes-sociais">
                     <a id="rodapeInstagram" href="#" target="_blank" class="botao-rede"><i class="fab fa-instagram"></i></a>
                     <a id="rodapeWhatsApp" href="#" target="_blank" class="botao-rede"><i class="fab fa-whatsapp"></i></a>
