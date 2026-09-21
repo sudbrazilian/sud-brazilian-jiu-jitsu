@@ -65,7 +65,7 @@
         .logo h1 { font-size: 14px; font-weight: 700; line-height: 1.3; color: var(--texto-branco); }
         .menu-navegacao ul { list-style: none; padding: 0 15px; }
         .menu-navegacao li a {
-            display: flex; align-items: center; gap: 10px; padding: 12px 15px; margin-bottom: 5px;
+            display: flex align-items: center; gap: 10px; padding: 12px 15px; margin-bottom: 5px;
             color: var(--texto-cinza); text-decoration: none; font-size: 14px; font-weight: 600; border-radius: 6px; transition: 0.2s;
         }
         .menu-navegacao li a.ativo, .menu-navegacao li a:hover { background: rgba(209,0,0,0.15); color: var(--vermelho-principal); }
@@ -225,11 +225,9 @@
             <input type="text" id="buscaAluno" placeholder="🔍 Buscar por nome, CPF ou responsável...">
             <select id="filtroTipo">
                 <option value="">Todos os Tipos</option>
-                <!-- Preenchido dinamicamente -->
             </select>
             <select id="filtroPeriodo">
                 <option value="">Todos os Planos</option>
-                <!-- Preenchido automaticamente -->
             </select>
         </div>
         <table class="tabela">
@@ -272,12 +270,11 @@
                             <label>Tipo de Aluno *</label>
                             <select id="tipoAluno" onchange="atualizarValorPlano()" required>
                                 <option value="">Selecione</option>
-                                <!-- Preenchido dinamicamente -->
                             </select>
                         </div>
                         <div class="campo">
                             <label>Data de Nascimento *</label>
-                            <input type="date" id="nascimentoAluno" required>
+                            <input type="text" id="nascimentoAluno" placeholder="DD/MM/AAAA" maxlength="10" required oninput="aplicarMascaraData(this)">
                         </div>
                     </div>
                     <div class="linha">
@@ -310,7 +307,6 @@
                             <label>Plano *</label>
                             <select id="periodoAluno" onchange="atualizarValorPlano()" required>
                                 <option value="">Selecione</option>
-                                <!-- Preenchido automaticamente -->
                             </select>
                         </div>
                         <div class="campo">
@@ -367,19 +363,42 @@
         let tiposSistema = [];
         let alunosCarregados = [];
 
-        // Carregar Tipos e Planos do Firebase
+        function aplicarMascaraData(campo) {
+            let valor = campo.value.replace(/\D/g, '');
+            if (valor.length > 2) valor = valor.slice(0, 2) + '/' + valor.slice(2);
+            if (valor.length > 5) valor = valor.slice(0, 5) + '/' + valor.slice(5, 9);
+            campo.value = valor;
+        }
+
+        function converterParaDataISO(dataTexto) {
+            if (!dataTexto) return '';
+            const partes = dataTexto.split('/');
+            if (partes.length !== 3) return '';
+            const [dia, mes, ano] = partes;
+            if (dia.length !== 2 || mes.length !== 2 || ano.length !== 4) return '';
+            return `${ano}-${mes}-${dia}`;
+        }
+
+        function formatarDataParaExibicao(dataISO) {
+            if (!dataISO) return '-';
+            const data = new Date(dataISO);
+            if (isNaN(data.getTime())) return '-';
+            const dia = String(data.getDate() + 1).padStart(2, '0');
+            const mes = String(data.getMonth() + 1).padStart(2, '0');
+            const ano = data.getFullYear();
+            return `${dia}/${mes}/${ano}`;
+        }
+
         async function carregarConfiguracoes() {
             try {
                 const doc = await db.collection('configuracoes').doc('geral').get();
                 if (doc.exists) {
                     const dados = doc.data();
-                    // Tipos de Aluno
                     if (dados.tiposAluno && Array.isArray(dados.tiposAluno)) {
                         tiposSistema = dados.tiposAluno.map(t => typeof t === 'object' ? t.nome : t).filter(nome => nome?.trim());
                     } else {
                         tiposSistema = ['Kids', 'Baby Class', 'Comercial', 'Competidor', 'Bolsista'];
                     }
-                    // Planos
                     if (dados.planos && Array.isArray(dados.planos)) {
                         planosSistema = dados.planos;
                     } else {
@@ -413,16 +432,11 @@
         }
 
         function preencherSelects() {
-            // Select de Tipo no cadastro
             const selectTipoCadastro = document.getElementById('tipoAluno');
-            // Select de Filtro por Tipo
             const selectFiltroTipo = document.getElementById('filtroTipo');
-            // Select de Plano no cadastro
             const selectPlanoCadastro = document.getElementById('periodoAluno');
-            // Select de Filtro por Plano
             const selectFiltroPlano = document.getElementById('filtroPeriodo');
-
-            // Limpar e preencher Tipos
+            
             selectTipoCadastro.innerHTML = '<option value="">Selecione</option>';
             selectFiltroTipo.innerHTML = '<option value="">Todos os Tipos</option>';
             
@@ -439,8 +453,7 @@
                 optFiltro.textContent = nome;
                 selectFiltroTipo.appendChild(optFiltro);
             });
-
-            // Limpar e preencher Planos
+            
             selectPlanoCadastro.innerHTML = '<option value="">Selecione</option>';
             selectFiltroPlano.innerHTML = '<option value="">Todos os Planos</option>';
             
@@ -662,7 +675,7 @@
                 document.getElementById('cpfAluno').value = formatarCPF(dados.cpf || '');
                 preencherSelects();
                 document.getElementById('tipoAluno').value = dados.tipo || '';
-                document.getElementById('nascimentoAluno').value = dados.dataNascimento ? dados.dataNascimento.toDate().toISOString().split('T')[0] : '';
+                document.getElementById('nascimentoAluno').value = dados.dataNascimento ? formatarDataParaExibicao(dados.dataNascimento.toDate()) : '';
                 document.getElementById('responsavelAluno').value = dados.responsavel || '';
                 document.getElementById('telefoneAluno').value = dados.telefone || '';
                 document.getElementById('emailAluno').value = dados.email || '';
@@ -712,11 +725,12 @@
             const valorFinal = parseFloat(valorFinalTexto) || 0;
             
             const cpfSemFormatacao = document.getElementById('cpfAluno').value.replace(/\D/g, '');
-            const dataNascimentoValor = document.getElementById('nascimentoAluno').value;
+            const dataNascimentoTexto = document.getElementById('nascimentoAluno').value;
+            const dataNascimentoISO = converterParaDataISO(dataNascimentoTexto);
             const dataVencimentoValor = document.getElementById('matriculaAluno').value;
             
-            if (!dataNascimentoValor || !dataVencimentoValor) {
-                alert('⚠️ Preencha as datas corretamente!');
+            if (!dataNascimentoISO || !dataVencimentoValor) {
+                alert('⚠️ Preencha as datas corretamente! Ex: 21/09/2026');
                 return;
             }
             
@@ -724,7 +738,7 @@
                 nome: document.getElementById('nomeAluno').value.trim(),
                 cpf: cpfSemFormatacao,
                 tipo: tipo,
-                dataNascimento: firebase.firestore.Timestamp.fromDate(new Date(dataNascimentoValor + 'T00:00:00')),
+                dataNascimento: firebase.firestore.Timestamp.fromDate(new Date(dataNascimentoISO + 'T00:00:00')),
                 responsavel: document.getElementById('responsavelAluno').value.trim(),
                 telefone: document.getElementById('telefoneAluno').value.trim(),
                 email: document.getElementById('emailAluno').value.trim(),
